@@ -96,7 +96,7 @@
 <meta name="description" content="先有键盘后有天，一梭代码日神仙。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/Android/index.html">
 <meta property="og:site_name" content="朽木自雕">
 <meta property="og:description" content="先有键盘后有天，一梭代码日神仙。">
 <meta name="twitter:card" content="summary">
@@ -129,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/Android/"/>
 
 
 
 
 
-  <title>朽木自雕</title>
+  <title>标签: Android | 朽木自雕</title>
   
 
 
@@ -160,9 +160,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -245,124 +243,43 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-collapse">
+    <div class="collection-title">
+      <h1>Android<small>标签</small>
+      </h1>
+    </div>
+
     
       
 
-  
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" itemprop="url">Android中快捷启动支付宝微信扫一扫的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" itemprop="url">
               
-                <span class="post-meta-item-text">发表于</span>
+                <span itemprop="name">Android中快捷启动支付宝微信扫一扫的方法</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T15:10:34+08:00">
-                2017-07-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
+            </a>
         
-          
-            <h1 id="Android-快捷打开支付宝微信扫码的方法"><a href="#Android-快捷打开支付宝微信扫码的方法" class="headerlink" title="Android 快捷打开支付宝微信扫码的方法"></a>Android 快捷打开支付宝微信扫码的方法</h1><h2 id="支付宝-amp-微信扫一扫-✓"><a href="#支付宝-amp-微信扫一扫-✓" class="headerlink" title="支付宝&amp;微信扫一扫 ✓"></a>支付宝&amp;微信扫一扫 ✓</h2><p>支付宝扫一扫：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"alipayqr://platformapi/startapp?saId=10000007"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);</div><div class="line">context.startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>微信原来的扫一扫打开是这样的，不过目前的版本已经失效了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"weixin://dl/scan"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>所以只能使用am命令来控制二维码界面的activity打开</p>
-<p>使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.plugin.scanner.ui.BaseScanUI<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">String cmd=<span class="string">"am start -n com.tencent.mm/com.tencent.mm.plugin.scanner.ui.BaseScanUI"</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Process p = Runtime.getRuntime().exec(cmd);</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+      </h2>
 
-          
-        
-      
-    </div>
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2017-07-07T15:10:34+08:00"
+              content="2017-07-07" >
+          07-07
+        </time>
+      </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+    </header>
   </article>
 
 
     
-  </section>
+  </div>
 
   
 
