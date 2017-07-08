@@ -93,15 +93,16 @@
 
 
 
-<meta name="description" content="先有键盘后有天，一梭代码日神仙。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java 123456789101112131">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android清除所有noticafition的一些探究">
+<meta property="og:url" content="http://yoursite.com/2017/07/08/Android清除所有noticafition的一些探究/index.html">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="先有键盘后有天，一梭代码日神仙。">
+<meta property="og:description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java 123456789101112131">
+<meta property="og:updated_time" content="2017-07-08T01:52:20.632Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="朽木自雕">
-<meta name="twitter:description" content="先有键盘后有天，一梭代码日神仙。">
+<meta name="twitter:title" content="Android清除所有noticafition的一些探究">
+<meta name="twitter:description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java 123456789101112131">
 
 
 
@@ -129,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/08/Android清除所有noticafition的一些探究/"/>
 
 
 
 
 
-  <title>朽木自雕</title>
+  <title>Android清除所有noticafition的一些探究 | 朽木自雕</title>
   
 
 
@@ -160,9 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -245,9 +244,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -273,9 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/Android清除所有noticafition的一些探究/" itemprop="url">Android清除所有noticafition的一些探究</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android清除所有noticafition的一些探究</h1>
         
 
         <div class="post-meta">
@@ -322,9 +319,7 @@
       
 
       
-        
-          
-            <p>最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。<br>查看NotificationManager源码可知<br><a href="http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java" target="_blank" rel="external">http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java</a></p>
+        <p>最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。<br>查看NotificationManager源码可知<br><a href="http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java" target="_blank" rel="external">http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java</a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="number">28</span>    <span class="comment">/**</span></div><div class="line">229     * Cancel all previously shown notifications. See &#123;<span class="doctag">@link</span> #cancel&#125; for the</div><div class="line">230     * detailed behavior.</div><div class="line">231     */</div><div class="line"><span class="number">232</span>    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancelAll</span><span class="params">()</span></span></div><div class="line">233    &#123;</div><div class="line"><span class="number">234</span>        INotificationManager service = getService();</div><div class="line">              <span class="comment">//此处获取了包名，导致只能关闭该包下的消息</span></div><div class="line"><span class="number">235</span>        String pkg = mContext.getPackageName();</div><div class="line"><span class="number">236</span>        <span class="keyword">if</span> (localLOGV) Log.v(TAG, pkg + <span class="string">": cancelAll()"</span>);</div><div class="line"><span class="number">237</span>        <span class="keyword">try</span> &#123;</div><div class="line"><span class="number">238</span>            service.cancelAllNotifications(pkg, UserHandle.myUserId());</div><div class="line"><span class="number">239</span>        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line"><span class="number">240</span>        &#125;</div><div class="line"><span class="number">241</span>    &#125;</div></pre></td></tr></table></figure>
 <p>再次查看UserHandle.myUserId的源码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">233     * Returns the user id of the current process</div><div class="line">234     * <span class="doctag">@return</span> user id of the current process</div><div class="line">235     * <span class="doctag">@hide</span>  这个方法是隐藏的</div><div class="line">236     */</div><div class="line"><span class="number">237</span>    <span class="meta">@SystemApi</span></div><div class="line"><span class="number">238</span>    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">myUserId</span><span class="params">()</span> </span>&#123;</div><div class="line">          <span class="comment">//获取进程对应的UID</span></div><div class="line"><span class="number">239</span>        <span class="keyword">return</span> getUserId(Process.myUid());</div><div class="line"><span class="number">240</span>    &#125;</div></pre></td></tr></table></figure></p>
 <p>cancelAll中关闭通知使用了uid和包名，可以看出来其实是只关闭一个应用里所有的通知</p>
@@ -333,20 +328,27 @@
 <p>通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。<br>这个问题应该是由于该方法中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">952</span>                <span class="keyword">if</span> (child.getVisibility() == View.VISIBLE) &#123;</div><div class="line"><span class="number">953</span>                    viewsToHide.add(child);</div><div class="line"><span class="number">954</span>                &#125;</div></pre></td></tr></table></figure></p>
 <p>这一段代码造成的。<br>解决方法：<br>1.使用xposed hook替换整个清除通知栏的方法，去掉这一部分。比较麻烦，而且可能会造成某些问题，但是效果好。<br>2.在调用hook出来的clearAllNotificatons的时候，执行一下拉通知栏和收起通知栏的方法。效果稍微差一些，但是不至于出现太大问题。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -354,365 +356,38 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/" itemprop="url">解决Android6.0通知栏下栏缓慢的问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:45:07+08:00">
-                2017-07-08
-              </time>
+              <a href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/" rel="next" title="解决Android6.0通知栏下栏缓慢的问题">
+                <i class="fa fa-chevron-left"></i> 解决Android6.0通知栏下栏缓慢的问题
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>最近在开发中想要实现一个下拉通知栏的功能，但是在6.0上使用方法下拉，展开动画十分缓慢，刚好在Nova launcher中，也实现了下拉通知栏，而且在6.0上提示说获取root权限，变通的解决这个问题，在酷安开发者群有朋友提到说可以在获取root权限后使用shell模拟触摸事件来实现这个方法，测试以后发现确实可行。<br>调用如下指令模拟手势实现下拉：<br>adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位置滑动到 x 100 y 500的位置 历时300毫秒</p>
-<p>此时通知栏并不会完全展开，解决方法也非常简单，再模拟一次下拉事件，点击刚刚没有完全展开的状态栏即可：</p>
-<p><del>adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的位置</del> 模拟点击会出现奇奇怪怪的问题，可能在其他rom上会点击到其他的位置，所以再做一次下滑会好一些<br>这样通知栏就完全展开了</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/Android启动快捷方式的方法/" itemprop="url">Android启动快捷方式的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:37:58+08:00">
-                2017-07-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）</p>
-<p>在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。</p>
-<p>方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取到所有快捷方式</span></div><div class="line"> Intent shortcutsIntent = <span class="keyword">new</span> Intent(Intent.ACTION_CREATE_SHORTCUT);</div><div class="line">        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(</div><div class="line">                shortcutsIntent, <span class="number">0</span>);</div><div class="line">        <span class="keyword">for</span> (ResolveInfo resolveInfo : shortcuts) &#123;</div><div class="line">            String name = resolveInfo.activityInfo.applicationInfo.packageName;</div><div class="line">            String activityName = resolveInfo.activityInfo.name;</div><div class="line">            String label=resolveInfo.activityInfo.applicationInfo.name;</div><div class="line">            <span class="keyword">int</span> flags=resolveInfo.activityInfo.flags;</div><div class="line">            Log.i(TAG, <span class="string">"updatePackages: "</span>+name+<span class="string">" "</span>+activityName+<span class="string">" "</span>+flags+<span class="string">" "</span>+label);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"><span class="comment">//启动方式如下</span></div><div class="line">        ActivityInfo ai=shortcuts.get(<span class="number">7</span>).activityInfo;</div><div class="line">        String pkgName=ai.applicationInfo.packageName;</div><div class="line">        String activityName=ai.name;</div><div class="line">        <span class="keyword">int</span> flag=ai.flags;</div><div class="line">        Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line"></div><div class="line">        intent.addFlags(flag);</div><div class="line">        startActivity(intent);</div><div class="line"></div><div class="line"><span class="comment">//获取对应icon方法如下</span></div><div class="line"> Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line">        intent.addFlags(flag);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Drawable dw=pm.getActivityIcon(intent);</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
-<p>在这个地方踩到一个坑：<br>如果手机内有“冰箱”这类的应用将app停用，app或者快捷方式就无法打开了。<br>解决方法也很简单，使用enable指令就可以再打开了。</p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" itemprop="url">Android中快捷启动支付宝微信扫一扫的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T15:10:34+08:00">
-                2017-07-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Android-快捷打开支付宝微信扫码的方法"><a href="#Android-快捷打开支付宝微信扫码的方法" class="headerlink" title="Android 快捷打开支付宝微信扫码的方法"></a>Android 快捷打开支付宝微信扫码的方法</h1><h2 id="支付宝-amp-微信扫一扫-✓"><a href="#支付宝-amp-微信扫一扫-✓" class="headerlink" title="支付宝&amp;微信扫一扫 ✓"></a>支付宝&amp;微信扫一扫 ✓</h2><p>支付宝扫一扫：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"alipayqr://platformapi/startapp?saId=10000007"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);</div><div class="line">context.startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>微信原来的扫一扫打开是这样的，不过目前的版本已经失效了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"weixin://dl/scan"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>所以只能使用am命令来控制二维码界面的activity打开</p>
-<p>使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.plugin.scanner.ui.BaseScanUI<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">String cmd=<span class="string">"am start -n com.tencent.mm/com.tencent.mm.plugin.scanner.ui.BaseScanUI"</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Process p = Runtime.getRuntime().exec(cmd);</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -720,6 +395,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -906,10 +585,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
