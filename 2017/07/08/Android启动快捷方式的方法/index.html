@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -93,15 +93,17 @@
 
 
 
-<meta name="description" content="先有键盘后有天，一梭代码日神仙。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android启动快捷方式的方法">
+<meta property="og:url" content="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/index.html">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="先有键盘后有天，一梭代码日神仙。">
+<meta property="og:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta property="og:updated_time" content="2017-07-08T01:40:57.062Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="朽木自雕">
-<meta name="twitter:description" content="先有键盘后有天，一梭代码日神仙。">
+<meta name="twitter:title" content="Android启动快捷方式的方法">
+<meta name="twitter:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
 
 
 
@@ -129,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/"/>
 
 
 
 
 
-  <title>朽木自雕</title>
+  <title>Android启动快捷方式的方法 | 朽木自雕</title>
   
 
 
@@ -160,9 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -245,9 +245,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -273,9 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/Android启动快捷方式的方法/" itemprop="url">Android启动快捷方式的方法</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android启动快捷方式的方法</h1>
         
 
         <div class="post-meta">
@@ -322,164 +320,77 @@
       
 
       
-        
-          
-            <p>最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）</p>
+        <p>最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）</p>
 <p>在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。</p>
 <p>方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取到所有快捷方式</span></div><div class="line"> Intent shortcutsIntent = <span class="keyword">new</span> Intent(Intent.ACTION_CREATE_SHORTCUT);</div><div class="line">        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(</div><div class="line">                shortcutsIntent, <span class="number">0</span>);</div><div class="line">        <span class="keyword">for</span> (ResolveInfo resolveInfo : shortcuts) &#123;</div><div class="line">            String name = resolveInfo.activityInfo.applicationInfo.packageName;</div><div class="line">            String activityName = resolveInfo.activityInfo.name;</div><div class="line">            String label=resolveInfo.activityInfo.applicationInfo.name;</div><div class="line">            <span class="keyword">int</span> flags=resolveInfo.activityInfo.flags;</div><div class="line">            Log.i(TAG, <span class="string">"updatePackages: "</span>+name+<span class="string">" "</span>+activityName+<span class="string">" "</span>+flags+<span class="string">" "</span>+label);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"><span class="comment">//启动方式如下</span></div><div class="line">        ActivityInfo ai=shortcuts.get(<span class="number">7</span>).activityInfo;</div><div class="line">        String pkgName=ai.applicationInfo.packageName;</div><div class="line">        String activityName=ai.name;</div><div class="line">        <span class="keyword">int</span> flag=ai.flags;</div><div class="line">        Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line"></div><div class="line">        intent.addFlags(flag);</div><div class="line">        startActivity(intent);</div><div class="line"></div><div class="line"><span class="comment">//获取对应icon方法如下</span></div><div class="line"> Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line">        intent.addFlags(flag);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Drawable dw=pm.getActivityIcon(intent);</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
 <p>在这个地方踩到一个坑：<br>如果手机内有“冰箱”这类的应用将app停用，app或者快捷方式就无法打开了。<br>解决方法也很简单，使用enable指令就可以再打开了。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" itemprop="url">Android中快捷启动支付宝微信扫一扫的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T15:10:34+08:00">
-                2017-07-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Android-快捷打开支付宝微信扫码的方法"><a href="#Android-快捷打开支付宝微信扫码的方法" class="headerlink" title="Android 快捷打开支付宝微信扫码的方法"></a>Android 快捷打开支付宝微信扫码的方法</h1><h2 id="支付宝-amp-微信扫一扫-✓"><a href="#支付宝-amp-微信扫一扫-✓" class="headerlink" title="支付宝&amp;微信扫一扫 ✓"></a>支付宝&amp;微信扫一扫 ✓</h2><p>支付宝扫一扫：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"alipayqr://platformapi/startapp?saId=10000007"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);</div><div class="line">context.startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>微信原来的扫一扫打开是这样的，不过目前的版本已经失效了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"weixin://dl/scan"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>所以只能使用am命令来控制二维码界面的activity打开</p>
-<p>使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.plugin.scanner.ui.BaseScanUI<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">String cmd=<span class="string">"am start -n com.tencent.mm/com.tencent.mm.plugin.scanner.ui.BaseScanUI"</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Process p = Runtime.getRuntime().exec(cmd);</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" rel="next" title="Android中快捷启动支付宝微信扫一扫的方法">
+                <i class="fa fa-chevron-left"></i> Android中快捷启动支付宝微信扫一扫的方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -487,6 +398,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -673,10 +588,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
