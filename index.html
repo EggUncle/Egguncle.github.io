@@ -325,7 +325,10 @@
         
           
           说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333
-写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafit
+写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more
+当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。然后我是这样说的：
+
+通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。这个问题应该是由于该方法中1234&gt;952                if (child.getVisibility() == View.VISIBLE) &#123;&gt;953  
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -444,7 +447,12 @@
         
           
           昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。
-SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences有一些新的变更https://developer.android.com/about/ve
+SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences有一些新的变更https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn
+
+&gt;私有文件的文件权限不应再由所有者放宽，为使用 MODE_WORLD_READABLE 和/或 MODE_WORLD_WRITEABLE 而进行的此类尝试将触发 SecurityException。注：迄今为止，这种限制尚不能完全执行。应用仍可能使用原生 API 或 File API 来修改它们的私有目录权限。但是，我们强烈反对放宽私有目录的权限。
+
+在自己的模块中使用了sp而且由于xp需要使用的原因设置成了MODE_WORLD_READABLE，但是这个模式在Nougat上直接抛出了异常。
+检索源码发现这个检测模式的方法是这样的：1234567891011http://androidxr
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -563,7 +571,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
         
           
           源码地址http://androidxref.com/6.0.1_r10/xref/frameworks/base/core/java/android/os/AsyncTask.java
-首先来看一下AsyncTask的构造方法123456789101112131415161718192021222
+首先来看一下AsyncTask的构造方法1234567891011121314151617181920212223242526272829288    public AsyncTask() &#123;289        mWorker = new WorkerRunnable&lt;Params, Result&gt;() &#123;290            public Result call() throws Exception &#123;291                mTaskInvoked.set(true);292293                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);294                //noinspection unchecked295    
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -681,7 +689,8 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
       
         
           
-          前一阵在自己的app里面实现了一个截图功能，实现的方法比较粗暴，直接使用的screenshot指令，效果拔群。123456String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png
+          前一阵在自己的app里面实现了一个截图功能，实现的方法比较粗暴，直接使用的screenshot指令，效果拔群。123456String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";     try &#123;         Process p = Runtime.getRuntime().exec(cmd);     &#125; catch (IOException e) &#123;         XposedBridge.log(e.getMessage());     &#125;
+后来有朋友说这么截图比较生硬，因为看不到截图的结果，后来就想加一个toast，弹出一个提示就好了。12345678String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";     try &#123;         Process p = Run
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -799,7 +808,8 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
       
         
           
-          最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/andro
+          最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java
+12345678910111213141528    /**229     * Cancel all previously shown notifications. See &#123;@link #cancel&#125; for the230     * detailed behavior.231     */232    public void cancelAll()233    &#123;234        INotificationManager service = getService();              //此处获取了包名，导致只能关闭该包下的消息235        String pkg = mC
           ...
           <!--noindex-->
           <div class="post-button text-center">
