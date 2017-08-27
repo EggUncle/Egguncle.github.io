@@ -1,0 +1,680 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333 写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android清除所有noticafition的一些探究（二）">
+<meta property="og:url" content="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/index.html">
+<meta property="og:site_name" content="朽木自雕">
+<meta property="og:description" content="说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333 写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#">
+<meta property="og:updated_time" content="2017-08-27T10:58:28.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android清除所有noticafition的一些探究（二）">
+<meta name="twitter:description" content="说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333 写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/"/>
+
+
+
+
+
+  <title>Android清除所有noticafition的一些探究（二） | 朽木自雕</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朽木自雕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朽木自雕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android清除所有noticafition的一些探究（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T18:03:45+08:00">
+                2017-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333</p>
+<p>写上一篇关于清除所有通知的博客已经是六月上旬的事情了<br><a href="https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more" target="_blank" rel="external">https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more</a></p>
+<p>当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。<br>然后我是这样说的：</p>
+<blockquote>
+<p>通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。<br>这个问题应该是由于该方法中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="number">952</span>                <span class="keyword">if</span> (child.getVisibility() == View.VISIBLE) &#123;</div><div class="line">&gt;<span class="number">953</span>                    viewsToHide.add(child);</div><div class="line">&gt;<span class="number">954</span>                &#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+<p>这一段代码造成的。<br>解决方法：<br>1.使用xposed hook替换整个清除通知栏的方法，去掉这一部分。比较麻烦，而且可能会造成某些问题，但是效果好。<br>2.在调用hook出来的clearAllNotificatons的时候，执行一下拉通知栏和收起通知栏的方法。效果稍微差一些，但是不至于出现太大问题。</p>
+</blockquote>
+<p>本着再把这个功能优化一下的想法，决定使用我提到的第一种方法来实现这个功能，即使用replaceHookedMethod重写整个方法，然后按照上面提到的，去除child.getVisibility() == View.VISIBLE的判断，但是实际操作之后发现并没有出现料想之中的结果，即点击清除所有通知的快捷按钮以后，通知被清除且图标消失。<br>然后我又重新把这一段源码看了一遍<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="number">943</span>    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">clearAllNotifications</span><span class="params">()</span> </span>&#123;</div><div class="line"><span class="number">944</span></div><div class="line"><span class="number">945</span>        <span class="comment">// animate-swipe all dismissable notifications, then animate the shade closed</span></div><div class="line"><span class="number">946</span>        <span class="keyword">int</span> numChildren = mStackScroller.getChildCount();</div><div class="line"><span class="number">947</span></div><div class="line"><span class="number">948</span>        <span class="keyword">final</span> ArrayList&lt;View&gt; viewsToHide = <span class="keyword">new</span> ArrayList&lt;View&gt;(numChildren);</div><div class="line"><span class="number">949</span>        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numChildren; i++) &#123;</div><div class="line"><span class="number">950</span>            <span class="keyword">final</span> View child = mStackScroller.getChildAt(i);</div><div class="line"><span class="number">951</span>            <span class="keyword">if</span> (mStackScroller.canChildBeDismissed(child)) &#123;</div><div class="line">  <span class="comment">//canChildBeDismissed这个方法似乎是判断一下通知栏里面veto（因该是禁止通知按钮）是不是为空和是不是可见return  (veto != null &amp;&amp; veto.getVisibility() != View.GONE);</span></div><div class="line"><span class="number">952</span>                <span class="keyword">if</span> (child.getVisibility() == View.VISIBLE) &#123;</div><div class="line">  <span class="comment">//哇这里明明就是VISIBLE 我当时竟然说是因为这个才导致清除不了的</span></div><div class="line"><span class="number">953</span>                    viewsToHide.add(child);</div><div class="line"><span class="number">954</span>                &#125;</div><div class="line"><span class="number">955</span>            &#125;</div><div class="line"><span class="number">956</span>        &#125;</div><div class="line"><span class="number">957</span>        <span class="keyword">if</span> (viewsToHide.isEmpty()) &#123;</div><div class="line">  <span class="comment">//执行收起通知栏面板的动画</span></div><div class="line"><span class="number">958</span>            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);</div><div class="line"><span class="number">959</span>            <span class="keyword">return</span>;</div><div class="line"><span class="number">960</span>        &#125;</div><div class="line"><span class="number">961</span></div><div class="line"><span class="comment">//执行关闭通知栏动作</span></div><div class="line"><span class="number">962</span>        addPostCollapseAction(<span class="keyword">new</span> Runnable() &#123;</div><div class="line"><span class="number">963</span>            <span class="meta">@Override</span></div><div class="line"><span class="number">964</span>            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"><span class="number">965</span>                <span class="keyword">try</span> &#123;</div><div class="line"><span class="number">966</span>                    mBarService.onClearAllNotifications(mCurrentUserId);</div><div class="line"><span class="number">967</span>                &#125; <span class="keyword">catch</span> (Exception ex) &#123; &#125;</div><div class="line"><span class="number">968</span>            &#125;</div><div class="line"><span class="number">969</span>        &#125;);</div><div class="line"><span class="number">970</span></div><div class="line"><span class="comment">//展示清除通知栏所有内容的动画</span></div><div class="line"><span class="number">971</span>        performDismissAllAnimations(viewsToHide);</div><div class="line"><span class="number">972</span></div><div class="line"><span class="number">973</span>    &#125;</div></pre></td></tr></table></figure></p>
+<p>以上的各个方法我在重写执行时都尝试过注释他们不让他们运行，然后通知栏的行为出现了不一样的情况，比如下拉通知通知变得不可见了但是清除通知的按钮很靠下，而且无法点击，或者清除通知以后状态栏没有收回去等等。。。就不一一列举了，<br>但是不论怎么搞都没有实现我想要的效果，然后我注意到了mBarService这个玩意，它调用了一个onClearAllNotifications方法，看起来像是真的来清除通知栏提示的。<br>哇既然找到了就看一看它：<br>跟了一下代码，发现mBarService其实是一个AIDL接口：<br><a href="http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/com/android/internal/statusbar/IStatusBarService.aidl" target="_blank" rel="external">http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/com/android/internal/statusbar/IStatusBarService.aidl</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="number">24</span><span class="comment">/** <span class="doctag">@hide</span> */</span></div><div class="line"><span class="number">25</span>interface IStatusBarService</div><div class="line"><span class="number">26</span>&#123;</div><div class="line"><span class="number">27</span>    <span class="function"><span class="keyword">void</span> <span class="title">expandNotificationsPanel</span><span class="params">()</span></span>;</div><div class="line"><span class="number">28</span>    <span class="function"><span class="keyword">void</span> <span class="title">collapsePanels</span><span class="params">()</span></span>;</div><div class="line"><span class="number">29</span>    <span class="function"><span class="keyword">void</span> <span class="title">disable</span><span class="params">(<span class="keyword">int</span> what, IBinder token, String pkg)</span></span>;</div><div class="line"><span class="number">30</span>    <span class="function"><span class="keyword">void</span> <span class="title">setIcon</span><span class="params">(String slot, String iconPackage, <span class="keyword">int</span> iconId, <span class="keyword">int</span> iconLevel, String contentDescription)</span></span>;</div><div class="line"><span class="number">31</span>    <span class="function"><span class="keyword">void</span> <span class="title">setIconVisibility</span><span class="params">(String slot, <span class="keyword">boolean</span> visible)</span></span>;</div><div class="line"><span class="number">32</span>    <span class="function"><span class="keyword">void</span> <span class="title">removeIcon</span><span class="params">(String slot)</span></span>;</div><div class="line"><span class="number">33</span>    <span class="function"><span class="keyword">void</span> <span class="title">topAppWindowChanged</span><span class="params">(<span class="keyword">boolean</span> menuVisible)</span></span>;</div><div class="line"><span class="number">34</span>    <span class="function"><span class="keyword">void</span> <span class="title">setImeWindowStatus</span><span class="params">(in IBinder token, <span class="keyword">int</span> vis, <span class="keyword">int</span> backDisposition,</span></span></div><div class="line"><span class="number">35</span>            <span class="keyword">boolean</span> showImeSwitcher);</div><div class="line"><span class="number">36</span>    <span class="function"><span class="keyword">void</span> <span class="title">expandSettingsPanel</span><span class="params">()</span></span>;</div><div class="line"><span class="number">37</span>    <span class="function"><span class="keyword">void</span> <span class="title">setCurrentUser</span><span class="params">(<span class="keyword">int</span> newUserId)</span></span>;</div><div class="line"><span class="number">38</span></div><div class="line"><span class="number">39</span>    <span class="comment">// ---- Methods below are for use by the status bar policy services ----</span></div><div class="line"><span class="number">40</span>    <span class="comment">// You need the STATUS_BAR_SERVICE permission</span></div><div class="line"><span class="number">41</span>    <span class="function"><span class="keyword">void</span> <span class="title">registerStatusBar</span><span class="params">(IStatusBar callbacks, out StatusBarIconList iconList,</span></span></div><div class="line"><span class="number">42</span>            out <span class="keyword">int</span>[] switches, out List&lt;IBinder&gt; binders);</div><div class="line"><span class="number">43</span>    <span class="function"><span class="keyword">void</span> <span class="title">onPanelRevealed</span><span class="params">(<span class="keyword">boolean</span> clearNotificationEffects)</span></span>;</div><div class="line"><span class="number">44</span>    <span class="function"><span class="keyword">void</span> <span class="title">onPanelHidden</span><span class="params">()</span></span>;</div><div class="line"><span class="number">45</span>    <span class="comment">// Mark current notifications as "seen" and stop ringing, vibrating, blinking.</span></div><div class="line"><span class="number">46</span>    <span class="function"><span class="keyword">void</span> <span class="title">clearNotificationEffects</span><span class="params">()</span></span>;</div><div class="line"><span class="number">47</span>    <span class="function"><span class="keyword">void</span> <span class="title">onNotificationClick</span><span class="params">(String key)</span></span>;</div><div class="line"><span class="number">48</span>    <span class="function"><span class="keyword">void</span> <span class="title">onNotificationActionClick</span><span class="params">(String key, <span class="keyword">int</span> actionIndex)</span></span>;</div><div class="line"><span class="number">49</span>    <span class="function"><span class="keyword">void</span> <span class="title">onNotificationError</span><span class="params">(String pkg, String tag, <span class="keyword">int</span> id,</span></span></div><div class="line"><span class="number">50</span>            <span class="keyword">int</span> uid, <span class="keyword">int</span> initialPid, String message, <span class="keyword">int</span> userId);</div><div class="line"><span class="number">51</span>    <span class="function"><span class="keyword">void</span> <span class="title">onClearAllNotifications</span><span class="params">(<span class="keyword">int</span> userId)</span></span>;</div><div class="line"><span class="number">52</span>    <span class="function"><span class="keyword">void</span> <span class="title">onNotificationClear</span><span class="params">(String pkg, String tag, <span class="keyword">int</span> id, <span class="keyword">int</span> userId)</span></span>;</div><div class="line"><span class="number">53</span>    <span class="function"><span class="keyword">void</span> <span class="title">onNotificationVisibilityChanged</span><span class="params">(</span></span></div><div class="line"><span class="number">54</span>            in String[] newlyVisibleKeys, in String[] noLongerVisibleKeys);</div><div class="line"><span class="number">55</span>    <span class="function"><span class="keyword">void</span> <span class="title">onNotificationExpansionChanged</span><span class="params">(in String key, in <span class="keyword">boolean</span> userAction, in <span class="keyword">boolean</span> expanded)</span></span>;</div><div class="line"><span class="number">56</span>    <span class="function"><span class="keyword">void</span> <span class="title">setSystemUiVisibility</span><span class="params">(<span class="keyword">int</span> vis, <span class="keyword">int</span> mask, String cause)</span></span>;</div><div class="line"><span class="number">57</span>    <span class="function"><span class="keyword">void</span> <span class="title">setWindowState</span><span class="params">(<span class="keyword">int</span> window, <span class="keyword">int</span> state)</span></span>;</div><div class="line"><span class="number">58</span></div><div class="line"><span class="number">59</span>    <span class="function"><span class="keyword">void</span> <span class="title">showRecentApps</span><span class="params">(<span class="keyword">boolean</span> triggeredFromAltTab)</span></span>;</div><div class="line"><span class="number">60</span>    <span class="function"><span class="keyword">void</span> <span class="title">hideRecentApps</span><span class="params">(<span class="keyword">boolean</span> triggeredFromAltTab, <span class="keyword">boolean</span> triggeredFromHomeKey)</span></span>;</div><div class="line"><span class="number">61</span>    <span class="function"><span class="keyword">void</span> <span class="title">toggleRecentApps</span><span class="params">()</span></span>;</div><div class="line"><span class="number">62</span>    <span class="function"><span class="keyword">void</span> <span class="title">preloadRecentApps</span><span class="params">()</span></span>;</div><div class="line"><span class="number">63</span>    <span class="function"><span class="keyword">void</span> <span class="title">cancelPreloadRecentApps</span><span class="params">()</span></span>;</div><div class="line"><span class="number">64</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>再找找看onClearAllNotifications实际被调用的地方：<br><a href="http://androidxref.com/5.1.0_r1/xref/frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java" target="_blank" rel="external">http://androidxref.com/5.1.0_r1/xref/frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java</a><br>最后找到了它的实现的地方<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="number">615</span>    <span class="meta">@Override</span></div><div class="line"><span class="number">616</span>    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClearAllNotifications</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line"><span class="number">617</span>        enforceStatusBarService();</div><div class="line"><span class="number">618</span>        <span class="keyword">final</span> <span class="keyword">int</span> callingUid = Binder.getCallingUid();</div><div class="line"><span class="number">619</span>        <span class="keyword">final</span> <span class="keyword">int</span> callingPid = Binder.getCallingPid();</div><div class="line"><span class="number">620</span>        <span class="keyword">long</span> identity = Binder.clearCallingIdentity();</div><div class="line"><span class="number">621</span>        <span class="keyword">try</span> &#123;</div><div class="line"><span class="number">622</span>            mNotificationDelegate.onClearAll(callingUid, callingPid, userId);</div><div class="line"><span class="number">623</span>        &#125; <span class="keyword">finally</span> &#123;</div><div class="line"><span class="number">624</span>            Binder.restoreCallingIdentity(identity);</div><div class="line"><span class="number">625</span>        &#125;</div><div class="line"><span class="number">626</span>    &#125;</div></pre></td></tr></table></figure></p>
+<p>NotificationDelegate是一个接口，它实际被实现的地方在NotificationManagerService的中，来看一下这个onClearAll方法的实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="number">532</span>        <span class="meta">@Override</span></div><div class="line"><span class="number">533</span>        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClearAll</span><span class="params">(<span class="keyword">int</span> callingUid, <span class="keyword">int</span> callingPid, <span class="keyword">int</span> userId)</span> </span>&#123;</div><div class="line"><span class="number">534</span>            <span class="keyword">synchronized</span> (mNotificationList) &#123;</div><div class="line"><span class="number">535</span>                cancelAllLocked(callingUid, callingPid, userId, REASON_DELEGATE_CANCEL_ALL, <span class="keyword">null</span>,</div><div class="line"><span class="number">536</span>                        <span class="comment">/*includeCurrentProfiles*/</span> <span class="keyword">true</span>);</div><div class="line"><span class="number">537</span>            &#125;</div><div class="line"><span class="number">538</span>        &#125;</div></pre></td></tr></table></figure></p>
+<p>再看看cancelAllLocked的实现以及它调用的另外一个方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="number">2677</span>    <span class="function"><span class="keyword">void</span> <span class="title">cancelAllLocked</span><span class="params">(<span class="keyword">int</span> callingUid, <span class="keyword">int</span> callingPid, <span class="keyword">int</span> userId, <span class="keyword">int</span> reason,</span></span></div><div class="line"><span class="number">2678</span>            ManagedServiceInfo listener, <span class="keyword">boolean</span> includeCurrentProfiles) &#123;</div><div class="line"><span class="number">2679</span>        String listenerName = listener == <span class="keyword">null</span> ? <span class="keyword">null</span> : listener.component.toShortString();</div><div class="line"><span class="number">2680</span>        EventLogTags.writeNotificationCancelAll(callingUid, callingPid,</div><div class="line"><span class="number">2681</span>                <span class="keyword">null</span>, userId, <span class="number">0</span>, <span class="number">0</span>, reason, listenerName);</div><div class="line"><span class="number">2682</span></div><div class="line"><span class="number">2683</span>        ArrayList&lt;NotificationRecord&gt; canceledNotifications = <span class="keyword">null</span>;</div><div class="line"><span class="number">2684</span>        <span class="keyword">final</span> <span class="keyword">int</span> N = mNotificationList.size();</div><div class="line"><span class="number">2685</span>        <span class="keyword">for</span> (<span class="keyword">int</span> i=N-<span class="number">1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</div><div class="line"><span class="number">2686</span>            NotificationRecord r = mNotificationList.get(i);</div><div class="line"><span class="number">2687</span>            <span class="keyword">if</span> (includeCurrentProfiles) &#123;</div><div class="line"><span class="number">2688</span>                <span class="keyword">if</span> (!notificationMatchesCurrentProfiles(r, userId)) &#123;</div><div class="line"><span class="number">2689</span>                    <span class="keyword">continue</span>;</div><div class="line"><span class="number">2690</span>                &#125;</div><div class="line"><span class="number">2691</span>            &#125; <span class="keyword">else</span> &#123;</div><div class="line"><span class="number">2692</span>                <span class="keyword">if</span> (!notificationMatchesUserId(r, userId)) &#123;</div><div class="line"><span class="number">2693</span>                    <span class="keyword">continue</span>;</div><div class="line"><span class="number">2694</span>                &#125;</div><div class="line"><span class="number">2695</span>            &#125;</div><div class="line"><span class="number">2696</span></div><div class="line"><span class="number">2697</span>            <span class="keyword">if</span> ((r.getFlags() &amp; (Notification.FLAG_ONGOING_EVENT</div><div class="line"><span class="number">2698</span>                            | Notification.FLAG_NO_CLEAR)) == <span class="number">0</span>) &#123;</div><div class="line"><span class="number">2699</span>                mNotificationList.remove(i);</div><div class="line"><span class="number">2700</span>                cancelNotificationLocked(r, <span class="keyword">true</span>, reason);</div><div class="line"><span class="number">2701</span>                <span class="comment">// Make a note so we can cancel children later.</span></div><div class="line"><span class="number">2702</span>                <span class="keyword">if</span> (canceledNotifications == <span class="keyword">null</span>) &#123;</div><div class="line"><span class="number">2703</span>                    canceledNotifications = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"><span class="number">2704</span>                &#125;</div><div class="line"><span class="number">2705</span>                canceledNotifications.add(r);</div><div class="line"><span class="number">2706</span>            &#125;</div><div class="line"><span class="number">2707</span>        &#125;</div><div class="line"><span class="number">2708</span>        <span class="keyword">int</span> M = canceledNotifications != <span class="keyword">null</span> ? canceledNotifications.size() : <span class="number">0</span>;</div><div class="line"><span class="number">2709</span>        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; M; i++) &#123;</div><div class="line"><span class="number">2710</span>            cancelGroupChildrenLocked(canceledNotifications.get(i), callingUid, callingPid,</div><div class="line"><span class="number">2711</span>                    listenerName, REASON_GROUP_SUMMARY_CANCELED);</div><div class="line"><span class="number">2712</span>        &#125;</div><div class="line"><span class="number">2713</span>        updateLightsLocked();</div><div class="line"><span class="number">2714</span>    &#125;</div><div class="line"><span class="number">2715</span></div><div class="line"><span class="number">2716</span>    <span class="comment">// Warning: The caller is responsible for invoking updateLightsLocked().</span></div><div class="line"><span class="number">2717</span>    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">cancelGroupChildrenLocked</span><span class="params">(NotificationRecord r, <span class="keyword">int</span> callingUid, <span class="keyword">int</span> callingPid,</span></span></div><div class="line"><span class="number">2718</span>            String listenerName, <span class="keyword">int</span> reason) &#123;</div><div class="line"><span class="number">2719</span>        Notification n = r.getNotification();</div><div class="line"><span class="number">2720</span>        <span class="keyword">if</span> (!n.isGroupSummary()) &#123;</div><div class="line"><span class="number">2721</span>            <span class="keyword">return</span>;</div><div class="line"><span class="number">2722</span>        &#125;</div><div class="line"><span class="number">2723</span></div><div class="line"><span class="number">2724</span>        String pkg = r.sbn.getPackageName();</div><div class="line"><span class="number">2725</span>        <span class="keyword">int</span> userId = r.getUserId();</div><div class="line"><span class="number">2726</span></div><div class="line"><span class="number">2727</span>        <span class="keyword">if</span> (pkg == <span class="keyword">null</span>) &#123;</div><div class="line"><span class="number">2728</span>            <span class="keyword">if</span> (DBG) Log.e(TAG, <span class="string">"No package for group summary: "</span> + r.getKey());</div><div class="line"><span class="number">2729</span>            <span class="keyword">return</span>;</div><div class="line"><span class="number">2730</span>        &#125;</div><div class="line"><span class="number">2731</span></div><div class="line"><span class="number">2732</span>        <span class="keyword">final</span> <span class="keyword">int</span> N = mNotificationList.size();</div><div class="line"><span class="number">2733</span>        <span class="keyword">for</span> (<span class="keyword">int</span> i = N - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line"><span class="number">2734</span>            NotificationRecord childR = mNotificationList.get(i);</div><div class="line"><span class="number">2735</span>            StatusBarNotification childSbn = childR.sbn;</div><div class="line"><span class="number">2736</span>            <span class="keyword">if</span> (childR.getNotification().isGroupChild() &amp;&amp;</div><div class="line"><span class="number">2737</span>                    childR.getGroupKey().equals(r.getGroupKey())) &#123;</div><div class="line"><span class="number">2738</span>                EventLogTags.writeNotificationCancel(callingUid, callingPid, pkg, childSbn.getId(),</div><div class="line"><span class="number">2739</span>                        childSbn.getTag(), userId, <span class="number">0</span>, <span class="number">0</span>, reason, listenerName);</div><div class="line"><span class="comment">//具体的清除就是在这里了</span></div><div class="line"><span class="number">2740</span>                mNotificationList.remove(i);</div><div class="line"><span class="number">2741</span>                cancelNotificationLocked(childR, <span class="keyword">false</span>, reason);</div><div class="line"><span class="number">2742</span>            &#125;</div><div class="line"><span class="number">2743</span>        &#125;</div><div class="line"><span class="number">2744</span>    &#125;</div></pre></td></tr></table></figure></p>
+<p>至此终于找到了清除的实现的部分，但是暂时还是不会把这些东西做一个调用加入到xpnavbar模块中，主要是调用的步骤复杂了一些，可能会出现系统版本不同导致奇奇怪怪的问题带来不稳定的因素。</p>
+<p>最后放两个小彩蛋<br>1.关于整个方法替换的实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">Class&lt;?&gt; istatusbarservice = lpparam.classLoader.loadClass(I_STATUS_BAR_SERVICE);</div><div class="line">      <span class="keyword">final</span> Method onClearAllNotifications = istatusbarservice.getMethod(<span class="string">"onClearAllNotifications"</span>, <span class="keyword">int</span>.class);</div><div class="line"></div><div class="line">      XposedHelpers.findAndHookMethod(phoneStatusBarClass, <span class="string">"clearAllNotifications"</span>, <span class="keyword">new</span> XC_MethodReplacement() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">protected</span> Object <span class="title">replaceHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">              XpLog.i(<span class="string">"try to replace clearAllNotifications"</span>);</div><div class="line">              ViewGroup mStackScroller = (ViewGroup) XposedHelpers.getObjectField(param.thisObject, <span class="string">"mStackScroller"</span>);</div><div class="line"></div><div class="line">              <span class="keyword">int</span> numChildren = mStackScroller.getChildCount();</div><div class="line">              <span class="keyword">final</span> ArrayList&lt;View&gt; viewsToHide = <span class="keyword">new</span> ArrayList&lt;View&gt;(numChildren);</div><div class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numChildren; i++) &#123;</div><div class="line">                  <span class="keyword">final</span> View child = mStackScroller.getChildAt(i);</div><div class="line">                  <span class="keyword">boolean</span> b = (<span class="keyword">boolean</span>) XposedHelpers.callMethod(mStackScroller, <span class="string">"canChildBeDismissed"</span>, child);</div><div class="line">                  <span class="keyword">if</span> (b) &#123;</div><div class="line">                      <span class="keyword">if</span> (child.getVisibility() == View.VISIBLE) &#123;</div><div class="line">                          viewsToHide.add(child);</div><div class="line">                      &#125;</div><div class="line">                  &#125;</div><div class="line">              &#125;</div><div class="line">              <span class="keyword">if</span> (viewsToHide.isEmpty()) &#123;</div><div class="line">                  XposedHelpers.callMethod(param.thisObject, <span class="string">"animateCollapsePanels"</span>, <span class="number">0</span>);</div><div class="line">                  <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">              &#125;</div><div class="line">              <span class="keyword">final</span> Object mBarService = XposedHelpers.getObjectField(param.thisObject, <span class="string">"mBarService"</span>);</div><div class="line">              <span class="keyword">final</span> <span class="keyword">int</span> mCurrentUserId = (<span class="keyword">int</span>) XposedHelpers.getObjectField(param.thisObject, <span class="string">"mCurrentUserId"</span>);</div><div class="line">              XposedHelpers.callMethod(param.thisObject, <span class="string">"addPostCollapseAction"</span>, <span class="keyword">new</span> Runnable() &#123;</div><div class="line">                  <span class="meta">@Override</span></div><div class="line">                  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                      <span class="keyword">try</span> &#123;</div><div class="line">                          onClearAllNotifications.invoke(mBarService, mCurrentUserId);</div><div class="line">                      &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">                          XpLog.e(e);</div><div class="line">                      &#125;</div><div class="line">                  &#125;</div><div class="line">              &#125;);</div><div class="line"></div><div class="line">              XposedHelpers.callMethod(param.thisObject, <span class="string">"performDismissAllAnimations"</span>, viewsToHide);</div><div class="line">              XpLog.i(<span class="string">"--- clearAllNotifications ---"</span>);</div><div class="line">              <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;);</div></pre></td></tr></table></figure></p>
+<p>2.关于clearAllNotifications这个方法，在5.0和6.0的实现并不一样<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="number">952</span>    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">clearAllNotifications</span><span class="params">()</span> </span>&#123;</div><div class="line"><span class="number">953</span></div><div class="line"><span class="number">954</span>        <span class="comment">// animate-swipe all dismissable notifications, then animate the shade closed</span></div><div class="line"><span class="number">955</span>        <span class="keyword">int</span> numChildren = mStackScroller.getChildCount();</div><div class="line"><span class="number">956</span></div><div class="line"><span class="number">957</span>        <span class="keyword">final</span> ArrayList&lt;View&gt; viewsToHide = <span class="keyword">new</span> ArrayList&lt;View&gt;(numChildren);</div><div class="line"><span class="number">958</span>        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numChildren; i++) &#123;</div><div class="line"><span class="number">959</span>            <span class="keyword">final</span> View child = mStackScroller.getChildAt(i);</div><div class="line"><span class="number">960</span>            <span class="keyword">if</span> (child <span class="keyword">instanceof</span> ExpandableNotificationRow) &#123;</div><div class="line"><span class="number">961</span>                <span class="keyword">if</span> (mStackScroller.canChildBeDismissed(child)) &#123;</div><div class="line"><span class="number">962</span>                    <span class="keyword">if</span> (child.getVisibility() == View.VISIBLE) &#123;</div><div class="line"><span class="number">963</span>                        viewsToHide.add(child);</div><div class="line"><span class="number">964</span>                    &#125;</div><div class="line"><span class="number">965</span>                &#125;</div><div class="line">具体不一样的部分就是这里了，因为<span class="number">6.0</span> 多了一个通知栏提醒可以展开的功能吧。</div><div class="line">------------------------------------</div><div class="line"><span class="number">966</span>                ExpandableNotificationRow row = (ExpandableNotificationRow) child;</div><div class="line"><span class="number">967</span>                List&lt;ExpandableNotificationRow&gt; children = row.getNotificationChildren();</div><div class="line"><span class="number">968</span>                <span class="keyword">if</span> (row.areChildrenExpanded() &amp;&amp; children != <span class="keyword">null</span>) &#123;</div><div class="line"><span class="number">969</span>                    <span class="keyword">for</span> (ExpandableNotificationRow childRow : children) &#123;</div><div class="line"><span class="number">970</span>                        <span class="keyword">if</span> (childRow.getVisibility() == View.VISIBLE) &#123;</div><div class="line"><span class="number">971</span>                            viewsToHide.add(childRow);</div><div class="line"><span class="number">972</span>                        &#125;</div><div class="line"><span class="number">973</span>                    &#125;</div><div class="line"><span class="number">974</span>                &#125;</div><div class="line">------------------------------------</div><div class="line"><span class="number">975</span>            &#125;</div><div class="line"><span class="number">976</span>        &#125;</div><div class="line"><span class="number">977</span>        <span class="keyword">if</span> (viewsToHide.isEmpty()) &#123;</div><div class="line"><span class="number">978</span>            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);</div><div class="line"><span class="number">979</span>            <span class="keyword">return</span>;</div><div class="line"><span class="number">980</span>        &#125;</div><div class="line"><span class="number">981</span></div><div class="line"><span class="number">982</span>        addPostCollapseAction(<span class="keyword">new</span> Runnable() &#123;</div><div class="line"><span class="number">983</span>            <span class="meta">@Override</span></div><div class="line"><span class="number">984</span>            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"><span class="number">985</span>                mStackScroller.setDismissAllInProgress(<span class="keyword">false</span>);</div><div class="line"><span class="number">986</span>                <span class="keyword">try</span> &#123;</div><div class="line"><span class="number">987</span>                    mBarService.onClearAllNotifications(mCurrentUserId);</div><div class="line"><span class="number">988</span>                &#125; <span class="keyword">catch</span> (Exception ex) &#123; &#125;</div><div class="line"><span class="number">989</span>            &#125;</div><div class="line"><span class="number">990</span>        &#125;);</div><div class="line"><span class="number">991</span></div><div class="line"><span class="number">992</span>        performDismissAllAnimations(viewsToHide);</div><div class="line"><span class="number">993</span></div><div class="line"><span class="number">994</span>    &#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/13/XpNavbar模块在7-0适配时发现的一些问题的总结/" rel="next" title="XpNavbar模块在7.0适配时发现的一些问题的总结">
+                <i class="fa fa-chevron-left"></i> XpNavbar模块在7.0适配时发现的一些问题的总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">先有键盘后有天，一梭代码日神仙。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
