@@ -256,6 +256,127 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/23/Xposed模块为什么要重启以后才能生效/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朽木自雕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/23/Xposed模块为什么要重启以后才能生效/" itemprop="url">Xposed模块为什么要重启以后才能生效</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-23T22:50:11+08:00">
+                2017-11-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。
+在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码：
+‘’’if (zygote) {        runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : “com.android.internal.os.ZygoteInit”,                startSystemServer ? “start-system-server” : “”);‘’’大致意思是：如果启动的进程是zygote，且启用了xposed，则加载xposed版的zygote
+这里的XPOSED_CLASS_DOTS_ZYGOTE对应的是de.robv.android.xposed.XposedBridge，即XposedBridge.jar，查看xp
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/11/23/Xposed模块为什么要重启以后才能生效/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -731,125 +852,6 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/Android清除所有noticafition的一些探究/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/Android清除所有noticafition的一些探究/" itemprop="url">Android清除所有noticafition的一些探究</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:51:36+08:00">
-                2017-07-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java
-12345678910111213141528    /**229     * Cancel all previously shown notifications. See &#123;@link #cancel&#125; for the230     * detailed behavior.231     */232    public void cancelAll()233    &#123;234        INotificationManager service = getService();              //此处获取了包名，导致只能关闭该包下的消息235        String pkg = mC
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/Android清除所有noticafition的一些探究/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -899,7 +901,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -912,7 +914,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
