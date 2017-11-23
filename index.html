@@ -326,8 +326,9 @@
           
           首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。
 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码：
-‘’’if (zygote) {        runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : “com.android.internal.os.ZygoteInit”,                startSystemServer ? “start-system-server” : “”);‘’’大致意思是：如果启动的进程是zygote，且启用了xposed，则加载xposed版的zygote
-这里的XPOSED_CLASS_DOTS_ZYGOTE对应的是de.robv.android.xposed.XposedBridge，即XposedBridge.jar，查看xp
+123if (zygote) &#123;        runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : &quot;com.android.internal.os.ZygoteInit&quot;,                startSystemServer ? &quot;start-system-server&quot; : &quot;&quot;);
+大致意思是：如果启动的进程是zygote，且启用了xposed，则加载xposed版的zygote
+这里的XPOSED_CLASS_DOTS_ZYGOTE对应的是de.robv.android.xposed.Xp
           ...
           <!--noindex-->
           <div class="post-button text-center">

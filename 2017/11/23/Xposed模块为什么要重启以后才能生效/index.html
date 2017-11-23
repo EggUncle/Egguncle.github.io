@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android, Xposed," />
+  <meta name="keywords" content="Android Xposed," />
 
 
 
@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码： ‘’’if (zygote) {        r">
-<meta name="keywords" content="Android, Xposed">
+<meta name="description" content="首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码： 123if (zygote) &amp;#123;">
+<meta name="keywords" content="Android Xposed">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Xposed模块为什么要重启以后才能生效">
 <meta property="og:url" content="http://yoursite.com/2017/11/23/Xposed模块为什么要重启以后才能生效/index.html">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码： ‘’’if (zygote) {        r">
-<meta property="og:updated_time" content="2017-11-23T14:51:50.061Z">
+<meta property="og:description" content="首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码： 123if (zygote) &amp;#123;">
+<meta property="og:updated_time" content="2017-11-23T14:54:41.832Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Xposed模块为什么要重启以后才能生效">
-<meta name="twitter:description" content="首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码： ‘’’if (zygote) {        r">
+<meta name="twitter:description" content="首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。 在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码： 123if (zygote) &amp;#123;">
 
 
 
@@ -322,37 +322,43 @@
       
         <p>首先android系统中所有进程都是由zygote进程 fork出来的，xposed的第一步就是劫持zygote进程。</p>
 <p>在xposed安装以后会替换system/bin下的一个文件，替换成自己的版本(app_main)，这个app_main.cpp文件中的main会在进程启动的时候执行，而在xposed版的app_process中有这样一段代码：</p>
-<p>‘’’<br>if (zygote) {<br>        runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : “com.android.internal.os.ZygoteInit”,<br>                startSystemServer ? “start-system-server” : “”);<br>‘’’<br>大致意思是：如果启动的进程是zygote，且启用了xposed，则加载xposed版的zygote</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (zygote) &#123;</div><div class="line">        runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : &quot;com.android.internal.os.ZygoteInit&quot;,</div><div class="line">                startSystemServer ? &quot;start-system-server&quot; : &quot;&quot;);</div></pre></td></tr></table></figure>
+<p>大致意思是：如果启动的进程是zygote，且启用了xposed，则加载xposed版的zygote</p>
 <p>这里的XPOSED_CLASS_DOTS_ZYGOTE对应的是de.robv.android.xposed.XposedBridge，即XposedBridge.jar，查看xposedBridge的main方法：</p>
-<p>‘’’<br>protected static void main(String[] args) {<br>        // Initialize the Xposed framework and modules<br>        try {<br>            if (!hadInitErrors()) {<br>                initXResources();</p>
-<pre><code>            SELinuxHelper.initOnce();
-            SELinuxHelper.initForProcess(null);
+<pre><code>protected static void main(String[] args) {
+        // Initialize the Xposed framework and modules
+        try {
+            if (!hadInitErrors()) {
+                initXResources();
 
-            runtime = getRuntime();
-            XPOSED_BRIDGE_VERSION = getXposedVersion();
+                SELinuxHelper.initOnce();
+                SELinuxHelper.initForProcess(null);
 
-            if (isZygote) {
-                XposedInit.hookResources();
-                XposedInit.initForZygote();
+                runtime = getRuntime();
+                XPOSED_BRIDGE_VERSION = getXposedVersion();
+
+                if (isZygote) {
+                    XposedInit.hookResources();
+                    XposedInit.initForZygote();
+                }
+
+                XposedInit.loadModules();
+            } else {
+                Log.e(TAG, &quot;Not initializing Xposed because of previous errors&quot;);
             }
-
-            XposedInit.loadModules();
-        } else {
-            Log.e(TAG, &quot;Not initializing Xposed because of previous errors&quot;);
+        } catch (Throwable t) {
+            Log.e(TAG, &quot;Errors during Xposed initialization&quot;, t);
+            disableHooks = true;
         }
-    } catch (Throwable t) {
-        Log.e(TAG, &quot;Errors during Xposed initialization&quot;, t);
-        disableHooks = true;
-    }
 
-    // Call the original startup code
-    if (isZygote) {
-        ZygoteInit.main(args);
-    } else {
-        RuntimeInit.main(args);
+        // Call the original startup code
+        if (isZygote) {
+            ZygoteInit.main(args);
+        } else {
+            RuntimeInit.main(args);
+        }
     }
-}
-</code></pre><p>‘’’<br>其中loadModules用来加载模块，即那些app插件，然后调用ZygoteInit.main(args)来继续正常的zygote启动。</p>
+</code></pre><p>其中loadModules用来加载模块，即那些app插件，然后调用ZygoteInit.main(args)来继续正常的zygote启动。</p>
 <p>到这里就不往后说了，现在来回答为什么一定要重启生效。</p>
 <p>因为这里提到的zygote只会在开机时启动一次，其他进程再次启动只会从这个zygote里fork一个新进程，而加载插件的阶段是在zygote启动的时候做的，所以一定要重启生效。</p>
 
@@ -384,7 +390,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android-Xposed/" rel="tag"># Android, Xposed</a>
+            <a href="/tags/Android-Xposed/" rel="tag"># Android Xposed</a>
           
         </div>
       
