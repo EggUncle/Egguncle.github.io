@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta name="description" content="0x00 前言emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。 0x01 Android卸载监控的思路记得刚刚来数字的时候，土豆师傅就和我说过卸载监控怎么实现的，今天也随手看了点儿，没有很麻烦。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android启动快捷方式的方法">
-<meta property="og:url" content="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/index.html">
+<meta property="og:title" content="Android 卸载监控">
+<meta property="og:url" content="http://yoursite.com/2018/05/31/Android-卸载监控/index.html">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
-<meta property="og:updated_time" content="2017-07-08T01:40:57.062Z">
+<meta property="og:description" content="0x00 前言emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。 0x01 Android卸载监控的思路记得刚刚来数字的时候，土豆师傅就和我说过卸载监控怎么实现的，今天也随手看了点儿，没有很麻烦。">
+<meta property="og:updated_time" content="2018-05-30T18:04:48.708Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android启动快捷方式的方法">
-<meta name="twitter:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta name="twitter:title" content="Android 卸载监控">
+<meta name="twitter:description" content="0x00 前言emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。 0x01 Android卸载监控的思路记得刚刚来数字的时候，土豆师傅就和我说过卸载监控怎么实现的，今天也随手看了点儿，没有很麻烦。">
 
 
 
@@ -131,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/31/Android-卸载监控/"/>
 
 
 
 
 
-  <title>Android启动快捷方式的方法 | 朽木自雕</title>
+  <title>Android 卸载监控 | 朽木自雕</title>
   
 
 
@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/31/Android-卸载监控/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一只大茶蛋">
@@ -273,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android启动快捷方式的方法</h1>
+          <h1 class="post-title" itemprop="name headline">Android 卸载监控</h1>
         
 
         <div class="post-meta">
@@ -285,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:37:58+08:00">
-                2017-07-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-31T01:12:33+08:00">
+                2018-05-31
               </time>
             
 
@@ -320,10 +320,13 @@
       
 
       
-        <p>最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）</p>
-<p>在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。</p>
-<p>方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取到所有快捷方式</span></div><div class="line"> Intent shortcutsIntent = <span class="keyword">new</span> Intent(Intent.ACTION_CREATE_SHORTCUT);</div><div class="line">        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(</div><div class="line">                shortcutsIntent, <span class="number">0</span>);</div><div class="line">        <span class="keyword">for</span> (ResolveInfo resolveInfo : shortcuts) &#123;</div><div class="line">            String name = resolveInfo.activityInfo.applicationInfo.packageName;</div><div class="line">            String activityName = resolveInfo.activityInfo.name;</div><div class="line">            String label=resolveInfo.activityInfo.applicationInfo.name;</div><div class="line">            <span class="keyword">int</span> flags=resolveInfo.activityInfo.flags;</div><div class="line">            Log.i(TAG, <span class="string">"updatePackages: "</span>+name+<span class="string">" "</span>+activityName+<span class="string">" "</span>+flags+<span class="string">" "</span>+label);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"><span class="comment">//启动方式如下</span></div><div class="line">        ActivityInfo ai=shortcuts.get(<span class="number">7</span>).activityInfo;</div><div class="line">        String pkgName=ai.applicationInfo.packageName;</div><div class="line">        String activityName=ai.name;</div><div class="line">        <span class="keyword">int</span> flag=ai.flags;</div><div class="line">        Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line"></div><div class="line">        intent.addFlags(flag);</div><div class="line">        startActivity(intent);</div><div class="line"></div><div class="line"><span class="comment">//获取对应icon方法如下</span></div><div class="line"> Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line">        intent.addFlags(flag);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Drawable dw=pm.getActivityIcon(intent);</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
-<p>在这个地方踩到一个坑：<br>如果手机内有“冰箱”这类的应用将app停用，app或者快捷方式就无法打开了。<br>解决方法也很简单，使用enable指令就可以再打开了。</p>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。</p>
+<h3 id="0x01-Android卸载监控的思路"><a href="#0x01-Android卸载监控的思路" class="headerlink" title="0x01 Android卸载监控的思路"></a>0x01 Android卸载监控的思路</h3><p>记得刚刚来数字的时候，土豆师傅就和我说过卸载监控怎么实现的，今天也随手看了点儿，没有很麻烦。实现卸载监控最关键的地方在于，卸载时app本身的进程会被杀死，所以正常情况下，写广播接收器之类的接收卸载广播这些思路，肯定是不行的，但是在linux中，如果fork出一个进程，那么当父进程被杀死之后，子进程并不会被杀死，而是变为init进程的子进程，而另一方面，当应用被卸载后，/data/data/packagename目录也会被删除，所以实现思路就很清晰了：先fork出一个子进程，然后再循环获取上面提到的目录是不是还存在，就实现了卸载监控。</p>
+<h3 id="0x02-实现"><a href="#0x02-实现" class="headerlink" title="0x02 实现"></a>0x02 实现</h3><p>思路已经很清楚了，接下来就能着手实现一个简单的版本，直接从jni的Jni_OnLoad入手<br><br>代码在公司的电脑里面，这里写点伪码示意一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">pid_t pid=fork();</div><div class="line">if(pid&lt;0)&#123;</div><div class="line"></div><div class="line">&#125;else if(pid==0)&#123;</div><div class="line">    while(true)&#123;</div><div class="line">        读取对应data路径</div><div class="line">        根据对应文件是否存在来判断是否被卸载</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>嗯最简单的实现就是这样，但是这样一直读是不是显得头铁，那换一种头不那么铁的方法。</p>
+<h3 id="0x03-inotify机制"><a href="#0x03-inotify机制" class="headerlink" title="0x03 inotify机制"></a>0x03 inotify机制</h3><p>从网上找了一下大致说明<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">inotify是linux内核2.6.13以后支持的一种特性，功能是监视文件系统的变化，在监视到文件系统发生变化</div><div class="line">以后，会向相应的应用程序发送变化事件。</div></pre></td></tr></table></figure></p>
+<p>可以利用这个机制来监听上文提到的文件是否存在，这样就不用持续的轮讯。</p>
+<h3 id="0x04-改进"><a href="#0x04-改进" class="headerlink" title="0x04 改进"></a>0x04 改进</h3><p>使用linux的inotify机制<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">//子进程注册&quot;/data/data/pym.test.uninstalledobserver&quot;目录监听器</div><div class="line">		int fileDescriptor = inotify_init();</div><div class="line">		if (fileDescriptor &lt; 0) &#123;</div><div class="line">			LOGD(&quot;inotify_init failed&quot;);</div><div class="line">			exit(1);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		int watchDescriptor;</div><div class="line">		watchDescriptor = inotify_add_watch(fileDescriptor,&quot;/data/data/com.egguncle.uninstallmonitor&quot;, IN_DELETE);</div><div class="line">		LOGD(&quot;watchDescriptor=%d&quot;,watchDescriptor);</div><div class="line">		if (watchDescriptor &lt; 0) &#123;</div><div class="line">			LOGD(&quot;inotify_add_watch failed&quot;);</div><div class="line">			exit(1);</div><div class="line">		&#125;</div><div class="line">		void *p_buf = malloc(sizeof(struct inotify_event));</div><div class="line">		if (p_buf == NULL) &#123;</div><div class="line">			LOGD(&quot;malloc failed&quot;);</div><div class="line">			exit(1);</div><div class="line">		&#125;</div><div class="line">		//开始监听</div><div class="line">		LOGD(&quot;start observer&quot;);</div><div class="line">		size_t readBytes = read(fileDescriptor, p_buf,sizeof(struct inotify_event));</div><div class="line"></div><div class="line">		free(p_buf);</div><div class="line">		inotify_rm_watch(fileDescriptor, IN_DELETE);</div><div class="line"></div><div class="line">		LOGD(&quot;uninstall&quot;);</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -366,8 +369,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" rel="next" title="Android中快捷启动支付宝微信扫一扫的方法">
-                <i class="fa fa-chevron-left"></i> Android中快捷启动支付宝微信扫一扫的方法
+              <a href="/2018/02/04/xposed-art-hook-浅析/" rel="next" title="xposed art hook 浅析">
+                <i class="fa fa-chevron-left"></i> xposed art hook 浅析
               </a>
             
           </div>
@@ -375,10 +378,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/" rel="prev" title="解决Android6.0通知栏下栏缓慢的问题">
-                解决Android6.0通知栏下栏缓慢的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -425,8 +424,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
@@ -493,6 +501,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-Android卸载监控的思路"><span class="nav-number">2.</span> <span class="nav-text">0x01 Android卸载监控的思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-实现"><span class="nav-number">3.</span> <span class="nav-text">0x02 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-inotify机制"><span class="nav-number">4.</span> <span class="nav-text">0x03 inotify机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-改进"><span class="nav-number">5.</span> <span class="nav-text">0x04 改进</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
