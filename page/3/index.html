@@ -96,7 +96,7 @@
 <meta name="description" content="真漫长啊。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="朽木自雕">
 <meta property="og:description" content="真漫长啊。">
 <meta name="twitter:card" content="summary">
@@ -129,7 +129,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/2/"/>
+  <link rel="canonical" href="http://yoursite.com/page/3/"/>
 
 
 
@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一只大茶蛋">
@@ -275,7 +275,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/27/Android清除所有noticafition的一些探究（二）/" itemprop="url">Android清除所有noticafition的一些探究（二）</a></h1>
+                <a class="post-title-link" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/" itemprop="url">解决Android6.0通知栏下栏缓慢的问题</a></h1>
         
 
         <div class="post-meta">
@@ -287,372 +287,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T18:03:45+08:00">
-                2017-08-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333
-写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more
-当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。然后我是这样说的：
-
-通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。这个问题应该是由于该方法中1234&gt;952                if (child.getVisibility() == View.VISIBLE) &#123;&gt;953  
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/27/Android清除所有noticafition的一些探究（二）/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/13/XpNavbar模块在7-0适配时发现的一些问题的总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/13/XpNavbar模块在7-0适配时发现的一些问题的总结/" itemprop="url">XpNavbar模块在7.0适配时发现的一些问题的总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-13T14:24:10+08:00">
-                2017-08-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。
-SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences有一些新的变更https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn
-
-&gt;私有文件的文件权限不应再由所有者放宽，为使用 MODE_WORLD_READABLE 和/或 MODE_WORLD_WRITEABLE 而进行的此类尝试将触发 SecurityException。注：迄今为止，这种限制尚不能完全执行。应用仍可能使用原生 API 或 File API 来修改它们的私有目录权限。但是，我们强烈反对放宽私有目录的权限。
-
-在自己的模块中使用了sp而且由于xp需要使用的原因设置成了MODE_WORLD_READABLE，但是这个模式在Nougat上直接抛出了异常。
-检索源码发现这个检测模式的方法是这样的：1234567891011http://androidxr
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/13/XpNavbar模块在7-0适配时发现的一些问题的总结/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/09/关于AsyncTask的一些分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/09/关于AsyncTask的一些分析/" itemprop="url">关于AsyncTask的一些分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-09T14:03:48+08:00">
-                2017-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          源码地址http://androidxref.com/6.0.1_r10/xref/frameworks/base/core/java/android/os/AsyncTask.java
-首先来看一下AsyncTask的构造方法1234567891011121314151617181920212223242526272829288    public AsyncTask() &#123;289        mWorker = new WorkerRunnable&lt;Params, Result&gt;() &#123;290            public Result call() throws Exception &#123;291                mTaskInvoked.set(true);292293                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);294                //noinspection unchecked295    
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/09/关于AsyncTask的一些分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/一个Toast引发的血案/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朽木自雕">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/一个Toast引发的血案/" itemprop="url">一个Toast引发的血案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T10:18:33+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:45:07+08:00">
                 2017-07-08
               </time>
             
@@ -689,12 +324,14 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
       
         
           
-          前一阵在自己的app里面实现了一个截图功能，实现的方法比较粗暴，直接使用的screenshot指令，效果拔群。123456String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";     try &#123;         Process p = Runtime.getRuntime().exec(cmd);     &#125; catch (IOException e) &#123;         XposedBridge.log(e.getMessage());     &#125;
-后来有朋友说这么截图比较生硬，因为看不到截图的结果，后来就想加一个toast，弹出一个提示就好了。12345678String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";     try &#123;         Process p = Run
-          ...
+          最近在开发中想要实现一个下拉通知栏的功能，但是在6.0上使用方法下拉，展开动画十分缓慢，刚好在Nova launcher中，也实现了下拉通知栏，而且在6.0上提示说获取root权限，变通的解决这个问题，在酷安开发者群有朋友提到说可以在获取root权限后使用shell模拟触摸事件来实现这个方法，测试以后发现确实可行。调用如下指令模拟手势实现下拉：adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位置滑动到 x 100 y 500的位置 历时300毫秒
+此时通知栏并不会完全展开，解决方法也非常简单，再模拟一次下拉事件，点击刚刚没有完全展开的状态栏即可：
+adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的位置 模拟点击会出现奇奇怪怪的问题，可能在其他rom上会点击到其他的位置，所以再做一次下滑会好一些这样通知栏就完全展开了
+
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/一个Toast引发的血案/#more" rel="contents">
+            <a class="btn" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -740,7 +377,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/Android清除所有noticafition的一些探究/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一只大茶蛋">
@@ -759,7 +396,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/08/Android清除所有noticafition的一些探究/" itemprop="url">Android清除所有noticafition的一些探究</a></h1>
+                <a class="post-title-link" href="/2017/07/08/Android启动快捷方式的方法/" itemprop="url">Android启动快捷方式的方法</a></h1>
         
 
         <div class="post-meta">
@@ -771,7 +408,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:51:36+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:37:58+08:00">
                 2017-07-08
               </time>
             
@@ -808,12 +445,134 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
       
         
           
-          最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java
-12345678910111213141528    /**229     * Cancel all previously shown notifications. See &#123;@link #cancel&#125; for the230     * detailed behavior.231     */232    public void cancelAll()233    &#123;234        INotificationManager service = getService();              //此处获取了包名，导致只能关闭该包下的消息235        String pkg = mC
+          最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）
+在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。
+方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(                shortcutsIntent, 0);        for (ResolveInfo resolveInfo : shortcuts) &#123;            String name = resolveInfo.activityInfo.applicationInfo.packageName; 
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/Android清除所有noticafition的一些探究/#more" rel="contents">
+            <a class="btn" href="/2017/07/08/Android启动快捷方式的方法/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朽木自雕">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" itemprop="url">Android中快捷启动支付宝微信扫一扫的方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T15:10:34+08:00">
+                2017-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Android 快捷打开支付宝微信扫码的方法支付宝&amp;微信扫一扫 ✓支付宝扫一扫：1234Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");Intent intent = new Intent(Intent.ACTION_VIEW, uri);intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);context.startActivity(intent);
+微信原来的扫一扫打开是这样的，不过目前的版本已经失效了123Uri uri = Uri.parse("weixin://dl/scan");Intent intent = new Intent(Intent.ACTION_VIEW, uri);startActivity(intent);
+所以只能使用am命令来控制二维码界面的activity打开
+使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -854,7 +613,7 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
   </nav>
 
 
