@@ -1,0 +1,696 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="art 反射 获取方法实例的流程java层java这层就简单一点说了,获取到class对象以后,使用getDeclaredMethod,然后调用getMethod,调用到getDeclaredMethodInternal. 虚机getDeclaredMethodInternal是一个native方法,在java_lang_Class.cc中123456789101112131415161718st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="art中反射查找方法的流程">
+<meta property="og:url" content="http://yoursite.com/2018/08/22/art中反射查找方法的流程/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="art 反射 获取方法实例的流程java层java这层就简单一点说了,获取到class对象以后,使用getDeclaredMethod,然后调用getMethod,调用到getDeclaredMethodInternal. 虚机getDeclaredMethodInternal是一个native方法,在java_lang_Class.cc中123456789101112131415161718st">
+<meta property="og:updated_time" content="2018-08-21T16:39:20.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="art中反射查找方法的流程">
+<meta name="twitter:description" content="art 反射 获取方法实例的流程java层java这层就简单一点说了,获取到class对象以后,使用getDeclaredMethod,然后调用getMethod,调用到getDeclaredMethodInternal. 虚机getDeclaredMethodInternal是一个native方法,在java_lang_Class.cc中123456789101112131415161718st">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/22/art中反射查找方法的流程/"/>
+
+
+
+
+
+  <title>art中反射查找方法的流程 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/22/art中反射查找方法的流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">art中反射查找方法的流程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-22T00:38:49+08:00">
+                2018-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="art-反射-获取方法实例的流程"><a href="#art-反射-获取方法实例的流程" class="headerlink" title="art 反射 获取方法实例的流程"></a>art 反射 获取方法实例的流程</h2><h4 id="java层"><a href="#java层" class="headerlink" title="java层"></a>java层</h4><p>java这层就简单一点说了,获取到class对象以后,使用getDeclaredMethod,然后调用getMethod,调用到getDeclaredMethodInternal.</p>
+<h4 id="虚机"><a href="#虚机" class="headerlink" title="虚机"></a>虚机</h4><p>getDeclaredMethodInternal是一个native方法,在java_lang_Class.cc中<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> jobject <span class="title">Class_getDeclaredMethodInternal</span><span class="params">(JNIEnv* env, jobject javaThis,</span></span></div><div class="line">                                               jstring name, jobjectArray args) &#123;</div><div class="line">  <span class="function">ScopedFastNativeObjectAccess <span class="title">soa</span><span class="params">(env)</span></span>;</div><div class="line">  StackHandleScope&lt;<span class="number">1</span>&gt; hs(soa.Self());</div><div class="line">  DCHECK_EQ(Runtime::Current()-&gt;GetClassLinker()-&gt;GetImagePointerSize(), kRuntimePointerSize);</div><div class="line">  DCHECK(!Runtime::Current()-&gt;IsActiveTransaction());</div><div class="line">  <span class="comment">//这一句应该就是最关键的,获取到方法的信息</span></div><div class="line">  Handle&lt;mirror::Method&gt; result = hs.NewHandle(</div><div class="line">      mirror::Class::GetDeclaredMethodInternal&lt;kRuntimePointerSize, <span class="literal">false</span>&gt;(</div><div class="line">          soa.Self(),</div><div class="line">          DecodeClass(soa, javaThis),</div><div class="line">          soa.Decode&lt;mirror::String&gt;(name),</div><div class="line">          soa.Decode&lt;mirror::ObjectArray&lt;mirror::Class&gt;&gt;(args)));</div><div class="line">  <span class="keyword">if</span> (result == <span class="literal">nullptr</span> || ShouldBlockAccessToMember(result-&gt;GetArtMethod(), soa.Self())) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> soa.AddLocalReference&lt;jobject&gt;(result.Get());</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后看一下 GetDeclaredMethodInternal的实现<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;PointerSize kPointerSize, <span class="keyword">bool</span> kTransactionActive&gt;</div><div class="line">ObjPtr&lt;Method&gt; Class::GetDeclaredMethodInternal(</div><div class="line">    Thread* self,</div><div class="line">    ObjPtr&lt;Class&gt; klass,  类</div><div class="line">    ObjPtr&lt;String&gt; name,  方法名</div><div class="line">    ObjPtr&lt;ObjectArray&lt;Class&gt;&gt; args) &#123;  参数类型列表</div><div class="line">  <span class="comment">// Covariant return types permit the class to define multiple</span></div><div class="line">  <span class="comment">// methods with the same name and parameter types. Prefer to</span></div><div class="line">  <span class="comment">// return a non-synthetic method in such situations. We may</span></div><div class="line">  <span class="comment">// still return a synthetic method to handle situations like</span></div><div class="line">  <span class="comment">// escalated visibility. We never return miranda methods that</span></div><div class="line">  <span class="comment">// were synthesized by the runtime.</span></div><div class="line">  StackHandleScope&lt;<span class="number">3</span>&gt; hs(self);</div><div class="line">  <span class="keyword">auto</span> h_method_name = hs.NewHandle(name);</div><div class="line">  <span class="keyword">if</span> (UNLIKELY(h_method_name == <span class="literal">nullptr</span>)) &#123;</div><div class="line">    ThrowNullPointerException(<span class="string">"name == null"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">auto</span> h_args = hs.NewHandle(args);</div><div class="line">  Handle&lt;Class&gt; h_klass = hs.NewHandle(klass);</div><div class="line">  ArtMethod* result = <span class="literal">nullptr</span>;</div><div class="line">  <span class="comment">//这里看字面意思就是获取这个类的虚方法的列表,进行遍历,GetDeclaredVirtualMethods的代码我稍微跟了下,最后就是返回一个ArraySlice&lt;ArtMethod&gt;集合,过程涉及到一些偏移什么的,应该相对底层了,这里先不深究了</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; m : h_klass-&gt;GetDeclaredVirtualMethods(kPointerSize)) &#123;</div><div class="line">    <span class="keyword">auto</span>* np_method = m.GetInterfaceMethodIfProxy(kPointerSize);</div><div class="line">    <span class="comment">// May cause thread suspension.</span></div><div class="line">    ObjPtr&lt;String&gt; np_name = np_method-&gt;GetNameAsString(self);</div><div class="line">    <span class="comment">//这里的操作也比较直接,就是对比方法名称和参数列表是否相等,下面那个循环的操作也比较类似</span></div><div class="line">    <span class="keyword">if</span> (!np_name-&gt;Equals(h_method_name.Get()) || !np_method-&gt;EqualParameters(h_args)) &#123;</div><div class="line">      <span class="keyword">if</span> (UNLIKELY(self-&gt;IsExceptionPending())) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!m.IsMiranda()) &#123;</div><div class="line">      <span class="keyword">if</span> (!m.IsSynthetic()) &#123;</div><div class="line">        <span class="keyword">return</span> Method::CreateFromArtMethod&lt;kPointerSize, kTransactionActive&gt;(self, &amp;m);</div><div class="line">      &#125;</div><div class="line">      result = &amp;m;  <span class="comment">// Remember as potential result if it's not a miranda method.</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (result == <span class="literal">nullptr</span>) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; m : h_klass-&gt;GetDirectMethods(kPointerSize)) &#123;</div><div class="line">      <span class="keyword">auto</span> modifiers = m.GetAccessFlags();</div><div class="line">      <span class="keyword">if</span> ((modifiers &amp; kAccConstructor) != <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">auto</span>* np_method = m.GetInterfaceMethodIfProxy(kPointerSize);</div><div class="line">      <span class="comment">// May cause thread suspension.</span></div><div class="line">      ObjPtr&lt;String&gt; np_name = np_method-&gt;GetNameAsString(self);</div><div class="line">      <span class="keyword">if</span> (np_name == <span class="literal">nullptr</span>) &#123;</div><div class="line">        self-&gt;AssertPendingException();</div><div class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> (!np_name-&gt;Equals(h_method_name.Get()) || !np_method-&gt;EqualParameters(h_args)) &#123;</div><div class="line">        <span class="keyword">if</span> (UNLIKELY(self-&gt;IsExceptionPending())) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">nullptr</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">      &#125;</div><div class="line">      DCHECK(!m.IsMiranda());  <span class="comment">// Direct methods cannot be miranda methods.</span></div><div class="line">      <span class="keyword">if</span> ((modifiers &amp; kAccSynthetic) == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> Method::CreateFromArtMethod&lt;kPointerSize, kTransactionActive&gt;(self, &amp;m);</div><div class="line">      &#125;</div><div class="line">      result = &amp;m;  <span class="comment">// Remember as potential result.</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result != <span class="literal">nullptr</span></div><div class="line">      ? Method::CreateFromArtMethod&lt;kPointerSize, kTransactionActive&gt;(self, result)</div><div class="line">      : <span class="literal">nullptr</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这些其实不是我的重点..我的疑问其实出在GetNameAsString中<br>字面意思其实蛮好理解的,就是获取名称的字符串,然而<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ObjPtr&lt;mirror::String&gt; ArtMethod::GetNameAsString(Thread* self) &#123;</div><div class="line">  CHECK(!IsProxyMethod());</div><div class="line">  StackHandleScope&lt;<span class="number">1</span>&gt; hs(self);</div><div class="line">  Handle&lt;mirror::DexCache&gt; dex_cache(hs.NewHandle(GetDexCache()));</div><div class="line">  <span class="keyword">auto</span>* dex_file = dex_cache-&gt;GetDexFile();</div><div class="line">  <span class="keyword">uint32_t</span> dex_method_idx = GetDexMethodIndex();</div><div class="line">  <span class="keyword">const</span> DexFile::MethodId&amp; method_id = dex_file-&gt;GetMethodId(dex_method_idx);</div><div class="line">  <span class="keyword">return</span> Runtime::Current()-&gt;GetClassLinker()-&gt;ResolveString(method_id.name_idx_, dex_cache);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在IsProxyMethod中的返回值为true,导致CHECK(!IsProxyMethod())报check failed,导致程序终止了<br>有些东西涉及到工作的具体内容这里就不说了,但是确实比较玄学..</p>
+<p>还是得想办法摸索一下看看</p>
+<p>代理方法这个东西,我其实没怎么查到相关信息</p>
+<blockquote>
+<p>至于代理方法，由于是动态生成的（没有对应的DEX字节码），因此即使ART虚拟机运行在解释模式中，它们也不通过解释器来执行（这一点猜测的，还没有确认）。</p>
+</blockquote>
+<p>上文中的GetNameAsString实现的最后的return语句,看起来是向dex缓存来找对应的方法名称,但是如果是代理方法,就是没有对应的dex字节码,就肯定是找不到了,所以在执行这个方法的最前面就会进行这个check<br>看一下IsProxyMethod的具体实现<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> ArtMethod::IsProxyMethod() &#123;</div><div class="line">  DCHECK(!IsRuntimeMethod()) &lt;&lt; <span class="string">"ArtMethod::IsProxyMethod called on a runtime method"</span>;</div><div class="line">  <span class="comment">// Avoid read barrier since the from-space version of the class will have the correct proxy class</span></div><div class="line">  <span class="comment">// flags since they are constant for the lifetime of the class.</span></div><div class="line">  <span class="keyword">return</span> GetDeclaringClass&lt;kWithoutReadBarrier&gt;()-&gt;IsProxyClass();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>大概是这样,emmm…我刚刚好像找到为什么报错了,公司的代码重写了这个部分,细节这里不贴出来了,可能是那个重写的部分没有对这个方法有正确的返回值,所以会出错.</p>
+<p>嗯大概是这样吧,算是比较水的分析了一下反射找到方法的流程,还好找着为什么报错了要不然就要被连人带椅子扔出去了.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/17/Android-序列化反序列化不匹配造成的一个安全问题/" rel="next" title="Android 序列化反序列化不匹配造成的一个安全问题">
+                <i class="fa fa-chevron-left"></i> Android 序列化反序列化不匹配造成的一个安全问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#art-反射-获取方法实例的流程"><span class="nav-number">1.</span> <span class="nav-text">art 反射 获取方法实例的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java层"><span class="nav-number">1.0.1.</span> <span class="nav-text">java层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚机"><span class="nav-number">1.0.2.</span> <span class="nav-text">虚机</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
