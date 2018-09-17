@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,23 @@
 
 
 
-<meta name="description" content="Android 快捷打开支付宝微信扫码的方法支付宝&amp;amp;微信扫一扫 ✓支付宝扫一扫：1234Uri uri = Uri.parse(&quot;alipayqr://platformapi/startapp?saId=10000007&quot;);Intent intent = new Intent(Intent.ACTION_VIEW, uri);intent.setFlags(Intent.FLAG_ACT">
-<meta name="keywords" content="Android">
+<meta name="description" content="一种简单的app_process 全局注入方案偶然在看雪看到的一篇文章,最近还看了一些elf相关的东西,所以结合一下记点儿东西.  https://bbs.pediy.com/thread-224191.htm  elf文件相关资料  https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf  app_proces">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android中快捷启动支付宝微信扫一扫的方法">
-<meta property="og:url" content="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/index.html">
+<meta property="og:title" content="app_process注入">
+<meta property="og:url" content="http://yoursite.com/2018/09/18/app-process注入/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="Android 快捷打开支付宝微信扫码的方法支付宝&amp;amp;微信扫一扫 ✓支付宝扫一扫：1234Uri uri = Uri.parse(&quot;alipayqr://platformapi/startapp?saId=10000007&quot;);Intent intent = new Intent(Intent.ACTION_VIEW, uri);intent.setFlags(Intent.FLAG_ACT">
+<meta property="og:description" content="一种简单的app_process 全局注入方案偶然在看雪看到的一篇文章,最近还看了一些elf相关的东西,所以结合一下记点儿东西.  https://bbs.pediy.com/thread-224191.htm  elf文件相关资料  https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf  app_proces">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-07-07T07:14:30.309Z">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-14-45%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-26-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-38-39%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-39-42%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-44-44%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:updated_time" content="2018-09-17T17:28:23.687Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android中快捷启动支付宝微信扫一扫的方法">
-<meta name="twitter:description" content="Android 快捷打开支付宝微信扫码的方法支付宝&amp;amp;微信扫一扫 ✓支付宝扫一扫：1234Uri uri = Uri.parse(&quot;alipayqr://platformapi/startapp?saId=10000007&quot;);Intent intent = new Intent(Intent.ACTION_VIEW, uri);intent.setFlags(Intent.FLAG_ACT">
+<meta name="twitter:title" content="app_process注入">
+<meta name="twitter:description" content="一种简单的app_process 全局注入方案偶然在看雪看到的一篇文章,最近还看了一些elf相关的东西,所以结合一下记点儿东西.  https://bbs.pediy.com/thread-224191.htm  elf文件相关资料  https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf  app_proces">
+<meta name="twitter:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-14-45%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
 
 
 
@@ -132,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/18/app-process注入/"/>
 
 
 
 
 
-  <title>Android中快捷启动支付宝微信扫一扫的方法 | Ekkkkkkko</title>
+  <title>app_process注入 | Ekkkkkkko</title>
   
 
 
@@ -257,7 +262,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/app-process注入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一只大茶蛋">
@@ -274,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android中快捷启动支付宝微信扫一扫的方法</h1>
+          <h1 class="post-title" itemprop="name headline">app_process注入</h1>
         
 
         <div class="post-meta">
@@ -286,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T15:10:34+08:00">
-                2017-07-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T01:13:48+08:00">
+                2018-09-18
               </time>
             
 
@@ -321,10 +326,36 @@
       
 
       
-        <h1 id="Android-快捷打开支付宝微信扫码的方法"><a href="#Android-快捷打开支付宝微信扫码的方法" class="headerlink" title="Android 快捷打开支付宝微信扫码的方法"></a>Android 快捷打开支付宝微信扫码的方法</h1><h2 id="支付宝-amp-微信扫一扫-✓"><a href="#支付宝-amp-微信扫一扫-✓" class="headerlink" title="支付宝&amp;微信扫一扫 ✓"></a>支付宝&amp;微信扫一扫 ✓</h2><p>支付宝扫一扫：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"alipayqr://platformapi/startapp?saId=10000007"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);</div><div class="line">context.startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>微信原来的扫一扫打开是这样的，不过目前的版本已经失效了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"weixin://dl/scan"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p>所以只能使用am命令来控制二维码界面的activity打开</p>
-<p>使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.plugin.scanner.ui.BaseScanUI<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">String cmd=<span class="string">"am start -n com.tencent.mm/com.tencent.mm.plugin.scanner.ui.BaseScanUI"</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Process p = Runtime.getRuntime().exec(cmd);</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+        <h2 id="一种简单的app-process-全局注入方案"><a href="#一种简单的app-process-全局注入方案" class="headerlink" title="一种简单的app_process 全局注入方案"></a>一种简单的app_process 全局注入方案</h2><p>偶然在看雪看到的一篇文章,最近还看了一些elf相关的东西,所以结合一下记点儿东西.</p>
+<blockquote>
+<p><a href="https://bbs.pediy.com/thread-224191.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-224191.htm</a></p>
+</blockquote>
+<p>elf文件相关资料</p>
+<blockquote>
+<p><a href="https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf" target="_blank" rel="noopener">https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf</a></p>
+</blockquote>
+<p>app_process其实是一个elf文件,这里对它进行一些修改来达到自己的目的.</p>
+<p>我的调试机是Nexus5 lineageOS 14,这里我们把它的app_process32 拷贝到本地,使用readelf看一下它的动态段</p>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-14-45%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p>其中有个DEBUG项,是用于调试的,没有明确定义格式,修改点就在这里.<br><br>由于需要对system分区进行读写操作,所以这里就先adb remount一下.</p>
+<p>把app_process32 pull到本地,用010editor打开,因为DEBUG项的上一项标记为0x6ffffffa,所以这里在010editor中搜索faffff6f(小端序)<br><br><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-26-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p>其中标红部分即为需要修改的部分.<br>DT_DEBUG的标识为21,即0x15,值为0,这里将它改成DT_NEEDED,并将它的值改为一个so的名称(其实是索引),这里就不对字符串表做修改了,看看下面的DT_NEEDED项的字符串索引,然后改改写到目标位置.</p>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-38-39%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p>这里额外说一下关于elf字符串索引的东西,elf中字符串以00(null)结尾,然后在文件中都是根据字符串表的索引来获取对应字符串的内容,索引本身可以不从字符串的开头开始,假设存在android字符串且它是字符串表的第一个,则索引为0的时候,取到的字符串就是android,当索引为2的时候,获取到的字符串就是droid,以此类推.</p>
+<p>修改以后文件内容如下:</p>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-39-42%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p>现在再用readelf打开文件,可以看到,对应的项已经变成一个NEEDED,而且对应一个叫ibc.so的共享库.</p>
+<p>由于在app_process中JNI_onLoad不会执行,但是.init_array这个节会有一些初始化操作,其中包括了静态变量的初始化,所以这里写一个ibc.so且它的代码如下:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"library.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">staticClass</span>&#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    staticClass()&#123;</div><div class="line">        LOGE(<span class="string">"just a hook test"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">static</span> staticClass s;</div></pre></td></tr></table></figure></p>
+<p>编译完成后,将它置于system/lib下,并将修改后的app_process32 push到system/bin下,重启手机,即可看到对应的log输出.</p>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-09-17%2018-44-44%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p>整个过程其实挺简单的,但是我比较菜所以再稍微记一下其中的知识点.</p>
+<h4 id="1-DT-NEEDED的作用"><a href="#1-DT-NEEDED的作用" class="headerlink" title="1.DT_NEEDED的作用"></a>1.DT_NEEDED的作用</h4><p>DT_NEEDED <br><br>此元素指明了一个所需的库的名字。不过此元素本身并不是一个字符串，它是一个指向由”DT_STRTAB”所标记的字符串表中的索引，在表中，此索引处是一个以’null’结尾的字符串，这个字符串就是库的名字。在动态数组中可以包含若干个此类型的项，这些项出现的相对顺序是不能随意调换的。</p>
+<p>这里还涉及到一些动态链接的知识,当动态连接器为一个目标文件创建内存段的时候，动态结构中的DT_NEEDED项会指明所依赖的库，动态连接器会连接被引用的符号和它们所依赖的库，这个过程会反复地执行，直到一个完整的进程镜像被构建好。当解析一个符号引用的时候，动态连接器以一种“广度优先”的算法来查找符号表。就是说，动态连接器首先查找可执行程序自己的符号表，然后是DT_NEEDED项所指明的库的符号表，再接下来是下一层依赖库的符号表，依次下去。共享目标文件必须是可读的，其它权限没有要求。</p>
+<h4 id="2-init-array-的作用"><a href="#2-init-array-的作用" class="headerlink" title="2. .init_array 的作用"></a>2. .init_array 的作用</h4><p>这里涉及到so的加载和启动过程</p>
+<blockquote>
+<p><a href="https://wps2015.org/drops/drops/Android%20Linker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html" target="_blank" rel="noopener">https://wps2015.org/drops/drops/Android%20Linker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</a></p>
+</blockquote>
+<p>该节中包含指针，这些指针指向了一些初始化代码。这些初始化代码一般是在main函数之前执行的。在C++程序中，这些代码用来运行静态构造函数。另外一个用途就是有时候用来初始化C库中的一些IO系统。</p>
 
       
     </div>
@@ -352,12 +383,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-        </div>
-      
 
       
       
@@ -367,15 +392,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/08/22/art中反射查找方法的流程/" rel="next" title="art中反射查找方法的流程">
+                <i class="fa fa-chevron-left"></i> art中反射查找方法的流程
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/08/Android启动快捷方式的方法/" rel="prev" title="Android启动快捷方式的方法">
-                Android启动快捷方式的方法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -509,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-快捷打开支付宝微信扫码的方法"><span class="nav-number">1.</span> <span class="nav-text">Android 快捷打开支付宝微信扫码的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#支付宝-amp-微信扫一扫-✓"><span class="nav-number">1.1.</span> <span class="nav-text">支付宝&amp;微信扫一扫 ✓</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一种简单的app-process-全局注入方案"><span class="nav-number">1.</span> <span class="nav-text">一种简单的app_process 全局注入方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-DT-NEEDED的作用"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.DT_NEEDED的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-init-array-的作用"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. .init_array 的作用</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

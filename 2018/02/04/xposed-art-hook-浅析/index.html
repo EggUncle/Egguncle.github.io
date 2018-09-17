@@ -100,6 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/02/04/xposed-art-hook-浅析/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
 <meta property="og:description" content="xposed art hook 原理只是自己一点浅薄的见解，最近在看art上面hook相关的东西，如果有写的不对的地方请指出。 java部分流程和dvm一样，现在只着重讲一下在art上面怎么hook的，所以从最关键的部分开始 xposed在java部分声明了各种native方法，而从这里进入navtive层，art和dvm的不同处理也是从这里开始 xposed整个重新编译了自己的libart.so">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-02-03T16:18:18.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xposed art hook 浅析">
@@ -323,7 +324,7 @@
         <h1 id="xposed-art-hook-原理"><a href="#xposed-art-hook-原理" class="headerlink" title="xposed art hook 原理"></a>xposed art hook 原理</h1><p>只是自己一点浅薄的见解，最近在看art上面hook相关的东西，如果有写的不对的地方请指出。</p>
 <p>java部分流程和dvm一样，现在只着重讲一下在art上面怎么hook的，所以从最关键的部分开始</p>
 <p>xposed在java部分声明了各种native方法，而从这里进入navtive层，art和dvm的不同处理也是从这里开始</p>
-<p>xposed整个重新编译了自己的libart.so ，也对art有一些改动，比如阻止内联等，详情可以看这个issue<br><a href="https://github.com/rovo89/Xposed/issues/160" target="_blank" rel="external">https://github.com/rovo89/Xposed/issues/160</a></p>
+<p>xposed整个重新编译了自己的libart.so ，也对art有一些改动，比如阻止内联等，详情可以看这个issue<br><a href="https://github.com/rovo89/Xposed/issues/160" target="_blank" rel="noopener">https://github.com/rovo89/Xposed/issues/160</a></p>
 <p>xposedbridge中有一个native方法  hookMethodNative ，从这里进入native层，因为看的是art的hook原理，所以从libxposed_art.cpp开始看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">void XposedBridge_hookMethodNative(JNIEnv* env, jclass, jobject javaReflectedMethod,</div><div class="line">            jobject, jint, jobject javaAdditionalInfo) &#123;</div><div class="line">    // Detect usage errors.</div><div class="line">    ScopedObjectAccess soa(env);</div><div class="line">    if (javaReflectedMethod == nullptr) &#123;</div><div class="line">#if PLATFORM_SDK_VERSION &gt;= 23</div><div class="line">        ThrowIllegalArgumentException(&quot;method must not be null&quot;);</div><div class="line">#else</div><div class="line">        ThrowIllegalArgumentException(nullptr, &quot;method must not be null&quot;);</div><div class="line">#endif</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Get the ArtMethod of the method to be hooked.</div><div class="line">    ArtMethod* artMethod = ArtMethod::FromReflectedMethod(soa, javaReflectedMethod);</div><div class="line"></div><div class="line">    // Hook the method</div><div class="line">    artMethod-&gt;EnableXposedHook(soa, javaAdditionalInfo);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>javaAdditionalInfo里面放的就是hook的部分</p>
 <p>这里比较关键的就是后面两句，分别获取了要被hook的方法的artmethod以及对其执行EnableXposedHook<br>然后来看一下EnableXposedHook在做什么</p>
@@ -472,7 +473,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

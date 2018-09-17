@@ -99,6 +99,7 @@
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
 <meta property="og:description" content="我会想念大家的">
+<meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ekkkkkkko">
 <meta name="twitter:description" content="我会想念大家的">
@@ -246,6 +247,137 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/app-process注入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/18/app-process注入/" itemprop="url">app_process注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T01:13:48+08:00">
+                2018-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          一种简单的app_process 全局注入方案偶然在看雪看到的一篇文章,最近还看了一些elf相关的东西,所以结合一下记点儿东西.
+
+https://bbs.pediy.com/thread-224191.htm
+
+elf文件相关资料
+
+https://paper.seebug.org/papers/Archive/refs/elf/Understanding_ELF.pdf
+
+app_process其实是一个elf文件,这里对它进行一些修改来达到自己的目的.
+我的调试机是Nexus5 lineageOS 14,这里我们把它的app_process32 拷贝到本地,使用readelf看一下它的动态段
+
+其中有个DEBUG项,是用于调试的,没有明确定义格式,修改点就在这里.由于需要对system分区进行读写操作,所以这里就先adb remount一下.
+把app_process32 pull到本地,用010editor打开,因为DEBUG项的上一项标记为0x6ffffffa,所以这里在010editor中搜索faffff6f(小端序)
+其中标红部分即为需要修改的部分.DT_DEBUG的标识
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/18/app-process注入/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -731,126 +863,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/31/Android-卸载监控/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/31/Android-卸载监控/" itemprop="url">Android 卸载监控</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-31T01:12:33+08:00">
-                2018-05-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          0x00 前言emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。
-0x01 Android卸载监控的思路记得刚刚来数字的时候，土豆师傅就和我说过卸载监控怎么实现的，今天也随手看了点儿，没有很麻烦。实现卸载监控最关键的地方在于，卸载时app本身的进程会被杀死，所以正常情况下，写广播接收器之类的接收卸载广播这些思路，肯定是不行的，但是在linux中，如果fork出一个进程，那么当父进程被杀死之后，子进程并不会被杀死，而是变为init进程的子进程，而另一方面，当应用被卸载后，/data/data/packagename目录也会被删除，所以实现思路就很清晰了：先fork出一个子进程，然后再循环获取上面提到的目录是不是还存在，就实现了卸载监控。
-0x02 实现思路已经很清楚了，接下来就能着手实现一个简单的版本，直接从jni的Jni_OnLoad入手代码在公司的电脑里面，这里写点伪码示意一下123
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/31/Android-卸载监控/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -900,7 +912,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

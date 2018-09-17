@@ -100,6 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/06/17/Android-进程注入/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
 <meta property="og:description" content="0x00 前言以前就想试下进程注入这个东西,但是相关知识懂得太少了,进度就一直很慢,后来还是想了下感觉还是得头铁的尝试一下看看,这里把整个过程和踩到的坑记下来,也算是个简单的教程吧,我会的不多,但是一路下来还是了解到了不少东西,这里就把一路上用到的也都记下来 0x01 目的首先先明确目标,首先新建一个app项目,里面的jni部分代码是这样的:1234567891011121314151617181">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-06-05%2021-26-57%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png?raw=true">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-06-05%2022-16-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
@@ -381,7 +382,7 @@
 <p>可以看到结果也出来了,成功注入了so并且调用了进程中的函数</p>
 <p>7.最后不要忘了恢复现场<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">parameters[0] = targetSoHandle;</div><div class="line"></div><div class="line">    if (ptraceCallWrapper(pid, &quot;dlclose&quot;, targetDlclose, parameters, 1, &amp;currentRegs) &lt; -1) &#123;</div><div class="line">        printf(&quot;call target dlclose error&quot;);</div><div class="line">        return -1;</div><div class="line">    &#125;</div><div class="line">    ptraceSetregs(pid, &amp;orgRegs);</div><div class="line">    ptraceDetach(pid);</div></pre></td></tr></table></figure></p>
 <p>整个流程下来大致就是这样,并不是很难.</p>
-<p><a href="https://github.com/EggUncle/PtraceInject" target="_blank" rel="external">代码实现</a></p>
+<p><a href="https://github.com/EggUncle/PtraceInject" target="_blank" rel="noopener">代码实现</a></p>
 <h3 id="0x05-踩到的一些坑"><a href="#0x05-踩到的一些坑" class="headerlink" title="0x05 踩到的一些坑"></a>0x05 踩到的一些坑</h3><ul>
 <li>selinux需要关了,setenforce 0</li>
 <li>adb root</li>
@@ -517,7 +518,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
