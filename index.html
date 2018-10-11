@@ -257,6 +257,127 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/12/在Android-p上添加framework-api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/12/在Android-p上添加framework-api/" itemprop="url">在Android p上添加framework api</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-12T00:38:39+08:00">
+                2018-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          前一阵往framework里面加了一些东西，然后需要将添加的api和系统api一样，防止被反射调用，查了一些博客之类的，都说是加个@hide这种注解就完事儿了，后来发现并不是这样。
+问了一下同事，也大概查了一点，发现@hide这个东西，只能将对应的api在生成java doc的时候隐藏起来，但是并不能防止其被反射调用。后来又查了一些东西，发现正确的姿势应该是在framework/base/config中的hide-api相关的txt文件中，添加对应的api信息，看起来像是方法签名一类的东西，和smali有点像，不光有方法，还有一些是成员变量，加上去以后，就能成功防止其被反射调用了。
+嗨呀又水了一篇，最近好像事情还挺多的，没什么时间学东西。
+
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/12/在Android-p上添加framework-api/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/28/smali从入门到自闭/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -740,131 +861,6 @@ app_process其实是一个elf文件,这里对它进行一些修改来达到自�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/17/Android-LaunchAnyWhere/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/17/Android-LaunchAnyWhere/" itemprop="url">Android LaunchAnyWhere</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-17T01:45:49+08:00">
-                2018-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          LaunchAnyWhere4.3及以下的一个系统漏洞
-
-本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.
-
-0x00 前言最近看了一点儿系统安全相关的东西,想了解一下java序列化反序列化的东西,正好看到LaunchAnyWhere这个比较经典的漏洞,也尝试了一下,触发机制和原理都比较简单,但是危害也不小.所以这里也顺手记下来.
-再顺带提一下,这个漏洞在Android4.3之后就失效了~
-0x01 背景知识1.Android 账户系统Android2.0中加入了一个新的包android.accounts，该包主要包括了集中式的账户管理API，用以安全地存储和访问认证的令牌和密码，比如，我们的手机存在多个账户，每个账户下面都有不同的信息，甚至每个账户都可以与不同的服务器之间进行数据同步（例如，手机账户中的联系人可以是一个Gmail账户中的通讯录，可联网进行同步更新）
-2.Android中添加账户的基本流程比如现在有两个app,appA需要使用到appB中的账户信息,而appB本身也提供了这种功能,那么就可以进行添加账户的操作.普通应用（记为AppA）去请求添加
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/17/Android-LaunchAnyWhere/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -914,7 +910,7 @@ app_process其实是一个elf文件,这里对它进行一些修改来达到自�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
