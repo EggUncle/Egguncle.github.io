@@ -257,6 +257,128 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/27/Android清除所有noticafition的一些探究（二）/" itemprop="url">Android清除所有noticafition的一些探究（二）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T18:03:45+08:00">
+                2017-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333
+写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more
+当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。然后我是这样说的：
+
+通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。这个问题应该是由于该方法中1234&gt;952                if (child.getVisibility() == View.VISIBLE) &#123;&gt;953  
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/08/27/Android清除所有noticafition的一些探究（二）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/13/XpNavbar模块在7-0适配时发现的一些问题的总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -729,127 +851,6 @@ SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/" itemprop="url">解决Android6.0通知栏下栏缓慢的问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T09:45:07+08:00">
-                2017-07-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          最近在开发中想要实现一个下拉通知栏的功能，但是在6.0上使用方法下拉，展开动画十分缓慢，刚好在Nova launcher中，也实现了下拉通知栏，而且在6.0上提示说获取root权限，变通的解决这个问题，在酷安开发者群有朋友提到说可以在获取root权限后使用shell模拟触摸事件来实现这个方法，测试以后发现确实可行。调用如下指令模拟手势实现下拉：adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位置滑动到 x 100 y 500的位置 历时300毫秒
-此时通知栏并不会完全展开，解决方法也非常简单，再模拟一次下拉事件，点击刚刚没有完全展开的状态栏即可：
-adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的位置 模拟点击会出现奇奇怪怪的问题，可能在其他rom上会点击到其他的位置，所以再做一次下滑会好一些这样通知栏就完全展开了
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -899,7 +900,7 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -950,6 +951,10 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
                   <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
                 </li>
               
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
             </ul>
           </div>
         
@@ -976,7 +981,7 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

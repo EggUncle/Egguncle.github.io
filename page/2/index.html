@@ -257,6 +257,127 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/17/Android-序列化反序列化不匹配造成的一个安全问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/17/Android-序列化反序列化不匹配造成的一个安全问题/" itemprop="url">Android 序列化反序列化不匹配造成的一个安全问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-17T01:47:26+08:00">
+                2018-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Android中的序列化反序列化不匹配导致的漏洞解析
+本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.
+
+0x00 前言上一次提到了launchAnyWhere这个漏洞,其中提到了修补方案,就是去验证intent指向的app和appB是不是有相同签名的,这里有这样一段:12345678910111213141516171819if (result != null+                    &amp;&amp; (intent = result.getParcelable(AccountManager.KEY_INTENT)) != null) &#123;+                /*+                 * The Authenticator API allows third party authenticators to+                 * supply arbitrary intents to other apps that they can run,+                 * this 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/06/17/Android-序列化反序列化不匹配造成的一个安全问题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/17/Android-LaunchAnyWhere/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -734,128 +855,6 @@ xposedbridge中有一个native方法  hookMethodNative ，从这里进入native�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/Android清除所有noticafition的一些探究（二）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/27/Android清除所有noticafition的一些探究（二）/" itemprop="url">Android清除所有noticafition的一些探究（二）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T18:03:45+08:00">
-                2017-08-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333
-写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more
-当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。然后我是这样说的：
-
-通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。这个问题应该是由于该方法中1234&gt;952                if (child.getVisibility() == View.VISIBLE) &#123;&gt;953  
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/27/Android清除所有noticafition的一些探究（二）/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -905,7 +904,7 @@ xposedbridge中有一个native方法  hookMethodNative ，从这里进入native�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -956,6 +955,10 @@ xposedbridge中有一个native方法  hookMethodNative ，从这里进入native�
                   <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
                 </li>
               
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
             </ul>
           </div>
         
@@ -982,7 +985,7 @@ xposedbridge中有一个native方法  hookMethodNative ，从这里进入native�
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
