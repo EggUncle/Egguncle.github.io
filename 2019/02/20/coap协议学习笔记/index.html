@@ -1,0 +1,743 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="coap 协议最近需要弄着个，就稍微简单的过了一遍整个coap，蛮多其实都没记住的，先写这些吧，可能会有后续。 消息类型 需要确认消息   CON 0 不需要确认消息  NON 1（适用于消息会重复频繁的发送，丢掉消息不对业务产生影响） 确认应答消息   ACK 2 复位消息  RST 3 (拒绝响应可以使用这个类型的消息)  可靠消息传输主要是通过确认及重传机制来实现的，客户端发送消息后，需要等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="coap协议学习笔记">
+<meta property="og:url" content="http://yoursite.com/2019/02/20/coap协议学习笔记/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="coap 协议最近需要弄着个，就稍微简单的过了一遍整个coap，蛮多其实都没记住的，先写这些吧，可能会有后续。 消息类型 需要确认消息   CON 0 不需要确认消息  NON 1（适用于消息会重复频繁的发送，丢掉消息不对业务产生影响） 确认应答消息   ACK 2 复位消息  RST 3 (拒绝响应可以使用这个类型的消息)  可靠消息传输主要是通过确认及重传机制来实现的，客户端发送消息后，需要等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-20T14:27:21.381Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="coap协议学习笔记">
+<meta name="twitter:description" content="coap 协议最近需要弄着个，就稍微简单的过了一遍整个coap，蛮多其实都没记住的，先写这些吧，可能会有后续。 消息类型 需要确认消息   CON 0 不需要确认消息  NON 1（适用于消息会重复频繁的发送，丢掉消息不对业务产生影响） 确认应答消息   ACK 2 复位消息  RST 3 (拒绝响应可以使用这个类型的消息)  可靠消息传输主要是通过确认及重传机制来实现的，客户端发送消息后，需要等">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/20/coap协议学习笔记/"/>
+
+
+
+
+
+  <title>coap协议学习笔记 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/20/coap协议学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">coap协议学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-20T22:24:46+08:00">
+                2019-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="coap-协议"><a href="#coap-协议" class="headerlink" title="coap 协议"></a>coap 协议</h1><p>最近需要弄着个，就稍微简单的过了一遍整个coap，蛮多其实都没记住的，先写这些吧，可能会有后续。</p>
+<h2 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h2><ol>
+<li>需要确认消息   CON 0</li>
+<li>不需要确认消息  NON 1（适用于消息会重复频繁的发送，丢掉消息不对业务产生影响）</li>
+<li>确认应答消息   ACK 2</li>
+<li>复位消息  RST 3 (拒绝响应可以使用这个类型的消息)</li>
+</ol>
+<h4 id="可靠消息传输"><a href="#可靠消息传输" class="headerlink" title="可靠消息传输"></a>可靠消息传输</h4><p>主要是通过确认及重传机制来实现的，客户端发送消息后，需要等待服务器收到通知， 如果在规定时间内，没有收到需要重新发送数据。 可靠传输是基于CON消息传输的，服务器端收到CON类型的消息后，需要返回ACK消息，客户端到在指定时间ACK_TIMEOUT内收到ACK消息后，才代表这个消息以可靠到服务器端。</p>
+<h4 id="不可靠消息传输"><a href="#不可靠消息传输" class="headerlink" title="不可靠消息传输"></a>不可靠消息传输</h4><p>客户端只管发送消息， 不管服务器端有没有收到，因此可能存在丢包。不可靠传输是基于NON消息传输的。服务器端收到NON类型的消息后，不用回复ACK消息。</p>
+<h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h2><ol>
+<li>GET  </li>
+<li>PUT  </li>
+<li>POST  </li>
+<li>DELETE<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">+------+--------+-----------+                       </div><div class="line">| Code | Name   | Reference |                        </div><div class="line">+------+--------+-----------+                        </div><div class="line">| 0.01 | GET    | [RFC7252] |                        </div><div class="line">| 0.02 | POST   | [RFC7252] |                        </div><div class="line">| 0.03 | PUT    | [RFC7252] |                        </div><div class="line">| 0.04 | DELETE | [RFC7252] |                        </div><div class="line">+------+--------+-----------+  </div><div class="line"> 表 5: CoAP Method Codes</div><div class="line">```  </div><div class="line"></div><div class="line">## 响应类型</div><div class="line">1. Success 2.xx 代表客户端请求被成功接收并被成功处理</div><div class="line">2. Client Error 4.xx 代表客户端请求有错误，比如参数错误等</div><div class="line">3. Server Error 5.xx 代表服务器在执行客户端请求时出错。</div><div class="line"></div><div class="line">所有的请求服务器响应可以放在CoAP CON/NON/ACK消息里面进行传输。针对CoAP 带CON消息请求，响应如果快速处理完（有些请求的处理需要耗时多，服务器无法立即响应），则可直接放在ACK消息包里面返回。对于无法立即响应的，服务器带资源ready后，会单独发一个响应消息包给客户端</div><div class="line"></div><div class="line">8-bit无符号整型。拆分为3-bit的分类信息和5-bit详细信息。</div><div class="line">写作”c.dd”。c是3-bit长，可以是一个从0到7的数字，dd是5-bit长，它一个两位的数字，从00到31。</div><div class="line">分类信息c可以代表是一个请求（0），一个成功的响应（2），一个客户端错误响应（4），或者一个服务端错误响应（5）。</div><div class="line"></div><div class="line">## 消息报文</div><div class="line">![](https://www.adminiot.com.cn/static/index/img/meta/coap/format.png)</div><div class="line"></div><div class="line">这里找一个实际的报文解析一下看看,首先使用这个库https://github.com/obgm/libcoap</div><div class="line">安装完之后,打开example,不打开服务端,下载网络调试助手,然后连接127.0.0.1 5683(coap默认端口),使用libcoap的demo中的client</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>./coap-client -m get -o result.txt coap://localhost<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">执行后显示</div></pre></td></tr></table></figure></p>
+<p>v:1 t:0 tkl:0 c:1 id:27940<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">即版本号为1,类型为0,即CON,token长度为0,code为1,即GET,message id为27940</div><div class="line"></div><div class="line">它的二进制数据如下(为方便展示这里使用十六进制)</div></pre></td></tr></table></figure></p>
+<p>40 01 6d 24 39 6c 6f 63 61 6c 68 6f 73 74<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">将其转换为2进制并按照报文格式划分</div></pre></td></tr></table></figure></p>
+<p>ver: 01<br>type: 00<br>tkl: 0000<br>code: 00000001<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">code的展现形式为c.dd 其中c为三位,dd为后五位,这里的code为0.01</div></pre></td></tr></table></figure></p>
+<p>+——+——–+———–+<br>| Code | Name   | Reference |<br>+——+——–+———–+<br>| 0.01 | GET    | [RFC7252] |<br>| 0.02 | POST   | [RFC7252] |<br>| 0.03 | PUT    | [RFC7252] |<br>| 0.04 | DELETE | [RFC7252] |<br>+——+——–+———–+<br>   表 5: CoAP Method Codes<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">```</div><div class="line">msg id: 0110110100100100 27940</div></pre></td></tr></table></figure></p>
+<p>字符串中没有出现ff ff,且tkl为0,所以后面的数据都是options<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">39 6c 6f 63 61 6c 68 6f 73 74</div></pre></td></tr></table></figure></p>
+<p>首先将39转化为2进制 0011 1001,<br>按照option的格式来看,0011(3)即为option detla,因为这是第一个option,所以它的索引就是3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"> +-----+---+---+---+---+----------------+--------+--------+----------+</div><div class="line"> | No. | C | U | N | R | Name           | Format | Length | Default  |</div><div class="line"> +-----+---+---+---+---+----------------+--------+--------+----------+</div><div class="line"> |   1 | x |   |   | x | If-Match       | opaque | 0-8    | (none)   |</div><div class="line"> |   3 | x | x | - |   | Uri-Host       | string | 1-255  | (see     |</div><div class="line"> |     |   |   |   |   |                |        |        | below)   |</div><div class="line"> |   4 |   |   |   | x | ETag           | opaque | 1-8    | (none)   |</div><div class="line"> |   5 | x |   |   |   | If-None-Match  | empty  | 0      | (none)   |</div><div class="line"> |   7 | x | x | - |   | Uri-Port       | uint   | 0-2    | (see     |</div><div class="line"> |     |   |   |   |   |                |        |        | below)   |</div><div class="line"> |   8 |   |   |   | x | Location-Path  | string | 0-255  | (none)   |</div><div class="line"> |  11 | x | x | - | x | Uri-Path       | string | 0-255  | (none)   |</div><div class="line"> |  12 |   |   |   |   | Content-Format | uint   | 0-2    | (none)   |</div><div class="line"> |  14 |   | x | - |   | Max-Age        | uint   | 0-4    | 60       |</div><div class="line"> |  15 | x | x | - | x | Uri-Query      | string | 0-255  | (none)   |</div><div class="line"> |  17 | x |   |   |   | Accept         | uint   | 0-2    | (none)   |</div><div class="line"> |  20 |   |   |   | x | Location-Query | string | 0-255  | (none)   |</div><div class="line"> |  35 | x | x | - |   | Proxy-Uri      | string | 1-1034 | (none)   |</div><div class="line"> |  39 | x | x | - |   | Proxy-Scheme   | string | 1-255  | (none)   |</div><div class="line"> |  60 |   |   | x |   | Size1          | uint   | 0-4    | (none)   |</div><div class="line"> +-----+---+---+---+---+----------------+--------+--------+----------+</div><div class="line"></div><div class="line">C=Critical 临界, U=Unsafe 不安全, N=NoCacheKey 不缓存, R=Repeatable 可重复</div><div class="line"></div><div class="line">                           Table 4: Options</div></pre></td></tr></table></figure></p>
+<p>对应的项为uri-host,而该option的length为1001(9),即长度为9,所以option的value即为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">6c 6f 63 61 6c 68 6f 73 74</div></pre></td></tr></table></figure></p>
+<p>根据ascii码表转换一下,就是localhost<br>所以这个coap包的内容就是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ver: 1</div><div class="line">type: CON</div><div class="line">tkl: 0</div><div class="line">code: GET</div><div class="line">msg id: 27940</div><div class="line">uri-host: localhost</div></pre></td></tr></table></figure></p>
+<h2 id="资源发现"><a href="#资源发现" class="headerlink" title="资源发现"></a>资源发现</h2><p>为了实现在没有人干预的情况下正常工作，CoAP提供了资源发现机制。这就是的客户端理解哪些URI是被支持，并且客户端可以获知该URI的具体含义。<br>CoAP协议建议，服务器端应该支持一个/.well-known/core，该URI可以被任何客户端访问。一个专门用于资源发现的服务器必须侦听默认的5683端口。<br>如果访问预先协商好的URI /.well-known/core，将会获得以下形式的响应：</p>
+<p><sensors temp="">;sz=512;title=Temperature Sensor;ct=50,<actuators jack="">;sz=256;title=Hydraulic Jacks;ct=50</actuators></sensors></p>
+<p>上面的例子可以帮助我们深入理解服务器如何告诉客户端此处有哪些资源可以利用，通过这个例子可以获得以下信息：</p>
+<ul>
+<li>有一个URI为“sensors/temp”的设备，该设备的名称为“温度传感器”。有效载荷的内容类型为50字节（application/json，JSON格式）。当使用一个GET方法访问资源时，最小消息的长度为512字节。</li>
+<li>除了温度之外还有另外一个资源，通过上面的例子可以发现资源和资源之间通过逗号分隔，该资源的URI为actuators/jack，该资源的名称为液压千斤顶，如果使用GET方法访问该资源的话，那么最大的数据包大小为256字节。有效载荷内容的大小为50字节（application/json，格式）。</li>
+</ul>
+<h2 id="实现注意事项"><a href="#实现注意事项" class="headerlink" title="实现注意事项"></a>实现注意事项</h2><ol>
+<li>消息包大小</li>
+<li>各种格式错误的判断</li>
+<li>报文可能是无序的 (当使用单独响应时,可能会存在响应数据的包先于ack到达的情况,此时ack包的msg id和请求的相同,但是单独响应的这个包的msg id是新的,那这里怎么确定这个响应是给这个请求的?这个包可能是con类型的消息,如果提前到达的话就直接作为ack.依靠token以及额外的相关端地址来确定)</li>
+</ol>
+<p>在附带响应中，CON请求和ACK的“Message ID”必须匹配，响应和原始请求的“token”必须匹配。在单独响应中，只需响应和原始请求的“token”匹配。万一信息携带异常的响应（不是认定的端，端地址、token和客户端的期望不匹配），这个响应必须被拒绝</p>
+<ol>
+<li>UDP不可靠,可能需要重传机制</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://tools.ietf.org/html/rfc7252#section-5.8.2" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc7252#section-5.8.2</a></li>
+<li><a href="https://github.com/WildDogTeam/contribute/blob/master/source/RFC7252-%E3%80%8A%E5%8F%97%E9%99%90%E5%BA%94%E7%94%A8%E5%8D%8F%E8%AE%AE%E3%80%8B%E4%B8%AD%E6%96%87%E7%89%88.md" target="_blank" rel="noopener">https://github.com/WildDogTeam/contribute/blob/master/source/RFC7252-%E3%80%8A%E5%8F%97%E9%99%90%E5%BA%94%E7%94%A8%E5%8D%8F%E8%AE%AE%E3%80%8B%E4%B8%AD%E6%96%87%E7%89%88.md</a></li>
+<li><a href="https://segmentfault.com/a/1190000011533594" target="_blank" rel="noopener">https://segmentfault.com/a/1190000011533594</a></li>
+<li><a href="http://fanzhenyu.me/2017/03/01/CoAP%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">http://fanzhenyu.me/2017/03/01/CoAP%20%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/30/pwn的一个入门题目/" rel="next" title="pwn的一个入门题目">
+                <i class="fa fa-chevron-left"></i> pwn的一个入门题目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://omasko.github.io/" title="表面基佬Mask" target="_blank">表面基佬Mask</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#coap-协议"><span class="nav-number">1.</span> <span class="nav-text">coap 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息类型"><span class="nav-number">1.1.</span> <span class="nav-text">消息类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可靠消息传输"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">可靠消息传输</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不可靠消息传输"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">不可靠消息传输</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求方法"><span class="nav-number">1.2.</span> <span class="nav-text">请求方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源发现"><span class="nav-number">1.3.</span> <span class="nav-text">资源发现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现注意事项"><span class="nav-number">1.4.</span> <span class="nav-text">实现注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
