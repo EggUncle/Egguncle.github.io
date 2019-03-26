@@ -93,17 +93,20 @@
 
 
 
-<meta name="description" content="前一阵往framework里面加了一些东西，然后需要将添加的api和系统api一样，防止被反射调用，查了一些博客之类的，都说是加个@hide这种注解就完事儿了，后来发现并不是这样。 问了一下同事，也大概查了一点，发现@hide这个东西，只能将对应的api在生成java doc的时候隐藏起来，但是并不能防止其被反射调用。后来又查了一些东西，发现正确的姿势应该是在framework/base/conf">
+<meta name="description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug. 0x01 起因我的代码中有大概这样一个操作1struct test *t = my_malloc(sizeof(struct test)); my_malloc大概是malloc一个封装,代码大致是这样,它属于my_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在Android p上添加framework api">
-<meta property="og:url" content="http://yoursite.com/2018/10/12/在Android-p上添加framework-api/index.html">
+<meta property="og:title" content="一个include引起的惨案">
+<meta property="og:url" content="http://yoursite.com/2019/03/26/一个include引起的惨案/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="前一阵往framework里面加了一些东西，然后需要将添加的api和系统api一样，防止被反射调用，查了一些博客之类的，都说是加个@hide这种注解就完事儿了，后来发现并不是这样。 问了一下同事，也大概查了一点，发现@hide这个东西，只能将对应的api在生成java doc的时候隐藏起来，但是并不能防止其被反射调用。后来又查了一些东西，发现正确的姿势应该是在framework/base/conf">
+<meta property="og:description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug. 0x01 起因我的代码中有大概这样一个操作1struct test *t = my_malloc(sizeof(struct test)); my_malloc大概是malloc一个封装,代码大致是这样,它属于my_">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-12T14:02:40.125Z">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-21%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-30%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
+<meta property="og:updated_time" content="2019-03-26T15:02:57.839Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在Android p上添加framework api">
-<meta name="twitter:description" content="前一阵往framework里面加了一些东西，然后需要将添加的api和系统api一样，防止被反射调用，查了一些博客之类的，都说是加个@hide这种注解就完事儿了，后来发现并不是这样。 问了一下同事，也大概查了一点，发现@hide这个东西，只能将对应的api在生成java doc的时候隐藏起来，但是并不能防止其被反射调用。后来又查了一些东西，发现正确的姿势应该是在framework/base/conf">
+<meta name="twitter:title" content="一个include引起的惨案">
+<meta name="twitter:description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug. 0x01 起因我的代码中有大概这样一个操作1struct test *t = my_malloc(sizeof(struct test)); my_malloc大概是malloc一个封装,代码大致是这样,它属于my_">
+<meta name="twitter:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-21%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
 
 
 
@@ -131,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/12/在Android-p上添加framework-api/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/26/一个include引起的惨案/"/>
 
 
 
 
 
-  <title>在Android p上添加framework api | Ekkkkkkko</title>
+  <title>一个include引起的惨案 | Ekkkkkkko</title>
   
 
 
@@ -256,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/12/在Android-p上添加framework-api/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/26/一个include引起的惨案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一只大茶蛋">
@@ -273,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在Android p上添加framework api</h1>
+          <h1 class="post-title" itemprop="name headline">一个include引起的惨案</h1>
         
 
         <div class="post-meta">
@@ -285,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-12T00:38:39+08:00">
-                2018-10-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-26T22:58:20+08:00">
+                2019-03-26
               </time>
             
 
@@ -320,9 +323,21 @@
       
 
       
-        <p>前一阵往framework里面加了一些东西，然后需要将添加的api和系统api一样，防止被反射调用，查了一些博客之类的，都说是加个@hide这种注解就完事儿了，后来发现并不是这样。</p>
-<p>问了一下同事，也大概查了一点，发现@hide这个东西，只能将对应的api在生成java doc的时候隐藏起来，但是并不能防止其被反射调用。后来又查了一些东西，发现正确的姿势应该是在framework/base/config中的hide-api相关的txt文件中，添加对应的api信息，看起来像是方法签名一类的东西，和smali有点像，不光有方法，还有一些是成员变量，加上去以后，就能成功防止其被反射调用了。</p>
-<p>嗨呀又水了一篇，最近好像事情还挺多的，没什么时间学东西。</p>
+        <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug.</p>
+<h1 id="0x01-起因"><a href="#0x01-起因" class="headerlink" title="0x01 起因"></a>0x01 起因</h1><p>我的代码中有大概这样一个操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct test *t = my_malloc(sizeof(struct test));</div></pre></td></tr></table></figure></p>
+<p>my_malloc大概是malloc一个封装,代码大致是这样,它属于my_stdlib.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void* my_malloc(param)&#123;</div><div class="line">  return malloc(param);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后就碰上一个有些奇怪的问题,调用my_malloc以后,返回的地址,访问时会报段错误,而实际查看它的内存信息的时候,像是被覆盖了.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">实际malloc返回的地址</div><div class="line">7f968511e0</div><div class="line"></div><div class="line">而my_malloc返回后的地址变成了这样</div><div class="line">ffffffff968511e0</div></pre></td></tr></table></figure></p>
+<p>大致情况看起来就是,前四个字节,像是被什么不知名的东西,覆盖掉了.</p>
+<h1 id="0x02-分析"><a href="#0x02-分析" class="headerlink" title="0x02 分析"></a>0x02 分析</h1><p>起初确实是觉得是代码逻辑有什么问题,导致了溢出之类的,覆盖了这一部分的返回值,而后发现斌没有,在尝试使用gdb的单步调试的时候发现了更加奇怪的情况.</p>
+<p>在bl跳转调用my_malloc后,其中bl跳转调用真正的malloc,以及最后my_malloc返回前,我都查看了x0寄存器的值,发现都没有问题,而后在my_malloc返回,走到外部调用它的函数的时候,返回值像是突然发生了变化,停在调用bl my_malloc之后时,查看x0寄存器,它的值仍然是正常了,尝试使用gdb修改pc指针,跳过bl后的语句,结果发现,返回给外部函数的值就正常了.</p>
+<p>造成异常的语句,是一条汇编代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sxtw	x0, w0</div></pre></td></tr></table></figure></p>
+<p>它的作用是将w0的值进行符号扩展,再赋值给x0寄存器,w0为x0的低32位,sxtw的作用大致是在扩展为64位时,将原先符号位前面的数据填满左边,而零填满右边的数据.(我目前汇编这个不是太好,这里可能没有很透彻的理解这条汇编,具体可以看这里<a href="https://developer.arm.com/docs/100898/latest/data-processing-instructions" target="_blank" rel="noopener">https://developer.arm.com/docs/100898/latest/data-processing-instructions</a>)</p>
+<p>这里大概分析一下这条语句在目前这个场景下实际执行的情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">首先x0原先的值,在调用完my_malloc的之后,变成了</div><div class="line"></div><div class="line">高32位    低32位</div><div class="line">0000007f 968511e0</div><div class="line"></div><div class="line">而w0此时的值,即为x0的底32位</div><div class="line">968511e0</div><div class="line"></div><div class="line">sxtw将w0的符号位扩展,填满前32位,所以结果变成了这样</div><div class="line"></div><div class="line">高32位    低32位</div><div class="line">ffffffff 968511e0</div></pre></td></tr></table></figure></p>
+<p>到这里,就已经分析出来了报错的原因,即为多出来的这一条sxtw语句,导致了返回值变为了一个奇怪的值,不可访问,而后导致段错误,但是真正问题是,为什么会多出一条sxtw语句导致这样的问题.</p>
+<h1 id="0x03-原因"><a href="#0x03-原因" class="headerlink" title="0x03 原因"></a>0x03 原因</h1><p>找了一堆资料,最后发现..出现这个情况的原因,比较沙雕. 我找到一份ppt,其中稍微提到了一个这样的情况.<br><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-21%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-30%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true" alt=""></p>
+<p>这里大概解释一下,就是当没有函数原型的时候,编译出来的返回值的类型会是int,也就是四个字节,也就是底32位,当它存在一个64的寄存器的时候,可能就需要进行符号扩展的操作,也就是使用功能类似sxtw的语句,导致了我上面提到的那个问题,而后引入了my_stdlib.h,就没有这个问题了.</p>
+<h1 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h1><p>总结就是,以后写代码还是得多注意编译器警告.这个玩意在编译的时候其实有警告信息的,我当时看到编译通过了就没仔细看,今天和同事聊了一下这个事情,我们决定在编译期间,把警告直接当作报错停止编译过程了.不过讲道理我以前连gdb都不怎么会用,经过这一波应该也算是会点新东西了,嗨呀我好菜啊.</p>
 
       
     </div>
@@ -359,8 +374,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/28/smali从入门到自闭/" rel="next" title="smali从入门到自闭">
-                <i class="fa fa-chevron-left"></i> smali从入门到自闭
+              <a href="/2019/02/21/coap协议学习笔记-块传输/" rel="next" title="coap协议学习笔记 块传输">
+                <i class="fa fa-chevron-left"></i> coap协议学习笔记 块传输
               </a>
             
           </div>
@@ -368,10 +383,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/30/pwn的一个入门题目/" rel="prev" title="pwn的一个入门题目">
-                pwn的一个入门题目 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -418,8 +429,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
@@ -498,6 +518,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-起因"><span class="nav-number">2.</span> <span class="nav-text">0x01 起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-分析"><span class="nav-number">3.</span> <span class="nav-text">0x02 分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-原因"><span class="nav-number">4.</span> <span class="nav-text">0x03 原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-总结"><span class="nav-number">5.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
