@@ -1,0 +1,742 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android Binder hook," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
+<meta name="keywords" content="Android Binder hook">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从binder传输的数据角度来分析binder通信的过程">
+<meta property="og:url" content="http://yoursite.com/2019/04/21/从binder数据传输的角度分析binder通信的过程/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png">
+<meta property="og:updated_time" content="2019-04-21T06:06:07.199Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从binder传输的数据角度来分析binder通信的过程">
+<meta name="twitter:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
+<meta name="twitter:image" content="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/21/从binder数据传输的角度分析binder通信的过程/"/>
+
+
+
+
+
+  <title>从binder传输的数据角度来分析binder通信的过程 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/从binder数据传输的角度分析binder通信的过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从binder传输的数据角度来分析binder通信的过程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-21T14:04:47+08:00">
+                2019-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Binder-数据分析"><a href="#Binder-数据分析" class="headerlink" title="Binder 数据分析"></a>Binder 数据分析</h1><h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>前一阵弄了一个和binder有关的小工具 <a href="https://github.com/EggUncle/Hermes" target="_blank" rel="noopener">https://github.com/EggUncle/Hermes</a> ，大概就是通过对ioctl进行hook，读取到binder的数据信息。</p>
+<p>binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。<br><br>操作环境: Nexus5x aosp 7.1.2</p>
+<h2 id="0x01-获取数据"><a href="#0x01-获取数据" class="headerlink" title="0x01 获取数据"></a>0x01 获取数据</h2><p>首先使用注入工具对com.android.phone 进行hook，并且使用工具获取其服务的相关信息。</p>
+<p>注入工具可以使用这个: <a href="https://github.com/EggUncle/PtraceInject" target="_blank" rel="noopener">https://github.com/EggUncle/PtraceInject</a>  (仅支持android7以及7以下的系统)</p>
+<p>获取服务信息的工具可以使用这个: <a href="https://github.com/EggUncle/DumpAndroidServicesInfo" target="_blank" rel="noopener">https://github.com/EggUncle/DumpAndroidServicesInfo</a> （获取到的结果是一个json文件）</p>
+<p>注入工具之后，打开测试用的获取imei的app，点击获取imei的按钮，打开logcat，搜索关键字获取LIB_BINDER_HOOK，到的数据如下（时间的信息已经删除，时间的log信息和此处的分析没有关系）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: read BR_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 11804, code = 124, dump name : @)com.android.internal.telephony.ITelephonycom.test.androidbinderhook , pname size is 69, data size is 152 , target is 777fcde708  777fcde708</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 29000000 63006f00 6d002e00  ..@.)...c.o.m...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 61006e00 64007200 6f006900 64002e00  a.n.d.r.o.i.d...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006e00 74006500 72006e00 61006c00  i.n.t.e.r.n.a.l.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e007400 65006c00 65007000 68006f00  ..t.e.l.e.p.h.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6e007900 2e004900 54006500 6c006500  n.y...I.T.e.l.e.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 70006800 6f006e00 79000000 1a000000  p.h.o.n.y.......</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 63006f00 6d002e00 74006500 73007400  c.o.m...t.e.s.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e006100 6e006400 72006f00 69006400  ..a.n.d.r.o.i.d.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 62006900 6e006400 65007200 68006f00  b.i.n.d.e.r.h.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006b00 00000000                    o.k.....</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 53, dump name : @android.app.IActivityManager.android.permission.READ_PRIVILEGED_PHONE_STATE.n&apos; , pname size is 79, data size is 176 , target is 777fcde804  777fcde804</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 1c000000 61006e00 64007200  ..@.....a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 61007000 70002e00  o.i.d...a.p.p...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004100 63007400 69007600 69007400  I.A.c.t.i.v.i.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 79004d00 61006e00 61006700 65007200  y.M.a.n.a.g.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 2e000000 61006e00 64007200  ........a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 70006500 72006d00  o.i.d...p.e.r.m.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69007300 73006900 6f006e00 2e005200  i.s.s.i.o.n...R.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 45004100 44005f00 50005200 49005600  E.A.D._.P.R.I.V.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004c00 45004700 45004400 5f005000  I.L.E.G.E.D._.P.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 48004f00 4e004500 5f005300 54004100  H.O.N.E._.S.T.A.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 54004500 00000000 1c2e0000 6e270000  T.E.........n&apos;..</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: read BR_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name :  , pname size is 0, data size is 8 , target is 777fcde708  777fcde708</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 ffffffff                    ........</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 53, dump name : @android.app.IActivityManager#android.permission.READ_PHONE_STATE.n&apos; , pname size is 68, data size is 152 , target is 777fcde810  777fcde810</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 1c000000 61006e00 64007200  ..@.....a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 61007000 70002e00  o.i.d...a.p.p...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004100 63007400 69007600 69007400  I.A.c.t.i.v.i.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 79004d00 61006e00 61006700 65007200  y.M.a.n.a.g.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 23000000 61006e00 64007200  ....#...a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 70006500 72006d00  o.i.d...p.e.r.m.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69007300 73006900 6f006e00 2e005200  i.s.s.i.o.n...R.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 45004100 44005f00 50004800 4f004e00  E.A.D._.P.H.O.N.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 45005f00 53005400 41005400 45000000  E._.S.T.A.T.E...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 1c2e0000 6e270000                    ....n&apos;..</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: read BR_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name :  , pname size is 0, data size is 8 , target is 777fcde708  777fcde708</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 00000000                    ........</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 2, dump name : @&apos;com.android.internal.app.IAppOpsService3n&apos;com.test.androidbinderhook , pname size is 70, data size is 156 , target is 777fcde810  777fcde810</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 27000000 63006f00 6d002e00  ..@.&apos;...c.o.m...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 61006e00 64007200 6f006900 64002e00  a.n.d.r.o.i.d...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006e00 74006500 72006e00 61006c00  i.n.t.e.r.n.a.l.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e006100 70007000 2e004900 41007000  ..a.p.p...I.A.p.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 70004f00 70007300 53006500 72007600  p.O.p.s.S.e.r.v.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006300 65000000 33000000 6e270000  i.c.e...3...n&apos;..</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 1a000000 63006f00 6d002e00 74006500  ....c.o.m...t.e.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 73007400 2e006100 6e006400 72006f00  s.t...a.n.d.r.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006400 62006900 6e006400 65007200  i.d.b.i.n.d.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 68006f00 6f006b00 00000000           h.o.o.k.....</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: read BR_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name :  , pname size is 0, data size is 8 , target is 777fcde708  777fcde708</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 00000000                    ........</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name : 354360070189667 , pname size is 15, data size is 40 , target is 777fcde810  777fcde810</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 0f000000 33003500 34003300  ........3.5.4.3.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 36003000 30003700 30003100 38003900  6.0.0.7.0.1.8.9.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 36003600 37000000                    6.6.7...</div><div class="line">11804-11804/com.test.androidbinderhook I/LIB_BINDER_HOOK: onClick: 354360070189667</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: ---------------------------------</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name : 354360070189667 , pname size is 15, data size is 40 , target is 777fcde810  777fcde810</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 0f000000 33003500 34003300  ........3.5.4.3.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 36003000 30003700 30003100 38003900  6.0.0.7.0.1.8.9.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 36003600 37000000                    6.6.7...</div></pre></td></tr></table></figure></p>
+<h2 id="0x02-binder传输的数据结构"><a href="#0x02-binder传输的数据结构" class="headerlink" title="0x02 binder传输的数据结构"></a>0x02 binder传输的数据结构</h2><p>在对binder的数据进行分析之前，我们还是很有必要看一下binder本身在传输过程中的数据结构信息的。在binder传输数据的时候，它会使用到一个叫binder_write_read的结构体，它的信息如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">struct binder_write_read &#123;</div><div class="line">	binder_size_t		write_size;	/* bytes to write */</div><div class="line">	binder_size_t		write_consumed;	/* bytes consumed by driver */</div><div class="line">	binder_uintptr_t	write_buffer;</div><div class="line">	binder_size_t		read_size;	/* bytes to read */</div><div class="line">	binder_size_t		read_consumed;	/* bytes consumed by driver */</div><div class="line">	binder_uintptr_t	read_buffer;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>其中存储了上文中数据的成员是write_consumed和read_consumed，他们分别对应读和写的时候的一些指令时用到的数据。<br>binder数据传输的过程如下图：</p>
+<p><img src="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png" alt=""><br>图片摘自<a href="https://paul.pub/android-binder-driver/" target="_blank" rel="noopener">https://paul.pub/android-binder-driver/</a></p>
+<p>其中的write_consumed部分的数据包括BC_TRANSACTION和BC_REPLY，read_consumed部分的数据包括BR_TRANSACTION和BR_REPLY。</p>
+<p>接下来再看一下write_consumed中存储的数据的数据结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">struct binder_transaction_data &#123;</div><div class="line">	/* The first two are only used for bcTRANSACTION and brTRANSACTION,</div><div class="line">	 * identifying the target and contents of the transaction.</div><div class="line">	 */</div><div class="line">	union &#123;</div><div class="line">		/* target descriptor of command transaction */</div><div class="line">		__u32	handle;</div><div class="line">		/* target descriptor of return transaction */</div><div class="line">		binder_uintptr_t ptr;</div><div class="line">	&#125; target;</div><div class="line">	binder_uintptr_t	cookie;	/* target object cookie */</div><div class="line">	__u32		code;		/* transaction command */</div><div class="line"></div><div class="line">	/* General information about the transaction. */</div><div class="line">	__u32	        flags;</div><div class="line">	pid_t		sender_pid;</div><div class="line">	uid_t		sender_euid;</div><div class="line">	binder_size_t	data_size;	/* number of bytes of data */</div><div class="line">	binder_size_t	data_offsets;	/* number of bytes of offsets */</div><div class="line"></div><div class="line">	/* If this transaction is inline, the data immediately</div><div class="line">	 * follows here; otherwise, it ends with a pointer to</div><div class="line">	 * the data buffer.</div><div class="line">	 */</div><div class="line">	union &#123;</div><div class="line">		struct &#123;</div><div class="line">			/* transaction data */</div><div class="line">			binder_uintptr_t	buffer;</div><div class="line">			/* offsets from buffer to flat_binder_object structs */</div><div class="line">			binder_uintptr_t	offsets;</div><div class="line">		&#125; ptr;</div><div class="line">		__u8	buf[8];</div><div class="line">	&#125; data;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>其中的code，为对应的binder服务提供的方法的编号(这里可以通过源码或者上文中的工具获取到的服务信息来通过服务名称和编号来找到对应的方法),target相当于一个句柄，用来标识相关的发起请求的对象，而data即为实际传输的数据。接下来就可以开始实际的分析数据了。</p>
+<h2 id="0x03-数据分析"><a href="#0x03-数据分析" class="headerlink" title="0x03 数据分析"></a>0x03 数据分析</h2><p>这里从第一条数据看起<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">6094-6105/? E/LIB_BINDER_HOOK: read BR_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 11804, code = 124, dump name : @)com.android.internal.telephony.ITelephonycom.test.androidbinderhook , pname size is 69, data size is 152 , target is 777fcde708  777fcde708</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 29000000 63006f00 6d002e00  ..@.)...c.o.m...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 61006e00 64007200 6f006900 64002e00  a.n.d.r.o.i.d...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006e00 74006500 72006e00 61006c00  i.n.t.e.r.n.a.l.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e007400 65006c00 65007000 68006f00  ..t.e.l.e.p.h.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6e007900 2e004900 54006500 6c006500  n.y...I.T.e.l.e.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 70006800 6f006e00 79000000 1a000000  p.h.o.n.y.......</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 63006f00 6d002e00 74006500 73007400  c.o.m...t.e.s.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e006100 6e006400 72006f00 69006400  ..a.n.d.r.o.i.d.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 62006900 6e006400 65007200 68006f00  b.i.n.d.e.r.h.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006b00 00000000                    o.k.....</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 53, dump name : @android.app.IActivityManager.android.permission.READ_PRIVILEGED_PHONE_STATE.n&apos; , pname size is 79, data size is 176 , target is 777fcde804  777fcde804</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 1c000000 61006e00 64007200  ..@.....a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 61007000 70002e00  o.i.d...a.p.p...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004100 63007400 69007600 69007400  I.A.c.t.i.v.i.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 79004d00 61006e00 61006700 65007200  y.M.a.n.a.g.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 2e000000 61006e00 64007200  ........a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 70006500 72006d00  o.i.d...p.e.r.m.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69007300 73006900 6f006e00 2e005200  i.s.s.i.o.n...R.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 45004100 44005f00 50005200 49005600  E.A.D._.P.R.I.V.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004c00 45004700 45004400 5f005000  I.L.E.G.E.D._.P.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 48004f00 4e004500 5f005300 54004100  H.O.N.E._.S.T.A.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 54004500 00000000 1c2e0000 6e270000  T.E.........n&apos;..</div></pre></td></tr></table></figure></p>
+<p>首先这里有两条命令<br><br>第一条是BR_TRANSACTION，这里com.android.phone作为服务端，接受了br的请求，pid为 11804，这里是获取imei的测试app的pid，然后可以通过报文中的字符串信息看到与它通信的服务是ITelephony，然后在上文中获取到的服务信息中搜索相应的code，可以看到对应的方法的信息，即getDeviceId,获取imei的方法，同时它需要传入一个报名作为参数，而报文中也有包名相关的信息(com.test.androidbinderhook)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;code&quot;: 124,</div><div class="line">  &quot;methodName&quot;: &quot;getDeviceId&quot;,</div><div class="line">  &quot;paramTypeList&quot;: [</div><div class="line">    &quot;java.lang.String&quot;</div><div class="line">  ]</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>接下来详细分析其中的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 29000000 63006f00 6d002e00  ..@.)...c.o.m...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 61006e00 64007200 6f006900 64002e00  a.n.d.r.o.i.d...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006e00 74006500 72006e00 61006c00  i.n.t.e.r.n.a.l.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e007400 65006c00 65007000 68006f00  ..t.e.l.e.p.h.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6e007900 2e004900 54006500 6c006500  n.y...I.T.e.l.e.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 70006800 6f006e00 79000000 1a000000  p.h.o.n.y.......</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 63006f00 6d002e00 74006500 73007400  c.o.m...t.e.s.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e006100 6e006400 72006f00 69006400  ..a.n.d.r.o.i.d.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 62006900 6e006400 65007200 68006f00  b.i.n.d.e.r.h.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006b00 00000000                    o.k.....</div><div class="line"></div><div class="line">04004001 这部分和后面的字符串组成请求binder的对象的的标识，一般在binder的客户端部分用data.writeInterfaceToken(DESCRIPTOR)设置</div><div class="line">29000000 对应着10进制的41，代表着后续字符串的长度com.android.internal.telephony.ITelephony</div><div class="line">1a000000 对应着10进制的26，代表着后续字符串的长度com.test.androidbinderhook</div><div class="line">00000000 这个我也没整明白是个啥，可能是对齐用的数据</div></pre></td></tr></table></figure></p>
+<p>然后看看源码，从代码角度看看这个地方执行的过程，首先找到TelephonyManager 的getDeviceId的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">843    public String getDeviceId() &#123;</div><div class="line">844        try &#123;</div><div class="line">845            ITelephony telephony = getITelephony();</div><div class="line">846            if (telephony == null)</div><div class="line">847                return null;</div><div class="line">848            return telephony.getDeviceId(mContext.getOpPackageName());</div><div class="line">849        &#125; catch (RemoteException ex) &#123;</div><div class="line">850            return null;</div><div class="line">851        &#125; catch (NullPointerException ex) &#123;</div><div class="line">852            return null;</div><div class="line">853        &#125;</div><div class="line">854    &#125;</div></pre></td></tr></table></figure></p>
+<p>这里可以看到它调用了ITelephony的getDeviceId并传入包名</p>
+<p>接下来是第二个命令BC_TRANSACTION，我这里的理解是，phone中的服务，作为客户端，与其他binder进行交互，所以这里使用了BC_TRANSACTION的指令.从解析出来的字符串可知这里请求的相关服务为android.app.IActivityManager，code 53 对应的方法是如下: (这里补充以下，我提供的获取服务信息的工具，由于权限问题导致部分服务的信息获取不到，此处的的方法信息，是通过源码找到的)</p>
+<p>public int checkPermission(String permission, int pid, int uid)</p>
+<p>接下来看报文<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 1c000000 61006e00 64007200  ..@.....a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 61007000 70002e00  o.i.d...a.p.p...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004100 63007400 69007600 69007400  I.A.c.t.i.v.i.t.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 79004d00 61006e00 61006700 65007200  y.M.a.n.a.g.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 2e000000 61006e00 64007200  ........a.n.d.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 6f006900 64002e00 70006500 72006d00  o.i.d...p.e.r.m.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69007300 73006900 6f006e00 2e005200  i.s.s.i.o.n...R.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 45004100 44005f00 50005200 49005600  E.A.D._.P.R.I.V.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 49004c00 45004700 45004400 5f005000  I.L.E.G.E.D._.P.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 48004f00 4e004500 5f005300 54004100  H.O.N.E._.S.T.A.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 54004500 00000000 1c2e0000 6e270000  T.E.........n&apos;..</div><div class="line">前面都一样，和上文中相同的方式存储字符串数据</div><div class="line">1c2e0000 这里是进程id，数据以小端存储，即2e1c，对应的10进制是11804，对应测试app的进程号</div><div class="line">6e270000 这里是对应的uid的16进制形式</div></pre></td></tr></table></figure></p>
+<p>第二段的数据和这里比较相似，不再分析</p>
+<p>然后是第三段数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">6094-6105/? E/LIB_BINDER_HOOK: read BR_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name :  , pname size is 0, data size is 8 , target is 777fcde708  777fcde708</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 00000000                    ........</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_TRANSACTION</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 2, dump name : @&apos;com.android.internal.app.IAppOpsService3n&apos;com.test.androidbinderhook , pname size is 70, data size is 156 , target is 777fcde810  777fcde810</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 27000000 63006f00 6d002e00  ..@.&apos;...c.o.m...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 61006e00 64007200 6f006900 64002e00  a.n.d.r.o.i.d...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006e00 74006500 72006e00 61006c00  i.n.t.e.r.n.a.l.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e006100 70007000 2e004900 41007000  ..a.p.p...I.A.p.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 70004f00 70007300 53006500 72007600  p.O.p.s.S.e.r.v.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006300 65000000 33000000 6e270000  i.c.e...3...n&apos;..</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 1a000000 63006f00 6d002e00 74006500  ....c.o.m...t.e.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 73007400 2e006100 6e006400 72006f00  s.t...a.n.d.r.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006400 62006900 6e006400 65007200  i.d.b.i.n.d.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 68006f00 6f006b00 00000000           h.o.o.k.....</div></pre></td></tr></table></figure></p>
+<p>首先这里的指令为BC_TRANSACTION，phone进程作为客户端，向IAppOpsService服务发送请求数据，code为2，对应的方法信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;code&quot;: 2,</div><div class="line">  &quot;methodName&quot;: &quot;noteOperation&quot;,</div><div class="line">  &quot;paramTypeList&quot;: [</div><div class="line">    &quot;int&quot;,</div><div class="line">    &quot;int&quot;,</div><div class="line">    &quot;java.lang.String&quot;</div><div class="line">  ]</div><div class="line">&#125;,</div><div class="line">它的声明信息为</div><div class="line">public int noteOperation(int code, int uid, String packageName)</div></pre></td></tr></table></figure></p>
+<p>查阅了相关资料，发现它是给用户设置权限的方法，接下来来看报文信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 04004001 27000000 63006f00 6d002e00  ..@.&apos;...c.o.m...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 61006e00 64007200 6f006900 64002e00  a.n.d.r.o.i.d...</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006e00 74006500 72006e00 61006c00  i.n.t.e.r.n.a.l.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 2e006100 70007000 2e004900 41007000  ..a.p.p...I.A.p.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 70004f00 70007300 53006500 72007600  p.O.p.s.S.e.r.v.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006300 65000000 33000000 6e270000  i.c.e...3...n&apos;..</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 1a000000 63006f00 6d002e00 74006500  ....c.o.m...t.e.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 73007400 2e006100 6e006400 72006f00  s.t...a.n.d.r.o.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 69006400 62006900 6e006400 65007200  i.d.b.i.n.d.e.r.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 68006f00 6f006b00 00000000           h.o.o.k.....</div><div class="line"></div><div class="line">前面相同的部分这里不再解析了</div><div class="line">33000000 10进制为51，这里是对应的操作码，它的对应信息可以从这里查看http://androidxref.com/7.1.2_r36/xref/frameworks/base/core/java/android/app/AppOpsManager.java   可以看到51为OP_READ_PHONE_STATE，即为读取手机状态的权限</div><div class="line">6e270000 这里上文中也提到了，是测试app的uid</div></pre></td></tr></table></figure></p>
+<p>接着我们继续下一段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">6094-6105/? E/LIB_BINDER_HOOK: write BC_REPLY</div><div class="line">6094-6105/? E/LIB_BINDER_HOOK: PID = 0, code = 0, dump name : 354360070189667 , pname size is 15, data size is 40 , target is 777fcde810  777fcde810</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 00000000 0f000000 33003500 34003300  ........3.5.4.3.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 36003000 30003700 30003100 38003900  6.0.0.7.0.1.8.9.</div><div class="line">6094-6105/? D/LIB_BINDER_HOOK: 36003600 37000000                    6.6.7...</div></pre></td></tr></table></figure></p>
+<p>这里的消息就比较简单了，就是将imei的数据写入binder驱动，至此整个binder请求数据的过程就结束了.</p>
+<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>从binder数据角度来看获取imei的整个过程，大致上分为以下几步:</p>
+<ul>
+<li>发出请求</li>
+<li>检查权限</li>
+<li>授予权限</li>
+<li>返回数据</li>
+</ul>
+<h2 id="0x05-参考"><a href="#0x05-参考" class="headerlink" title="0x05 参考"></a>0x05 参考</h2><ul>
+<li><a href="http://gityuan.com/2015/11/01/binder-driver/" target="_blank" rel="noopener">http://gityuan.com/2015/11/01/binder-driver/</a></li>
+<li><a href="https://paul.pub/android-binder-driver/" target="_blank" rel="noopener">https://paul.pub/android-binder-driver/</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-Binder-hook/" rel="tag"># Android Binder hook</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/26/一个include引起的惨案/" rel="next" title="一个include引起的惨案">
+                <i class="fa fa-chevron-left"></i> 一个include引起的惨案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://omasko.github.io/" title="表面基佬Mask" target="_blank">表面基佬Mask</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Binder-数据分析"><span class="nav-number">1.</span> <span class="nav-text">Binder 数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-获取数据"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 获取数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-binder传输的数据结构"><span class="nav-number">1.3.</span> <span class="nav-text">0x02 binder传输的数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-数据分析"><span class="nav-number">1.4.</span> <span class="nav-text">0x03 数据分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-总结"><span class="nav-number">1.5.</span> <span class="nav-text">0x04 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-参考"><span class="nav-number">1.6.</span> <span class="nav-text">0x05 参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
