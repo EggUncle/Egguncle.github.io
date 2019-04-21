@@ -96,15 +96,15 @@
 <meta name="description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
 <meta name="keywords" content="Android Binder hook">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从binder传输的数据角度来分析binder通信的过程">
+<meta property="og:title" content="从binder数据传输的角度来分析binder通信的过程">
 <meta property="og:url" content="http://yoursite.com/2019/04/21/从binder数据传输的角度分析binder通信的过程/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
 <meta property="og:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png">
-<meta property="og:updated_time" content="2019-04-21T06:06:07.199Z">
+<meta property="og:updated_time" content="2019-04-21T06:20:47.642Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从binder传输的数据角度来分析binder通信的过程">
+<meta name="twitter:title" content="从binder数据传输的角度来分析binder通信的过程">
 <meta name="twitter:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
 <meta name="twitter:image" content="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png">
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>从binder传输的数据角度来分析binder通信的过程 | Ekkkkkkko</title>
+  <title>从binder数据传输的角度来分析binder通信的过程 | Ekkkkkkko</title>
   
 
 
@@ -276,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">从binder传输的数据角度来分析binder通信的过程</h1>
+          <h1 class="post-title" itemprop="name headline">从binder数据传输的角度来分析binder通信的过程</h1>
         
 
         <div class="post-meta">
