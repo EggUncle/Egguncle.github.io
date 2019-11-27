@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Elasticsearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="0x00 前言我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感">
+<meta name="keywords" content="Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch从入门到删库跑路">
+<meta property="og:url" content="http://yoursite.com/2019/11/27/elasticsearch从入门到删库跑路/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="0x00 前言我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-27T14:03:59.278Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="elasticsearch从入门到删库跑路">
+<meta name="twitter:description" content="0x00 前言我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/27/elasticsearch从入门到删库跑路/"/>
+
+
+
+
+
+  <title>elasticsearch从入门到删库跑路 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/elasticsearch从入门到删库跑路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">elasticsearch从入门到删库跑路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T21:28:56+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感觉都不太对。，也可能是我版本的问题吧，这里我使用的版本是6.2.2，kibana同版本的嗷。</p>
+<h3 id="0x01-Elasticsearch-介绍"><a href="#0x01-Elasticsearch-介绍" class="headerlink" title="0x01 Elasticsearch 介绍"></a>0x01 Elasticsearch 介绍</h3><p>又到了喜闻乐见的复制粘贴介绍环节</p>
+<blockquote>
+<p>Elasticsearch是高度可伸缩的开源全文搜索和分析引擎。它允许我们快速实时地存储、搜索、分析大数据。<br>Elasticsearch使用Lucene作为内部引擎，但是在你使用它做全文搜索时，只需要使用统一开发好的API即可，而不需要了解其背后复杂的Lucene的运行原理。它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单。</p>
+</blockquote>
+<h3 id="0x02-常-规-操-作"><a href="#0x02-常-规-操-作" class="headerlink" title="0x02 常 规 操 作"></a>0x02 常 规 操 作</h3><h4 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h4><p>这一步我的理解其实比较像数据库的建表，需要额外注意的部分是，对嵌套字段的处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">PUT 索引名称(自定义)</div><div class="line">&#123;</div><div class="line">  &quot;mappings&quot;:&#123;</div><div class="line">    &quot;type(自定义，类型名称)&quot;:&#123;</div><div class="line">      &quot;properties&quot;: &#123;</div><div class="line">        下面可以列出各个字段的名称和类型，也可以不列出来。没有列出来的字段会在上传的时候自动建立</div><div class="line">        这里需要注意的是，如果说涉及到的嵌套字段的话，最好使用 nested这种类型来指定，像下面这样</div><div class="line">        关于嵌套字段的相关知识一会儿在下面说</div><div class="line">        &quot;location&quot;:&#123;</div><div class="line">          &quot;type&quot;:&quot;nested&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>es相关的字段类型参考：<br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.2/mapping-types.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/elasticsearch/reference/6.2/mapping-types.html</a></p>
+<p>在建立字段时，必须考虑好各个字段的类型，因为这个东西一旦建表之后就不能修改了，实在要改的话，只能重新建表了。（注意：这里删除字段再重新建也不行，嗨呀在这上面吃过亏好气啊）</p>
+<h4 id="字段查询相关的语句"><a href="#字段查询相关的语句" class="headerlink" title="字段查询相关的语句"></a>字段查询相关的语句</h4><ol>
+<li>查询所有数据<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_search</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;: &#123;</div><div class="line">    &quot;match_all&quot;:&#123;&#125;</div><div class="line">  &#125;,</div><div class="line">  &quot;from&quot;:1, 查询时的起始位置</div><div class="line">  &quot;size&quot;:1  查询时需要数据的大小，有默认值的</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里通过from和size其实并不能查询到整个库的所有数据，如果需要查询所有的数据，或者是from+size大于10000的数据，需要使用滚动查询，后面会提这个东西，这里具体的原因似乎和分页一类的有关系，是es本身的一种限制，没有深究了。</p>
+<ol>
+<li><p>查询某个字段是否为空</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_search</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;: &#123;</div><div class="line">    &quot;bool&quot;: &#123;</div><div class="line">      &quot;must_not&quot;: &#123;</div><div class="line">        &quot;exists&quot;: &#123;</div><div class="line">          &quot;field&quot;: &quot;字段名&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>查询某个字段的精确值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_search</div><div class="line">&quot;query&quot;:&#123;</div><div class="line">    &quot;bool&quot;: &#123;</div><div class="line">        &quot;must&quot;: [</div><div class="line">            &#123;</div><div class="line">                &quot;match&quot;: &#123;</div><div class="line">                    &quot;字段名称.keyword&quot;: &quot;需要查找的精确值&quot;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="更新-amp-删除字段"><a href="#更新-amp-删除字段" class="headerlink" title="更新&amp;删除字段"></a>更新&amp;删除字段</h4><p>比如索引中存在一个tag字段，我现在想将name为a的数据的tag字段都改成x<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/type(自定义，类型名称)/_update_by_query</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;:&#123;</div><div class="line">    &quot;terms&quot;:&#123;</div><div class="line">      &quot;name.keyword&quot;:[   这里可以填入多个字段的值，keyword的作用后面再讲</div><div class="line">        &quot;a&quot;</div><div class="line">       ]</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  &quot;script&quot;:&#123;</div><div class="line">    &quot;source&quot;:&quot;ctx._source[&apos;tag&apos;]=&apos;x&apos;;&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>比如现在想删除所有存在name字段的数据中的name字段本身<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">删除字段</div><div class="line">POST index_name(自定义，索引名称)/type(自定义，类型名称)/_update_by_query</div><div class="line">&#123;</div><div class="line">  &quot;script&quot;:&quot;ctx._source.remove(\&quot;name\&quot;)&quot;,</div><div class="line">  &quot;query&quot;:&#123;</div><div class="line">    &quot;bool&quot;:&#123;</div><div class="line">      &quot;must&quot;:[</div><div class="line">        &#123;</div><div class="line">          &quot;exists&quot;:&#123;</div><div class="line">            &quot;field&quot;:&quot;name&quot;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="精确值删除"><a href="#精确值删除" class="headerlink" title="精确值删除"></a>精确值删除</h4><p>例如现在需要删除所有name为test的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_delete_by_query</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;: &#123;</div><div class="line">    &quot;match&quot;: &#123;</div><div class="line">      &quot;name&quot;: &quot;测试删除&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="区间查询"><a href="#区间查询" class="headerlink" title="区间查询"></a>区间查询</h4><p>这里举两个例子，时间区间查询，以及ip段区间查询<br>时间查询的话，需要给时间指定格式，或者本身在建立索引的时候，指定上格式一类的信息，<br>这里是查询time字段范围在2019-11-10 10:00:00至2019-11-20 10:00:00之间的语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_search</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;: &#123;</div><div class="line">    &quot;range&quot;: &#123;</div><div class="line">      &quot;time.keyword&quot;: &#123;</div><div class="line">        &quot;gte&quot;:&quot;2019-11-10 10:00:00&quot;,  gte为大于等于 gt为大于  </div><div class="line">        &quot;lte&quot;:&quot;2019-11-20 10:00:00&quot;,   lte为小于或等于 lt为小于</div><div class="line">        &quot;format&quot;: &quot;yyyy-MM-dd HH:mm:ss&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>ip段查询，查询192.168.1.0至192.168.1.255这个ip段的数据，这里ip字段本身最好也是ip类型的，但是实际操作的时候发现它可以是字符串类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_search</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;:&#123;</div><div class="line">    &quot;range&quot;:&#123;</div><div class="line">      &quot;ip&quot;:&#123;</div><div class="line">        &quot;gte&quot;:&quot;192.168.1.0&quot;,</div><div class="line">        &quot;lte&quot;:&quot;192.168.1.255&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h4><p>聚合查询可以用来统计某个字段的数量等等一类的情况，<br>例如，统计所有年龄出现的次数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">GET index_name(自定义，索引名称)/type(自定义，类型名称)/_search</div><div class="line">&#123;</div><div class="line">  &quot;size&quot;:0,    这里其实还是会进行一次所有数据量的查询，并展示结果，为了方便看后面聚合的数据的结果，所以这里给设置成了0</div><div class="line">  如果需要加上其他限制条件，例如name为test的age数据聚合计算，可以在聚合前先进行query查询相关字段的数据</div><div class="line">  &quot;aggs&quot;:&#123;</div><div class="line">    &quot;test(这里可以自定义一个名称)&quot;:&#123;</div><div class="line">      &quot;terms&quot;:&#123;</div><div class="line">        &quot;field&quot;:&quot;age&quot;,</div><div class="line">        &quot;size&quot;:10  这里指定显示聚合结果的条目数量</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>或者计算所有不同的age字段的数量，举例来说，比如数据库中age字段的值只有10,20,30三种，那这里算出来的结果就是3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">GET index_name(自定义，索引名称)/type(自定义，类型名称)/_search</div><div class="line">&#123;</div><div class="line">  &quot;size&quot;:0,</div><div class="line">  &quot;aggs&quot;:&#123;</div><div class="line">    &quot;test(这里可以自定义一个名称)&quot;:&#123;</div><div class="line">      &quot;cardinality&quot;:&#123;</div><div class="line">        &quot;field&quot;:&quot;age&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="0x03-一些遇到的坑"><a href="#0x03-一些遇到的坑" class="headerlink" title="0x03 一些遇到的坑"></a>0x03 一些遇到的坑</h3><h4 id="嵌套类型"><a href="#嵌套类型" class="headerlink" title="嵌套类型"></a>嵌套类型</h4><p>例如数据中有类似这样的情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;title&quot;: &quot;Nest eggs&quot;,</div><div class="line">  &quot;body&quot;:  &quot;Making your money work...&quot;,</div><div class="line">  &quot;tags&quot;:  [ &quot;cash&quot;, &quot;shares&quot; ],</div><div class="line">  &quot;comments&quot;: [</div><div class="line">    &#123;</div><div class="line">      &quot;name&quot;:    &quot;John Smith&quot;,</div><div class="line">      &quot;comment&quot;: &quot;Great article&quot;,</div><div class="line">      &quot;age&quot;:     28,</div><div class="line">      &quot;stars&quot;:   4,</div><div class="line">      &quot;date&quot;:    &quot;2014-09-01&quot;</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      &quot;name&quot;:    &quot;Alice White&quot;,</div><div class="line">      &quot;comment&quot;: &quot;More like this please&quot;,</div><div class="line">      &quot;age&quot;:     31,</div><div class="line">      &quot;stars&quot;:   5,</div><div class="line">      &quot;date&quot;:    &quot;2014-10-22&quot;</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在存储的时候其实这个结构是扁平的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;title&quot;:            [ eggs, nest ],</div><div class="line">  &quot;body&quot;:             [ making, money, work, your ],</div><div class="line">  &quot;tags&quot;:             [ cash, shares ],</div><div class="line">  &quot;comments.name&quot;:    [ alice, john, smith, white ],</div><div class="line">  &quot;comments.comment&quot;: [ article, great, like, more, please, this ],</div><div class="line">  &quot;comments.age&quot;:     [ 28, 31 ],</div><div class="line">  &quot;comments.stars&quot;:   [ 4, 5 ],</div><div class="line">  &quot;comments.date&quot;:    [ 2014-09-01, 2014-10-22 ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样就很明显会导致一个问题，当我想查询name为Alice，age为28的数据的时候，这条数据也是符合要求的，但是这明显不是查询的时候所期望的数据，这个时候就需要使用到嵌套类型了，这个需要在索引建立的时候就得设置好，回头看一下索引建立的部分，如果在这里的话应该这样写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">PUT 索引名称(自定义)</div><div class="line">&#123;</div><div class="line">  &quot;mappings&quot;:&#123;</div><div class="line">    &quot;index_name(自定义，索引名称)&quot;:&#123;</div><div class="line">      &quot;properties&quot;: &#123;</div><div class="line">        指定comments为嵌套类型，这样才能在组合查询嵌套中多个字段的时候，获取到正确的数据</div><div class="line">        &quot;comments&quot;:&#123;</div><div class="line">          &quot;type&quot;:&quot;nested&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>另外值得一提的是，当指定了嵌套类型之后，kibana在搜索框查询这个嵌套字段的时候就不好使了，查询结果会是空的。这里原因未知，我用的是6.2.2的版本，当时一直以为自己设置嵌套的时候设置错了，在kibana中一直查不出来，但是使用api或者手动敲查询命令的话，都是可以的</p>
+<p>嵌套类型的查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">POST index_name(自定义，索引名称)/_search</div><div class="line">&#123;</div><div class="line">    &quot;query&quot;: &#123;</div><div class="line">        &quot;nested&quot;: &#123;</div><div class="line">            &quot;path&quot;: &quot;comments&quot;,  这里需要先指定嵌套的字段路径</div><div class="line">            &quot;query&quot;: &#123;</div><div class="line">                &quot;bool&quot;: &#123;</div><div class="line">                    &quot;must&quot;: [</div><div class="line">                        &#123;</div><div class="line">                            &quot;match&quot;: &#123;</div><div class="line">                                &quot;comments.age&quot;: 28</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    ]</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="keyword的作用"><a href="#keyword的作用" class="headerlink" title="keyword的作用"></a>keyword的作用</h4><p>keyword这个东西和分词有一些关系，在建立es索引后，可以在kibana的索引信息查看页面看到很多字符串类型的字段都有会有相关的keyword字段，这里当对这些字段进行查询的时候，不使用keyword的情况下，查询的是被分词的字段，例如上文中的<figure class="highlight plain"><figcaption><span>White"```存入es后如果直接使用name字段查询Alice White是查不出来的，可以使用Alice或White进行查询，如果想要精确的查询到"Alice White"，那查询的字段就需要是name.keyword</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### 滚动查询</div><div class="line">上文中提到了查询的时候使用from和size，无法查询到10000以后的数据，但是实际的使用场景下肯定是会有查询10000以后数据的情况的，这个是时候就需要使用滚动查询了，使用方法也比较简单，缺点的话，可能就是没有from和size那样方便控制起始位置了</div></pre></td></tr></table></figure></p>
+<p>POST index_name(自定义，索引名称)/_search?scroll=1m  设置滚动窗口的时间为一分钟<br>{<br>  “query”: {<br>    “match_all”:{}<br>  },<br>  “size”: 100          设置滚动一次查询的数据量<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">在执行一次这个查询之后，返回的数据中会有一个_scroll_id，后续的查询就可以直接通过这个id了</div></pre></td></tr></table></figure></p>
+<p>POST /_search/scroll<br>{<br>  “scroll”:”1m”,<br>  “scroll_id”:”获得到的_scroll_id”<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">在这个窗口期内就可以通过反复执行这个scroll查询，读取到整个数据库的数据，这里的_scroll_id，我这儿试的时候，发现它在第一次滑动查询之后就不变了，在这个窗口期内可以反复使用，每次查询都会返回后续的数据</div><div class="line"></div><div class="line">### 0x04 快照备份与恢复</div><div class="line">这里简单提一下备份吧，最近在做这个，网上查了一下信息做参考，也踩到一点儿坑</div><div class="line">es支持多种备份的方式</div><div class="line">- 共享的文件系统，如NAS</div><div class="line">- Amazon S3</div><div class="line">- HDFS (Hadoop Distributed File System)</div><div class="line">- Azure Cloud</div><div class="line">这里我用的是第一种</div><div class="line"></div><div class="line">#### 注册快照仓库</div></pre></td></tr></table></figure></p>
+<p>PUT  _snapshot/my_backup  最后这里是快照仓库名称<br>{<br>    “type”: “fs”,<br>    “settings”: {<br>        “location”: “/data/backups/elasticsearch”<br>    }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;/data/backups/elasticsearch&quot;  这个目录建立的时候需要注意es的用户和组必须有它的读写权限，并且需要在es配置文件中配置上</div></pre></td></tr></table></figure></p>
+<p>path.repo: /data/backups/elasticsearch<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">这个es配置文件名字是 elasticsearch.yml 路径为 /etc/elasticsearch/elasticsearch.yml，在修改配置之后，需要重启es服务。</div><div class="line"></div><div class="line">#### 进行备份</div><div class="line">如果想要等到备份完成可以在后面加上 ?wait_for_completion=true，这里具体看使用情况吧，我在kibana中使用这个的时候导致了超时错误，我觉着没必要阻塞在这儿，可以用下面的请求来查看状态，当然这里还是看场景。</div></pre></td></tr></table></figure></p>
+<p>PUT _snapshot/my_backup/snapshot_name  最后这里是快照名称<br>{<br>    “indices”: “index_1,index_2”  指定需要备份的索引<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">备份过程中查看状态</div></pre></td></tr></table></figure></p>
+<p>GET _snapshot/my_backup/snapshot_name/_status<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">主要由如下几种状态：</div><div class="line">- INITIALIZING 集群状态检查，检查当前集群是否可以做快照，通常这个过程会非常快</div><div class="line">- STARTED 正在转移数据到仓库</div><div class="line">- FINALIZING 数据转移完成，正在转移元信息</div><div class="line">- DONE　完成</div><div class="line">- FAILED 备份失败</div><div class="line"></div><div class="line">#### 取消备份</div></pre></td></tr></table></figure></p>
+<p>DELETE _snapshot/my_backup/snapshot_name<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### 恢复备份</div></pre></td></tr></table></figure></p>
+<p>POST _snapshot/my_backup/snapshot_name/_restore<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### 指定恢复目标索引</div></pre></td></tr></table></figure></p>
+<p>POST _snapshot/my_backup/snapshot_name/_restore<br>{<br>    “indices”: “index_1”,<br>    “rename<em>pattern”: “index</em>(.+)”,<br>    “rename_replacement”: “restored<em>index</em>$1”<br>}<br>```<br>上面的indices, 表示只恢复索引’index_1’<br>renamepattern: 表示重命名索引以’index‘开头的索引.<br>rename_replacement: 表示将所有的索引重命名为’restored_index_xxx’.如index_1会被重命名为restored_index_1.</p>
+<p>如果指定了索引，这里第二项就可以直接写索引的名称，不用再加上(.+)这种通配符一类的东西，且最后的$1也可以不用，rename_replacement名字可以直接指定</p>
+<h3 id="0x05-总结-amp-其他的事情"><a href="#0x05-总结-amp-其他的事情" class="headerlink" title="0x05 总结&amp;其他的事情"></a>0x05 总结&amp;其他的事情</h3><p>es的常规操作其实网上到处都能找到，但是我用数据一类的东西比较少，有些东西其实是第一次遇到，不知道是不是es本身的特性，例如keyword分词，嵌套扁平化，无法直接查10000之后的数据只能滚动查询等等。今天看的备份，差不多来回折腾以及和提供es服务那边部门的同事聊了一会儿，es那个备份，不论什么方式似乎都是基于NFS的，通过挂载远程文件系统，备份完再摘掉啥的，在我们公司似乎因为一些安全上的限制，这个玩意不太好整。溜了溜了，好菜啊，辣鸡mac又开始发烫了。</p>
+<h3 id="0x06-参考"><a href="#0x06-参考" class="headerlink" title="0x06 参考"></a>0x06 参考</h3><ol>
+<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/nested-objects.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/current/nested-objects.html</a></li>
+<li><a href="https://ox0spy.github.io/post/elasticsearch/elasticsearch-snapshot-restore/" target="_blank" rel="noopener">https://ox0spy.github.io/post/elasticsearch/elasticsearch-snapshot-restore/</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/21/chrome-插件开发笔记/" rel="next" title="chrome 插件开发笔记">
+                <i class="fa fa-chevron-left"></i> chrome 插件开发笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://omasko.github.io/" title="表面基佬Mask" target="_blank">表面基佬Mask</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-Elasticsearch-介绍"><span class="nav-number">2.</span> <span class="nav-text">0x01 Elasticsearch 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-常-规-操-作"><span class="nav-number">3.</span> <span class="nav-text">0x02 常 规 操 作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立索引"><span class="nav-number">3.1.</span> <span class="nav-text">建立索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字段查询相关的语句"><span class="nav-number">3.2.</span> <span class="nav-text">字段查询相关的语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新-amp-删除字段"><span class="nav-number">3.3.</span> <span class="nav-text">更新&amp;删除字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#精确值删除"><span class="nav-number">3.4.</span> <span class="nav-text">精确值删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#区间查询"><span class="nav-number">3.5.</span> <span class="nav-text">区间查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#聚合查询"><span class="nav-number">3.6.</span> <span class="nav-text">聚合查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-一些遇到的坑"><span class="nav-number">4.</span> <span class="nav-text">0x03 一些遇到的坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#嵌套类型"><span class="nav-number">4.1.</span> <span class="nav-text">嵌套类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#keyword的作用"><span class="nav-number">4.2.</span> <span class="nav-text">keyword的作用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-总结-amp-其他的事情"><span class="nav-number">5.</span> <span class="nav-text">0x05 总结&amp;其他的事情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-参考"><span class="nav-number">6.</span> <span class="nav-text">0x06 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
