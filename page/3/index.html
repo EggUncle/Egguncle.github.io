@@ -257,6 +257,127 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/28/smali从入门到自闭/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/28/smali从入门到自闭/" itemprop="url">smali从入门到自闭</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-28T22:40:13+08:00">
+                2018-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。
+0x01 关于寄存器在插桩的时候碰上一个这个问题，就是由于我的操作导致目标方法总数的寄存器大于15,即.locals这个值大于15,一开始没当回事，后来发现，p0和p后面的那些寄存器，数字都是这里开始的，比如当.locals 15的时候，再使用到p0寄存器的时候，它其实是v16,这一点是从apktool在重新打包的时候看出来的，报错会有提示，在invoke和new-array，以及iget等操作的时候，使用到的寄存器下标是不能大于15的。
+后来在网上查到了一个相关的指令就是类似new-array/jumbo这种，但是实际操作发现不行，编辑器就标红了，打包的时候也报错说不支持这个指令，jumbo相关的都不行。
+还有就是当寄存器下标大于15的时候，invoke这种就不行了，但是可以使用invoke-xxxxx/range来操作，我一开始以为只有寄存器数量超过5个才要用这个的，后来手写了一些比较长的java方法，反编
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/28/smali从入门到自闭/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/app-process注入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -744,130 +865,11 @@ app_process其实是一个elf文件,这里对它进行一些修改来达到自�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/17/Android-进程注入/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一只大茶蛋">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ekkkkkkko">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/17/Android-进程注入/" itemprop="url">Android 进程注入</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-17T01:40:52+08:00">
-                2018-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          0x00 前言以前就想试下进程注入这个东西,但是相关知识懂得太少了,进度就一直很慢,后来还是想了下感觉还是得头铁的尝试一下看看,这里把整个过程和踩到的坑记下来,也算是个简单的教程吧,我会的不多,但是一路下来还是了解到了不少东西,这里就把一路上用到的也都记下来
-0x01 目的首先先明确目标,首先新建一个app项目,里面的jni部分代码是这样的:12345678910111213141516171819202122#include &lt;jni.h&gt;#include &lt;string&gt;#include &lt;string.h&gt;#include &lt;sys/mman.h&gt;extern &quot;C&quot;char *getkey() &#123;    static char key[32];    strcpy(key, &quot;justakeyfromjni&quot;);    return key;&#125;extern &quot;C&quot;JNIEXPORT jstringJNICALLJava_com_example_eggu
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/17/Android-进程注入/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -912,7 +914,7 @@ app_process其实是一个elf文件,这里对它进行一些修改来达到自�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -925,7 +927,7 @@ app_process其实是一个elf文件,这里对它进行一些修改来达到自�
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -993,7 +995,7 @@ app_process其实是一个elf文件,这里对它进行一些修改来达到自�
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
