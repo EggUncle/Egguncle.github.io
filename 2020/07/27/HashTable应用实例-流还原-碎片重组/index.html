@@ -1,0 +1,726 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="网络安全," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="0x00 前言在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据">
+<meta name="keywords" content="网络安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashTable应用实例-流还原&amp;碎片重组">
+<meta property="og:url" content="http://yoursite.com/2020/07/27/HashTable应用实例-流还原-碎片重组/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="0x00 前言在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%888.36.13.png?raw=true">
+<meta property="og:updated_time" content="2020-07-27T13:03:44.021Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HashTable应用实例-流还原&amp;碎片重组">
+<meta name="twitter:description" content="0x00 前言在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据">
+<meta name="twitter:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%888.36.13.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/27/HashTable应用实例-流还原-碎片重组/"/>
+
+
+
+
+
+  <title>HashTable应用实例-流还原&碎片重组 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/27/HashTable应用实例-流还原-碎片重组/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HashTable应用实例-流还原&碎片重组</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-27T20:49:53+08:00">
+                2020-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。<br>碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据结构本身的性质，记录一下关于它的实际应用-CAPWAP碎片还原。整个hashtable代码本身仅仅是从一个IDS里头看到的，自身实现的，比较简单的hashtable，解析capwap顺手用到了。</p>
+<p>HashTable本身的数据结构啥样这里就不提了，我觉得碎片重组和流还原本身比较相似，所以下文中仅仅介绍碎片重组。</p>
+<h3 id="0x01-碎片重组基本思路"><a href="#0x01-碎片重组基本思路" class="headerlink" title="0x01 碎片重组基本思路"></a>0x01 碎片重组基本思路</h3><p>首先忽略CAPWAP协议本身的特征和各种标志位以及操作码等等，概括的描述一下，一个碎片包，如果需要重组，需要拥有什么信息，以及如何重组<br>需要拥有的信息：</p>
+<ol>
+<li>五元祖，源目的ip/端口/传输层协议</li>
+<li>标志位，标示该报文是碎片包，以及是否是最后一个碎片包等等</li>
+<li>偏移量，标示该数据包的载荷，在最后还原的数据中的偏移位置</li>
+<li>碎片ID，也叫标示符，不同的协议可能叫法不太一样，总的来说就是协议栈提供的，需要保证这一批碎片中，这个值是相等的，以此来保证他们</li>
+</ol>
+<p>理论上来说有这些信息，就可以进行组合或者还原了<br>重组的方式也很简单，识别出来这条流之后（识别方式可以通过源目的端口以及ip等），根据偏移进行组装就可以了</p>
+<h3 id="0x02-识别流的方式"><a href="#0x02-识别流的方式" class="headerlink" title="0x02 识别流的方式"></a>0x02 识别流的方式</h3><p>这里简单提一下，识别流的方式。</p>
+<p>理论上部分网卡（ixgbe）本身是有这种功能的，实现的具体方式我也不清楚，具体来说就是pfring这种数据包捕获的方式，在有驱动一类东西支持的情况下，可以自行设置并发数，在里头会自行将对应的流放置与不同的并发的队列中。<br>代码中实现流识别的方式也比较简单，通过源目的ip和端口就可以了，不过之前看IDS的代码发现一个比较有意思的事情是，它是给每个流计算了一个ID的，ID的计算方式，就是通过源目的ip和端口一类的信息，但是一个流，是很可能有数据交互的情况的，即源目的ip端口相反的情况，因此在该IDS中，它在计算这个流ID的时候，会自动将ip这个值本身比较大的哪一组ip和端口，放置在计算id逻辑的前面。简单用伪代码标示就是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">IP1;</div><div class="line">PORT1;</div><div class="line">IP2;</div><div class="line">PORT2;</div><div class="line"></div><div class="line">if IP1&gt;IP2:</div><div class="line">  flow_id = IP1+IP2+PORT1+PORT2</div><div class="line">else:</div><div class="line">  flow_id = IP2+IP1+PORT2+PORT1</div></pre></td></tr></table></figure></p>
+<p>这样可以保证不管是源到目的的数据包还是目的给源返回的数据包，计算出来的id都是一致的，就可以识别成一条流。</p>
+<h3 id="0x03-碎片重组-amp-HashTable"><a href="#0x03-碎片重组-amp-HashTable" class="headerlink" title="0x03 碎片重组&amp;HashTable"></a>0x03 碎片重组&amp;HashTable</h3><p>将上面的信息进一步抽象，其实可以将数据分为两部分</p>
+<ol>
+<li>id</li>
+<li>数据载荷，即需要组合还原出来的数据</li>
+</ol>
+<p>这个情况，用hashtable处理就非常合适，简单来说就是通过id进行一些hash计算，得到一个在hashtable中的索引，而这个索引本身对应一段存储空间，用于存储碎片数据的空间，在流还原中，这部分空间就可以是一个链表，根据数据包中的偏移信息，来进行排序。注意，这里的链表，并不是用于处理hash冲突的链地址法中使用的链表。</p>
+<h4 id="0x03-1关于hash冲突"><a href="#0x03-1关于hash冲突" class="headerlink" title="0x03.1关于hash冲突"></a>0x03.1关于hash冲突</h4><p>我这里使用的hashtable时自己实现了这个处理冲突的算法，因为默认的不太好使，其实java里头也有，但是大部分情况下默认的就够了。</p>
+<p>这里导致冲突的原因主要就是，在往hashtable中添加数据计算索引的时候，计算到了同一个值，我之前写的hash函数比较简单，就是直接将flow id与hashtable的大小进行余数运算，果不其然就碰上了，之前同事说可以带上碎片ID进行hash计算，但是后来想了想还是没有使用这种方法，主要原因是，重复是正常现象，说明这个hash重复的数据包，就是来自这条流中的，那就是需要进行重组的。但是还有一种情况是，hash冲突后，这个包并不是属于冲突这个碎片集合所属的流中的，真的就是hash冲突了，那么这个时候，碎片id就碰上用场了，也就是说，在hashcompare函数中，进一步进行碎片id的对比，就可以比较好的处理这个问题了。</p>
+<p>整体来看可以通过一张图描述（用processon画的，凑合看看吧）<br><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%888.36.13.png?raw=true" alt=""></p>
+<p>index代表hashtable的索引，bucket即为上文中提到的，链地址法处理hash冲突的体现，而在这个实际应用中，为了存储并还原数据，因此使用了链表来进一步存储碎片。</p>
+<h3 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h3><p>hashtable这个，以前写andorid和用java的时候，都有使用到，但是后来整杂活之后，就比较少使用这个数据结构了，或者说没有这么直接的使用它，相对高级一些的语言，例如java、python等，这类语言对它都进行了比较好的封装，我这回使用的是c的，需要自己实现hash函数、释放函数、以及处理hash冲突的hashCompare函数。这回不知道为啥，觉得hashtable这个玩意，很亲切。。。</p>
+<p>哎，太菜了，还是要多学学，之前因为一些各种各样的原因，客户的pcap直到临近交付才给到我们，结果发现我们使用的流量处理程序无法解析其中出现的CAPWAP隧道协议，加了一个周末的班，调研了各种方案，甚至到了抓包驱动那一层，后来感觉自己写也就那么回事。。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络安全/" rel="tag"># 网络安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/24/suricata模块加载及运行笔记/" rel="next" title="suricata5.0.2模块加载及运行笔记">
+                <i class="fa fa-chevron-left"></i> suricata5.0.2模块加载及运行笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-碎片重组基本思路"><span class="nav-number">2.</span> <span class="nav-text">0x01 碎片重组基本思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-识别流的方式"><span class="nav-number">3.</span> <span class="nav-text">0x02 识别流的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-碎片重组-amp-HashTable"><span class="nav-number">4.</span> <span class="nav-text">0x03 碎片重组&amp;HashTable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-1关于hash冲突"><span class="nav-number">4.1.</span> <span class="nav-text">0x03.1关于hash冲突</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-总结"><span class="nav-number">5.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

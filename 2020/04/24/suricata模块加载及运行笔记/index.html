@@ -1,0 +1,727 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="suricata," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="0x00 前言诶好久没记点儿东西了，这段时间整的杂活也比较多，最近看了一些suricata的部分，这里简单的记一下，suricata的模块是如何注册，生效以及运行的。 整个模块化的情况可以用一张图概括，出处 https://blog.csdn.net/shenwansangz/article/details/37900875  简单来说，就是在一个线程中保存了一个slot链表，每一个slot结构体">
+<meta name="keywords" content="suricata">
+<meta property="og:type" content="article">
+<meta property="og:title" content="suricata5.0.2模块加载及运行笔记">
+<meta property="og:url" content="http://yoursite.com/2020/04/24/suricata模块加载及运行笔记/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="0x00 前言诶好久没记点儿东西了，这段时间整的杂活也比较多，最近看了一些suricata的部分，这里简单的记一下，suricata的模块是如何注册，生效以及运行的。 整个模块化的情况可以用一张图概括，出处 https://blog.csdn.net/shenwansangz/article/details/37900875  简单来说，就是在一个线程中保存了一个slot链表，每一个slot结构体">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20140717093204890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbndhbnNhbmd6/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2020-04-24T02:58:45.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="suricata5.0.2模块加载及运行笔记">
+<meta name="twitter:description" content="0x00 前言诶好久没记点儿东西了，这段时间整的杂活也比较多，最近看了一些suricata的部分，这里简单的记一下，suricata的模块是如何注册，生效以及运行的。 整个模块化的情况可以用一张图概括，出处 https://blog.csdn.net/shenwansangz/article/details/37900875  简单来说，就是在一个线程中保存了一个slot链表，每一个slot结构体">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20140717093204890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbndhbnNhbmd6/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/24/suricata模块加载及运行笔记/"/>
+
+
+
+
+
+  <title>suricata5.0.2模块加载及运行笔记 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/24/suricata模块加载及运行笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">suricata5.0.2模块加载及运行笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-24T20:57:13+08:00">
+                2020-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>诶好久没记点儿东西了，这段时间整的杂活也比较多，最近看了一些suricata的部分，这里简单的记一下，suricata的模块是如何注册，生效以及运行的。</p>
+<p>整个模块化的情况可以用一张图概括，出处 <a href="https://blog.csdn.net/shenwansangz/article/details/37900875" target="_blank" rel="noopener">https://blog.csdn.net/shenwansangz/article/details/37900875</a></p>
+<p><img src="https://img-blog.csdn.net/20140717093204890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2hlbndhbnNhbmd6/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+<p>简单来说，就是在一个线程中保存了一个slot链表，每一个slot结构体中，保存了一个模块，在后续运行的时候，会对slot进行遍历，将里面的模块取出并运行。</p>
+<p>主要分为以下几个步骤</p>
+<ol>
+<li>模块注册</li>
+<li>模块初始化</li>
+<li>模块关联运行模式</li>
+<li>模块运行</li>
+</ol>
+<h3 id="0x01-模块注册"><a href="#0x01-模块注册" class="headerlink" title="0x01 模块注册"></a>0x01 模块注册</h3><p>主要的注册逻辑在函数RegisterAllModules中，它的定义如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">void RegisterAllModules(void)</div><div class="line">&#123;</div><div class="line">    // zero all module storage</div><div class="line">    memset(tmm_modules, 0, TMM_SIZE * sizeof(TmModule));</div><div class="line"></div><div class="line">    /* commanders */</div><div class="line">    TmModuleUnixManagerRegister();</div><div class="line">  ........</div><div class="line">    TmModuleDebugList();</div><div class="line">    /* nflog */</div><div class="line">    TmModuleReceiveNFLOGRegister();</div><div class="line">    TmModuleDecodeNFLOGRegister();</div><div class="line"></div><div class="line">    /* windivert */</div><div class="line">    TmModuleReceiveWinDivertRegister();</div><div class="line">    TmModuleVerdictWinDivertRegister();</div><div class="line">    TmModuleDecodeWinDivertRegister();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所有的模块都是存储在tmm_modules数组中，它是一个TmModule结构体数组，每一个索引对于一个模块，在代码中是写死的，索引对应一个枚举类型，定义在src/tm-threads-common.h中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">typedef enum &#123;</div><div class="line">    TMM_FLOWWORKER,</div><div class="line">    TMM_DECODENFQ,</div><div class="line">    TMM_VERDICTNFQ,</div><div class="line">    TMM_RECEIVENFQ,</div><div class="line">    TMM_RECEIVEPCAP,</div><div class="line">    TMM_RECEIVEPCAPFILE,</div><div class="line">    TMM_DECODEPCAP,</div><div class="line">    TMM_DECODEPCAPFILE,</div><div class="line">    TMM_RECEIVEPFRING,</div><div class="line">    TMM_DECODEPFRING,</div><div class="line">    TMM_RESPONDREJECT,</div><div class="line">    TMM_DECODEIPFW,</div><div class="line">    TMM_VERDICTIPFW,</div><div class="line">    TMM_RECEIVEIPFW,</div><div class="line">    TMM_RECEIVEERFFILE,</div><div class="line">    TMM_DECODEERFFILE,</div><div class="line">    TMM_RECEIVEERFDAG,</div><div class="line">    TMM_DECODEERFDAG,</div><div class="line">    TMM_RECEIVEAFP,</div><div class="line">    TMM_DECODEAFP,</div><div class="line">    TMM_RECEIVENETMAP,</div><div class="line">    TMM_DECODENETMAP,</div><div class="line">    TMM_ALERTPCAPINFO,</div><div class="line">    TMM_RECEIVENAPATECH,</div><div class="line">    TMM_DECODENAPATECH,</div><div class="line">    TMM_STATSLOGGER,</div><div class="line">    TMM_RECEIVENFLOG,</div><div class="line">    TMM_DECODENFLOG,</div><div class="line">    TMM_RECEIVEWINDIVERT,</div><div class="line">    TMM_VERDICTWINDIVERT,</div><div class="line">    TMM_DECODEWINDIVERT,</div><div class="line"></div><div class="line">    TMM_FLOWMANAGER,</div><div class="line">    TMM_FLOWRECYCLER,</div><div class="line">    TMM_BYPASSEDFLOWMANAGER,</div><div class="line">    TMM_DETECTLOADER,</div><div class="line"></div><div class="line">    TMM_UNIXMANAGER,</div><div class="line"></div><div class="line">    TMM_SIZE,</div><div class="line">&#125; TmmId;</div></pre></td></tr></table></figure></p>
+<p>模块注册本身也比较简单，这里随便找一个注册函数看看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">void TmModuleFlowWorkerRegister (void)</div><div class="line">&#123;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].name = &quot;FlowWorker&quot;;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].ThreadInit = FlowWorkerThreadInit;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].Func = FlowWorker;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].ThreadDeinit = FlowWorkerThreadDeinit;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].ThreadExitPrintStats = FlowWorkerExitPrintStats;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].cap_flags = 0;</div><div class="line">    tmm_modules[TMM_FLOWWORKER].flags = TM_FLAG_STREAM_TM|TM_FLAG_DETECT_TM;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注册函数仅仅是将tmm_modules中对应的索引对应的TmModule对象</p>
+<p>TmModule本身是一个结构体，成员变量大都是函数指针，定义如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">typedef struct TmModule_ &#123;</div><div class="line">    const char *name;</div><div class="line"></div><div class="line">    /** thread handling */</div><div class="line">    TmEcode (*ThreadInit)(ThreadVars *, const void *, void **);</div><div class="line">    void (*ThreadExitPrintStats)(ThreadVars *, void *);</div><div class="line">    TmEcode (*ThreadDeinit)(ThreadVars *, void *);</div><div class="line"></div><div class="line">    /** the packet processing function */</div><div class="line">    TmEcode (*Func)(ThreadVars *, Packet *, void *, PacketQueue *, PacketQueue *);</div><div class="line"></div><div class="line">    TmEcode (*PktAcqLoop)(ThreadVars *, void *, void *);</div><div class="line"></div><div class="line">    /** terminates the capture loop in PktAcqLoop */</div><div class="line">    TmEcode (*PktAcqBreakLoop)(ThreadVars *, void *);</div><div class="line"></div><div class="line">    TmEcode (*Management)(ThreadVars *, void *);</div><div class="line"></div><div class="line">    /** global Init/DeInit */</div><div class="line">    TmEcode (*Init)(void);</div><div class="line">    TmEcode (*DeInit)(void);</div><div class="line"></div><div class="line">    void (*RegisterTests)(void);</div><div class="line"></div><div class="line">    uint8_t cap_flags;   /**&lt; Flags to indicate the capability requierment of</div><div class="line">                             the given TmModule */</div><div class="line">    /* Other flags used by the module */</div><div class="line">    uint8_t flags;</div><div class="line">&#125; TmModule;</div></pre></td></tr></table></figure></p>
+<h3 id="0x02-模块初始化"><a href="#0x02-模块初始化" class="headerlink" title="0x02 模块初始化"></a>0x02 模块初始化</h3><p>初始化主要分两个部分，一个是调用TmModule中的Init函数进行初始化，这部分只要有注册过的模块都会进行调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">void TmModuleRunInit(void)</div><div class="line">&#123;</div><div class="line">    TmModule *t;</div><div class="line">    uint16_t i;</div><div class="line"></div><div class="line">    for (i = 0; i &lt; TMM_SIZE; i++) &#123;</div><div class="line">        t = &amp;tmm_modules[i];</div><div class="line"></div><div class="line">        if (t-&gt;name == NULL)</div><div class="line">            continue;</div><div class="line"></div><div class="line">        if (t-&gt;Init == NULL)</div><div class="line">            continue;</div><div class="line"></div><div class="line">        t-&gt;Init();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>还有一部分初始化功能是调用ThreadInit，这个只有和运行模式进行关联的模块才会调用。</p>
+<h3 id="0x03-模块关联运行模式"><a href="#0x03-模块关联运行模式" class="headerlink" title="0x03 模块关联运行模式"></a>0x03 模块关联运行模式</h3><p>主要代码都在src/util-runmodes.c中，涉及到不同运行模式，使用的模块似乎是不一样的，这里仅仅以其中一个来举例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">/* create the threads */</div><div class="line">for (int thread = 0; thread &lt; threads_count; thread++) &#123;</div><div class="line">    .........</div><div class="line">    tm_module = TmModuleGetByName(recv_mod_name);</div><div class="line">    if (tm_module == NULL) &#123;</div><div class="line">        SCLogError(SC_ERR_INVALID_VALUE, &quot;TmModuleGetByName failed for %s&quot;, recv_mod_name);</div><div class="line">        exit(EXIT_FAILURE);</div><div class="line">    &#125;</div><div class="line">    TmSlotSetFuncAppend(tv, tm_module, aconf);</div><div class="line"></div><div class="line">    tm_module = TmModuleGetByName(decode_mod_name);</div><div class="line">    if (tm_module == NULL) &#123;</div><div class="line">        SCLogError(SC_ERR_INVALID_VALUE, &quot;TmModuleGetByName %s failed&quot;, decode_mod_name);</div><div class="line">        exit(EXIT_FAILURE);</div><div class="line">    &#125;</div><div class="line">    TmSlotSetFuncAppend(tv, tm_module, NULL);</div><div class="line"></div><div class="line">    tm_module = TmModuleGetByName(&quot;FlowWorker&quot;);</div><div class="line">    if (tm_module == NULL) &#123;</div><div class="line">        SCLogError(SC_ERR_RUNMODE, &quot;TmModuleGetByName for FlowWorker failed&quot;);</div><div class="line">        exit(EXIT_FAILURE);</div><div class="line">    &#125;</div><div class="line">    TmSlotSetFuncAppend(tv, tm_module, NULL);</div><div class="line"></div><div class="line">    tm_module = TmModuleGetByName(&quot;RespondReject&quot;);</div><div class="line">    if (tm_module == NULL) &#123;</div><div class="line">        SCLogError(SC_ERR_RUNMODE, &quot;TmModuleGetByName RespondReject failed&quot;);</div><div class="line">        exit(EXIT_FAILURE);</div><div class="line">    &#125;</div><div class="line">    TmSlotSetFuncAppend(tv, tm_module, NULL);</div><div class="line">........</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里省去大部分无关代码，关联运行模式的函数为TmSlotSetFuncAppend，本身的实现这里就不展开了，简单来说，就是将tm module存入thread的slots中，在后续模块触发的时候进行操作。需要注意的是，suricata的数据包捕获模块也是在这里注册的，就是在这个循环中，第一个被关联上的模块，就是用于数据捕获的模块，在启动之后，会循环调用PktAcqLoop来进行数据包的捕获。</p>
+<h3 id="0x04-模块运行"><a href="#0x04-模块运行" class="headerlink" title="0x04 模块运行"></a>0x04 模块运行</h3><p>这部分的代码就不详细展开了，具体的情况其实和抓包模块的实现有关系，之前简单的对其中一个抓包模块进行了调研，发现它就是在PktAcqLoop中捕获到数据包之后，又对slots中保存的所有模块进行了遍历并调用Func函数，这里找了几个实现了PktAcqLoop接口的模块，发现他们都在里面获取数据包之后，调用了TmThreadsSlotProcessPkt函数。</p>
+<h3 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h3><p>总的来讲我觉着suricata的代码，比snort清晰很多，至少没有之前那种看得一头雾水的情况了（主要是菜），各个模块的注册关联运行之类的都挺清楚的，其他部分也看了看，目前感觉还都挺清晰的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/suricata/" rel="tag"># suricata</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/06/机甲战魔金币无消耗修改器开发笔记/" rel="next" title="机甲战魔金币无消耗修改器开发笔记">
+                <i class="fa fa-chevron-left"></i> 机甲战魔金币无消耗修改器开发笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/27/HashTable应用实例-流还原-碎片重组/" rel="prev" title="HashTable应用实例-流还原&碎片重组">
+                HashTable应用实例-流还原&碎片重组 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-模块注册"><span class="nav-number">2.</span> <span class="nav-text">0x01 模块注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-模块初始化"><span class="nav-number">3.</span> <span class="nav-text">0x02 模块初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-模块关联运行模式"><span class="nav-number">4.</span> <span class="nav-text">0x03 模块关联运行模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-模块运行"><span class="nav-number">5.</span> <span class="nav-text">0x04 模块运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-总结"><span class="nav-number">6.</span> <span class="nav-text">0x05 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
