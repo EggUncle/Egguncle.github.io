@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Ekkkkkkko">
 <meta property="og:description" content="说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333 写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-27T10:58:28.672Z">
+<meta property="og:updated_time" content="2020-07-28T14:07:09.602Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android清除所有noticafition的一些探究（二）">
 <meta name="twitter:description" content="说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333 写上一篇关于清除所有通知的博客已经是六月上旬的事情了https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#">
@@ -323,7 +323,9 @@
       
         <p>说实话我自己都没想到关于这个东西会在三个月以后写第二篇233333</p>
 <p>写上一篇关于清除所有通知的博客已经是六月上旬的事情了<br><a href="https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more" target="_blank" rel="noopener">https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/#more</a></p>
-<p>当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。<br>然后我是这样说的：</p>
+<p>当时我找到了源码中调用清除所有通知的方法，并尝试调用使其清除所有通知，然后遇上了一个奇怪的问题，就是在通知栏收起的情况下，无法清除所有通知，状态栏仍然有图标存在，需要手动下拉一下通知栏再收起才可以清除。</p>
+<a id="more"></a>
+<p>然后我是这样说的：</p>
 <blockquote>
 <p>通过Xposed Hook后调用该方法，成功实现清除所有通知栏的内容，但是仍然有一改问题：在通知栏收起的情况下，清除通知后，状态栏仍然有图标存在，而在下拉状态栏后才清除。<br>这个问题应该是由于该方法中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="number">952</span>                <span class="keyword">if</span> (child.getVisibility() == View.VISIBLE) &#123;</div><div class="line">&gt;<span class="number">953</span>                    viewsToHide.add(child);</div><div class="line">&gt;<span class="number">954</span>                &#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
 <p>这一段代码造成的。<br>解决方法：<br>1.使用xposed hook替换整个清除通知栏的方法，去掉这一部分。比较麻烦，而且可能会造成某些问题，但是效果好。<br>2.在调用hook出来的clearAllNotificatons的时候，执行一下拉通知栏和收起通知栏的方法。效果稍微差一些，但是不至于出现太大问题。</p>

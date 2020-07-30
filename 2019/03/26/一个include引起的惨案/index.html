@@ -93,19 +93,19 @@
 
 
 
-<meta name="description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug. 0x01 起因我的代码中有大概这样一个操作1struct test *t = my_malloc(sizeof(struct test)); my_malloc大概是malloc一个封装,代码大致是这样,它属于my_">
+<meta name="description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一个include引起的惨案">
 <meta property="og:url" content="http://yoursite.com/2019/03/26/一个include引起的惨案/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug. 0x01 起因我的代码中有大概这样一个操作1struct test *t = my_malloc(sizeof(struct test)); my_malloc大概是malloc一个封装,代码大致是这样,它属于my_">
+<meta property="og:description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug.">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-21%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-30%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
-<meta property="og:updated_time" content="2019-03-26T15:02:57.839Z">
+<meta property="og:updated_time" content="2020-07-28T14:11:03.598Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个include引起的惨案">
-<meta name="twitter:description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug. 0x01 起因我的代码中有大概这样一个操作1struct test *t = my_malloc(sizeof(struct test)); my_malloc大概是malloc一个封装,代码大致是这样,它属于my_">
+<meta name="twitter:description" content="0x00 前言emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug.">
 <meta name="twitter:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2019-03-26%2022-33-21%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
 
 
@@ -324,6 +324,7 @@
 
       
         <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>emmmmm 前一段时间部门转iot了,然后就开始做相关的东西了,写了一些c语言的东西,踩到一个一开始觉得有点玄学的坑.在arm64的平台上遇到了一个比较奇怪的bug.</p>
+<a id="more"></a>
 <h1 id="0x01-起因"><a href="#0x01-起因" class="headerlink" title="0x01 起因"></a>0x01 起因</h1><p>我的代码中有大概这样一个操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct test *t = my_malloc(sizeof(struct test));</div></pre></td></tr></table></figure></p>
 <p>my_malloc大概是malloc一个封装,代码大致是这样,它属于my_stdlib.h<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void* my_malloc(param)&#123;</div><div class="line">  return malloc(param);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>然后就碰上一个有些奇怪的问题,调用my_malloc以后,返回的地址,访问时会报段错误,而实际查看它的内存信息的时候,像是被覆盖了.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">实际malloc返回的地址</div><div class="line">7f968511e0</div><div class="line"></div><div class="line">而my_malloc返回后的地址变成了这样</div><div class="line">ffffffff968511e0</div></pre></td></tr></table></figure></p>

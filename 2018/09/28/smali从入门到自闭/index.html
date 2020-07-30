@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。 0x01 关于寄存器在插桩的时候碰上一个这个问题，就是由于我的操作导致目标方法总数的寄存器大于15,即.locals这个值大于15,一开始没当回事，后来发现，p0和p后面的那些寄存器，数字都是这里开始的，比如当.local">
+<meta name="description" content="0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="smali从入门到自闭">
 <meta property="og:url" content="http://yoursite.com/2018/09/28/smali从入门到自闭/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。 0x01 关于寄存器在插桩的时候碰上一个这个问题，就是由于我的操作导致目标方法总数的寄存器大于15,即.locals这个值大于15,一开始没当回事，后来发现，p0和p后面的那些寄存器，数字都是这里开始的，比如当.local">
+<meta property="og:description" content="0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-28T15:03:48.458Z">
+<meta property="og:updated_time" content="2020-07-28T14:10:45.016Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smali从入门到自闭">
-<meta name="twitter:description" content="0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。 0x01 关于寄存器在插桩的时候碰上一个这个问题，就是由于我的操作导致目标方法总数的寄存器大于15,即.locals这个值大于15,一开始没当回事，后来发现，p0和p后面的那些寄存器，数字都是这里开始的，比如当.local">
+<meta name="twitter:description" content="0x00 前言嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。">
 
 
 
@@ -321,6 +321,7 @@
 
       
         <h4 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h4><p>嗨呀最近搞了一些smali的东西，踩到一些小坑，这里大概随便记点儿吧，常见的语法就不说了，最近弄的东西有点像smali的代码插桩，所以大概说的也是这里碰到的问题。</p>
+<a id="more"></a>
 <h4 id="0x01-关于寄存器"><a href="#0x01-关于寄存器" class="headerlink" title="0x01 关于寄存器"></a>0x01 关于寄存器</h4><p>在插桩的时候碰上一个这个问题，就是由于我的操作导致目标方法总数的寄存器大于15,即.locals这个值大于15,一开始没当回事，后来发现，p0和p后面的那些寄存器，数字都是这里开始的，比如当.locals 15的时候，再使用到p0寄存器的时候，它其实是v16,这一点是从apktool在重新打包的时候看出来的，报错会有提示，在invoke和new-array，以及iget等操作的时候，使用到的寄存器下标是不能大于15的。</p>
 <p>后来在网上查到了一个相关的指令就是类似new-array/jumbo这种，但是实际操作发现不行，编辑器就标红了，打包的时候也报错说不支持这个指令，jumbo相关的都不行。</p>
 <p>还有就是当寄存器下标大于15的时候，invoke这种就不行了，但是可以使用invoke-xxxxx/range来操作，我一开始以为只有寄存器数量超过5个才要用这个的，后来手写了一些比较长的java方法，反编译以后发现其实是有很多相关range的东西的，当寄存器下标过大时就需要这个，而且其实是可以只用一个的，例如invoke-xxxxx/range {v20 .. v20} 类似这样。</p>

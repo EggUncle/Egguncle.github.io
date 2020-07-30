@@ -93,19 +93,19 @@
 
 
 
-<meta name="description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
+<meta name="description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2">
 <meta name="keywords" content="Android Binder hook">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从binder数据传输的角度来分析binder通信的过程">
 <meta property="og:url" content="http://yoursite.com/2019/04/21/从binder数据传输的角度分析binder通信的过程/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
+<meta property="og:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png">
-<meta property="og:updated_time" content="2019-04-22T13:11:36.285Z">
+<meta property="og:updated_time" content="2020-07-28T14:09:16.734Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从binder数据传输的角度来分析binder通信的过程">
-<meta name="twitter:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2 0">
+<meta name="twitter:description" content="Binder 数据分析0x00 前言前一阵弄了一个和binder有关的小工具 https://github.com/EggUncle/Hermes ，大概就是通过对ioctl进行hook，读取到binder的数据信息。 binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。操作环境: Nexus5x aosp 7.1.2">
 <meta name="twitter:image" content="https://qiangbo-workspace.oss-cn-shanghai.aliyuncs.com/2017-01-15-AndroidAnatomy_Binder/binder_request_sequence.png">
 
 
@@ -325,6 +325,7 @@
       
         <h1 id="Binder-数据分析"><a href="#Binder-数据分析" class="headerlink" title="Binder 数据分析"></a>Binder 数据分析</h1><h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>前一阵弄了一个和binder有关的小工具 <a href="https://github.com/EggUncle/Hermes" target="_blank" rel="noopener">https://github.com/EggUncle/Hermes</a> ，大概就是通过对ioctl进行hook，读取到binder的数据信息。</p>
 <p>binder的具体原理等细节这里就不讨论了，我们此处仅仅从数据的角度来分析一下获取手机imei时，binder的请求和响应过程。<br><br>操作环境: Nexus5x aosp 7.1.2</p>
+<a id="more"></a>
 <h2 id="0x01-获取数据"><a href="#0x01-获取数据" class="headerlink" title="0x01 获取数据"></a>0x01 获取数据</h2><p>首先使用注入工具对com.android.phone 进行hook，并且使用工具获取其服务的相关信息。</p>
 <p>注入工具可以使用这个: <a href="https://github.com/EggUncle/PtraceInject" target="_blank" rel="noopener">https://github.com/EggUncle/PtraceInject</a>  (仅支持android7以及7以下的系统)</p>
 <p>获取服务信息的工具可以使用这个: <a href="https://github.com/EggUncle/DumpAndroidServicesInfo" target="_blank" rel="noopener">https://github.com/EggUncle/DumpAndroidServicesInfo</a> （获取到的结果是一个json文件）</p>

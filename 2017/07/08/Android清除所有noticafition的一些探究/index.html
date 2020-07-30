@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java 123456789101112131">
+<meta name="description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android清除所有noticafition的一些探究">
 <meta property="og:url" content="http://yoursite.com/2017/07/08/Android清除所有noticafition的一些探究/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java 123456789101112131">
+<meta property="og:description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-07-08T02:19:08.096Z">
+<meta property="og:updated_time" content="2020-07-28T14:07:07.921Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android清除所有noticafition的一些探究">
-<meta name="twitter:description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java 123456789101112131">
+<meta name="twitter:description" content="最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。">
 
 
 
@@ -321,7 +321,9 @@
       
 
       
-        <p>最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。<br>查看NotificationManager源码可知<br><a href="http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java" target="_blank" rel="noopener">http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java</a></p>
+        <p>最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。</p>
+<a id="more"></a>
+<p>查看NotificationManager源码可知<br><a href="http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java" target="_blank" rel="noopener">http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java</a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="number">28</span>    <span class="comment">/**</span></div><div class="line">229     * Cancel all previously shown notifications. See &#123;<span class="doctag">@link</span> #cancel&#125; for the</div><div class="line">230     * detailed behavior.</div><div class="line">231     */</div><div class="line"><span class="number">232</span>    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancelAll</span><span class="params">()</span></span></div><div class="line">233    &#123;</div><div class="line"><span class="number">234</span>        INotificationManager service = getService();</div><div class="line">              <span class="comment">//此处获取了包名，导致只能关闭该包下的消息</span></div><div class="line"><span class="number">235</span>        String pkg = mContext.getPackageName();</div><div class="line"><span class="number">236</span>        <span class="keyword">if</span> (localLOGV) Log.v(TAG, pkg + <span class="string">": cancelAll()"</span>);</div><div class="line"><span class="number">237</span>        <span class="keyword">try</span> &#123;</div><div class="line"><span class="number">238</span>            service.cancelAllNotifications(pkg, UserHandle.myUserId());</div><div class="line"><span class="number">239</span>        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line"><span class="number">240</span>        &#125;</div><div class="line"><span class="number">241</span>    &#125;</div></pre></td></tr></table></figure>
 <p>再次查看UserHandle.myUserId的源码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">233     * Returns the user id of the current process</div><div class="line">234     * <span class="doctag">@return</span> user id of the current process</div><div class="line">235     * <span class="doctag">@hide</span>  这个方法是隐藏的</div><div class="line">236     */</div><div class="line"><span class="number">237</span>    <span class="meta">@SystemApi</span></div><div class="line"><span class="number">238</span>    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">myUserId</span><span class="params">()</span> </span>&#123;</div><div class="line">          <span class="comment">//获取进程对应的UID</span></div><div class="line"><span class="number">239</span>        <span class="keyword">return</span> getUserId(Process.myUid());</div><div class="line"><span class="number">240</span>    &#125;</div></pre></td></tr></table></figure></p>
 <p>cancelAll中关闭通知使用了uid和包名，可以看出来其实是只关闭一个应用里所有的通知</p>

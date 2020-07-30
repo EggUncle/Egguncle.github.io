@@ -93,19 +93,19 @@
 
 
 
-<meta name="description" content="啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。 今天差不多把块传输的这部分看完了，也大概记了一点 coap 块传输块传输新增了几个option1234567891011+--------+--------+-----------+| Number | Name   | Reference |+--------+--------+-----------+| 23     | Block2">
+<meta name="description" content="啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。 今天差不多把块传输的这部分看完了，也大概记了一点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="coap协议学习笔记 块传输">
 <meta property="og:url" content="http://yoursite.com/2019/02/21/coap协议学习笔记-块传输/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。 今天差不多把块传输的这部分看完了，也大概记了一点 coap 块传输块传输新增了几个option1234567891011+--------+--------+-----------+| Number | Name   | Reference |+--------+--------+-----------+| 23     | Block2">
+<meta property="og:description" content="啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。 今天差不多把块传输的这部分看完了，也大概记了一点">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://wkretype.bdimg.com/retype/zoom/bf97fd1eeff9aef8941e06bd?pn=16&o=jpg_6&md5sum=c8725b0b48a9c0630c89996d5dc6e6dd&sign=ba8d40d735&png=85562-121761&jpg=1695092-1824857">
 <meta property="og:image" content="https://wkretype.bdimg.com/retype/zoom/bf97fd1eeff9aef8941e06bd?pn=15&o=jpg_6&md5sum=c8725b0b48a9c0630c89996d5dc6e6dd&sign=ba8d40d735&png=58885-85561&jpg=1548744-1695091">
-<meta property="og:updated_time" content="2019-02-21T15:09:52.624Z">
+<meta property="og:updated_time" content="2020-07-28T14:10:23.495Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="coap协议学习笔记 块传输">
-<meta name="twitter:description" content="啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。 今天差不多把块传输的这部分看完了，也大概记了一点 coap 块传输块传输新增了几个option1234567891011+--------+--------+-----------+| Number | Name   | Reference |+--------+--------+-----------+| 23     | Block2">
+<meta name="twitter:description" content="啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。 今天差不多把块传输的这部分看完了，也大概记了一点">
 <meta name="twitter:image" content="https://wkretype.bdimg.com/retype/zoom/bf97fd1eeff9aef8941e06bd?pn=16&o=jpg_6&md5sum=c8725b0b48a9c0630c89996d5dc6e6dd&sign=ba8d40d735&png=85562-121761&jpg=1695092-1824857">
 
 
@@ -325,6 +325,7 @@
       
         <p>啊不知道昨天那个咋整的，显示代码块的地方好像不大对劲。。。</p>
 <p>今天差不多把块传输的这部分看完了，也大概记了一点</p>
+<a id="more"></a>
 <h1 id="coap-块传输"><a href="#coap-块传输" class="headerlink" title="coap 块传输"></a>coap 块传输</h1><p>块传输新增了几个option<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">+--------+--------+-----------+</div><div class="line">| Number | Name   | Reference |</div><div class="line">+--------+--------+-----------+</div><div class="line">| 23     | Block2 | RFC 7959  |</div><div class="line">|        |        |           |</div><div class="line">| 27     | Block1 | RFC 7959  |</div><div class="line">|        |        |           |</div><div class="line">| 28     | Size2  | RFC 7959  |</div><div class="line">+--------+--------+-----------+</div><div class="line"></div><div class="line"> Table 3: CoAP Option Numbers</div></pre></td></tr></table></figure></p>
 <p>size1在rfc7252中定义</p>
 <h2 id="为何引入块传输"><a href="#为何引入块传输" class="headerlink" title="为何引入块传输"></a>为何引入块传输</h2><ul>

@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="0x00 前言最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。 总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。 0x01 cheat engine查了一下，大部分网上的教程里面，那种不用现成的修改器的，大部分都">
+<meta name="description" content="0x00 前言最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。 总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。">
 <meta name="keywords" content="windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机甲战魔金币无消耗修改器开发笔记">
 <meta property="og:url" content="http://yoursite.com/2020/04/06/机甲战魔金币无消耗修改器开发笔记/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="0x00 前言最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。 总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。 0x01 cheat engine查了一下，大部分网上的教程里面，那种不用现成的修改器的，大部分都">
+<meta property="og:description" content="0x00 前言最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。 总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-06T13:42:58.940Z">
+<meta property="og:updated_time" content="2020-07-28T14:09:22.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机甲战魔金币无消耗修改器开发笔记">
-<meta name="twitter:description" content="0x00 前言最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。 总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。 0x01 cheat engine查了一下，大部分网上的教程里面，那种不用现成的修改器的，大部分都">
+<meta name="twitter:description" content="0x00 前言最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。 总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。">
 
 
 
@@ -323,6 +323,7 @@
       
         <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>最近对windows单机游戏的修改器有一点儿兴趣，就简单看了下，写了个简单的购买道具时不消耗金币的功能练手玩。</p>
 <p>总的来说整个流程其实挺简单的，就是定位下内存中修改金币的指令，再置为nop就行了。这里的目标是前一段时间在steam登录的游戏《机甲战魔》，还是挺酷炫的，有一种开高达的感觉。</p>
+<a id="more"></a>
 <h3 id="0x01-cheat-engine"><a href="#0x01-cheat-engine" class="headerlink" title="0x01 cheat engine"></a>0x01 cheat engine</h3><p>查了一下，大部分网上的教程里面，那种不用现成的修改器的，大部分都是用的这个cheat engine的工具，就简单试了一下，还是挺好使的，没啥问题，和之前用八位神器改android单机游戏差不多，就是反复在内存中搜索某个值，定位到之后再设置为自己想要的值就行了。为了达成期望的功能，这里的思路其实也比较简单：</p>
 <ol>
 <li>先找到金币对应的内存位置</li>

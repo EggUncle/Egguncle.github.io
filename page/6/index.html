@@ -324,10 +324,7 @@
 
       
         
-          
-          最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。查看NotificationManager源码可知http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/java/android/app/NotificationManager.java
-12345678910111213141528    /**229     * Cancel all previously shown notifications. See &#123;@link #cancel&#125; for the230     * detailed behavior.231     */232    public void cancelAll()233    &#123;234        INotificationManager service = getService();              //此处获取了包名，导致只能关闭该包下的消息235        String pkg = mC
-          ...
+          <p>最近在开发xposed模块中想要实现一个清除所有通知的功能，但是发现cancelAll只能清除单个应用的所有通知。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/07/08/Android清除所有noticafition的一些探究/#more" rel="contents">
@@ -444,18 +441,11 @@
       
         
           
-          最近在开发中想要实现一个下拉通知栏的功能，但是在6.0上使用方法下拉，展开动画十分缓慢，刚好在Nova launcher中，也实现了下拉通知栏，而且在6.0上提示说获取root权限，变通的解决这个问题，在酷安开发者群有朋友提到说可以在获取root权限后使用shell模拟触摸事件来实现这个方法，测试以后发现确实可行。调用如下指令模拟手势实现下拉：adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位置滑动到 x 100 y 500的位置 历时300毫秒
-此时通知栏并不会完全展开，解决方法也非常简单，再模拟一次下拉事件，点击刚刚没有完全展开的状态栏即可：
-adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的位置 模拟点击会出现奇奇怪怪的问题，可能在其他rom上会点击到其他的位置，所以再做一次下滑会好一些这样通知栏就完全展开了
+            <p>最近在开发中想要实现一个下拉通知栏的功能，但是在6.0上使用方法下拉，展开动画十分缓慢，刚好在Nova launcher中，也实现了下拉通知栏，而且在6.0上提示说获取root权限，变通的解决这个问题，在酷安开发者群有朋友提到说可以在获取root权限后使用shell模拟触摸事件来实现这个方法，测试以后发现确实可行。<br>调用如下指令模拟手势实现下拉：<br>adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位置滑动到 x 100 y 500的位置 历时300毫秒</p>
+<p>此时通知栏并不会完全展开，解决方法也非常简单，再模拟一次下拉事件，点击刚刚没有完全展开的状态栏即可：</p>
+<p><del>adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的位置</del> 模拟点击会出现奇奇怪怪的问题，可能在其他rom上会点击到其他的位置，所以再做一次下滑会好一些<br>这样通知栏就完全展开了</p>
 
           
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/08/解决Android6-0通知栏下栏缓慢的问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
         
       
     </div>
@@ -564,11 +554,8 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
 
       
         
-          
-          最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）
-在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。
-方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(                shortcutsIntent, 0);        for (ResolveInfo resolveInfo : shortcuts) &#123;            String name = resolveInfo.activityInfo.applicationInfo.packageName; 
-          ...
+          <p>最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）</p>
+<p>在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/07/08/Android启动快捷方式的方法/#more" rel="contents">
@@ -685,18 +672,12 @@ adb shell input tap 100 100  模拟点击事件，点击了一下x 100 y 100的�
       
         
           
-          Android 快捷打开支付宝微信扫码的方法支付宝&amp;微信扫一扫 ✓支付宝扫一扫：1234Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");Intent intent = new Intent(Intent.ACTION_VIEW, uri);intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);context.startActivity(intent);
-微信原来的扫一扫打开是这样的，不过目前的版本已经失效了123Uri uri = Uri.parse("weixin://dl/scan");Intent intent = new Intent(Intent.ACTION_VIEW, uri);startActivity(intent);
-所以只能使用am命令来控制二维码界面的activity打开
-使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/07/Android中快捷启动支付宝微信扫一扫的方法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <h1 id="Android-快捷打开支付宝微信扫码的方法"><a href="#Android-快捷打开支付宝微信扫码的方法" class="headerlink" title="Android 快捷打开支付宝微信扫码的方法"></a>Android 快捷打开支付宝微信扫码的方法</h1><h2 id="支付宝-amp-微信扫一扫-✓"><a href="#支付宝-amp-微信扫一扫-✓" class="headerlink" title="支付宝&amp;微信扫一扫 ✓"></a>支付宝&amp;微信扫一扫 ✓</h2><p>支付宝扫一扫：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"alipayqr://platformapi/startapp?saId=10000007"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);</div><div class="line">context.startActivity(intent);</div></pre></td></tr></table></figure></p>
+<p>微信原来的扫一扫打开是这样的，不过目前的版本已经失效了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(<span class="string">"weixin://dl/scan"</span>);</div><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
+<p>所以只能使用am命令来控制二维码界面的activity打开</p>
+<p>使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.plugin.scanner.ui.BaseScanUI<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">String cmd=<span class="string">"am start -n com.tencent.mm/com.tencent.mm.plugin.scanner.ui.BaseScanUI"</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Process p = Runtime.getRuntime().exec(cmd);</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
         
       
     </div>

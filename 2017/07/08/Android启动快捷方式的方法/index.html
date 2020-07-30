@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta name="description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android启动快捷方式的方法">
 <meta property="og:url" content="http://yoursite.com/2017/07/08/Android启动快捷方式的方法/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta property="og:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-07-08T01:40:57.062Z">
+<meta property="og:updated_time" content="2020-07-28T14:07:06.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android启动快捷方式的方法">
-<meta name="twitter:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。 方法如下12345678910111213141516171819202122232425262728293031323334//获取到所有快捷方式 Intent shortcutsIntent =">
+<meta name="twitter:description" content="最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式） 在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。">
 
 
 
@@ -323,6 +323,7 @@
       
         <p>最近想在APP中启动其他应用的快捷方式（不是启动应用，而是启动类似绿色守护中那种，关屏并休眠的快捷方式）</p>
 <p>在网上找了很多文章，大部分都是讲如何设置快捷方式，并没有说如何用代码启动，就稍微折腾了一下。</p>
+<a id="more"></a>
 <p>方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取到所有快捷方式</span></div><div class="line"> Intent shortcutsIntent = <span class="keyword">new</span> Intent(Intent.ACTION_CREATE_SHORTCUT);</div><div class="line">        List&lt;ResolveInfo&gt; shortcuts = getPackageManager().queryIntentActivities(</div><div class="line">                shortcutsIntent, <span class="number">0</span>);</div><div class="line">        <span class="keyword">for</span> (ResolveInfo resolveInfo : shortcuts) &#123;</div><div class="line">            String name = resolveInfo.activityInfo.applicationInfo.packageName;</div><div class="line">            String activityName = resolveInfo.activityInfo.name;</div><div class="line">            String label=resolveInfo.activityInfo.applicationInfo.name;</div><div class="line">            <span class="keyword">int</span> flags=resolveInfo.activityInfo.flags;</div><div class="line">            Log.i(TAG, <span class="string">"updatePackages: "</span>+name+<span class="string">" "</span>+activityName+<span class="string">" "</span>+flags+<span class="string">" "</span>+label);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"><span class="comment">//启动方式如下</span></div><div class="line">        ActivityInfo ai=shortcuts.get(<span class="number">7</span>).activityInfo;</div><div class="line">        String pkgName=ai.applicationInfo.packageName;</div><div class="line">        String activityName=ai.name;</div><div class="line">        <span class="keyword">int</span> flag=ai.flags;</div><div class="line">        Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line"></div><div class="line">        intent.addFlags(flag);</div><div class="line">        startActivity(intent);</div><div class="line"></div><div class="line"><span class="comment">//获取对应icon方法如下</span></div><div class="line"> Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MAIN);</div><div class="line">        intent.setClassName(pkgName,</div><div class="line">                activityName);</div><div class="line">        intent.addFlags(flag);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Drawable dw=pm.getActivityIcon(intent);</div><div class="line">        &#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
 <p>在这个地方踩到一个坑：<br>如果手机内有“冰箱”这类的应用将app停用，app或者快捷方式就无法打开了。<br>解决方法也很简单，使用enable指令就可以再打开了。</p>
 

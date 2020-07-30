@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://retme.net/usr/uploads/image/20140820/20140820062918_12778.png">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-06-11%2022-38-13%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/2018-06-11%2022-39-22%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true">
-<meta property="og:updated_time" content="2018-06-16T17:47:02.000Z">
+<meta property="og:updated_time" content="2020-07-28T14:06:58.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android LaunchAnyWhere">
 <meta name="twitter:description" content="LaunchAnyWhere4.3及以下的一个系统漏洞  本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.  0x00 前言最近看了一点儿系统安全相关的东西,想了解一下java序列化反序列化的东西,正好看到LaunchAnyWhere这个比较经典的漏洞,也尝试了一下,触发机制和原理都比较简单,但是危害也不小.所以这里也顺手记下来. 再顺带提一下,这个漏洞在Android4">
@@ -331,6 +331,7 @@
 </blockquote>
 <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>最近看了一点儿系统安全相关的东西,想了解一下java序列化反序列化的东西,正好看到LaunchAnyWhere这个比较经典的漏洞,也尝试了一下,触发机制和原理都比较简单,但是危害也不小.所以这里也顺手记下来.</p>
 <p>再顺带提一下,这个漏洞在Android4.3之后就失效了~</p>
+<a id="more"></a>
 <h3 id="0x01-背景知识"><a href="#0x01-背景知识" class="headerlink" title="0x01 背景知识"></a>0x01 背景知识</h3><h4 id="1-Android-账户系统"><a href="#1-Android-账户系统" class="headerlink" title="1.Android 账户系统"></a>1.Android 账户系统</h4><p>Android2.0中加入了一个新的包android.accounts，该包主要包括了集中式的账户管理API，用以安全地存储和访问认证的令牌和密码，比如，我们的手机存在多个账户，每个账户下面都有不同的信息，甚至每个账户都可以与不同的服务器之间进行数据同步（例如，手机账户中的联系人可以是一个Gmail账户中的通讯录，可联网进行同步更新）</p>
 <h4 id="2-Android中添加账户的基本流程"><a href="#2-Android中添加账户的基本流程" class="headerlink" title="2.Android中添加账户的基本流程"></a>2.Android中添加账户的基本流程</h4><p>比如现在有两个app,appA需要使用到appB中的账户信息,而appB本身也提供了这种功能,那么就可以进行添加账户的操作.<br><br>普通应用（记为AppA）去请求添加某类账户时，会调用AccountManager.addAccount,然后AccountManager会去查找提供账号的应用（记为AppB）的Authenticator类，调用Authenticator. addAccount方法；AppA再根据AppB返回的Intent去调起AppB的账户登录界面。<br><br>整个流程如下图所示:</p>
 <p><img src="http://retme.net/usr/uploads/image/20140820/20140820062918_12778.png" alt=""></p>

@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Ekkkkkkko">
 <meta property="og:description" content="0x00 前言我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-27T14:15:40.730Z">
+<meta property="og:updated_time" content="2020-07-28T14:09:43.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch从入门到删库跑路">
 <meta name="twitter:description" content="0x00 前言我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感">
@@ -322,6 +322,7 @@
 
       
         <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>我觉着我干的事情一直比较杂，最近弄了一些 Elasticsearch 相关的事情，我本身并不是做服务端或者大数据那一类的，但是这里仍然因为工作上的原因使用了一些es，因此这里还是整理一下，目前常用的es相关知识，至少是我这个初学者比较容易遇到的一些操作，以及踩到的一些坑。有些信息出自官方文档，或者其他的blog，人类的本质果然是复读机。。很多blog不知道到底上哪儿复制的，有些东西感觉都不太对。，也可能是我版本的问题吧，这里我使用的版本是6.2.2，kibana同版本的嗷。</p>
+<a id="more"></a>
 <h3 id="0x01-Elasticsearch-介绍"><a href="#0x01-Elasticsearch-介绍" class="headerlink" title="0x01 Elasticsearch 介绍"></a>0x01 Elasticsearch 介绍</h3><p>又到了喜闻乐见的复制粘贴介绍环节</p>
 <blockquote>
 <p>Elasticsearch是高度可伸缩的开源全文搜索和分析引擎。它允许我们快速实时地存储、搜索、分析大数据。<br>Elasticsearch使用Lucene作为内部引擎，但是在你使用它做全文搜索时，只需要使用统一开发好的API即可，而不需要了解其背后复杂的Lucene的运行原理。它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单。</p>

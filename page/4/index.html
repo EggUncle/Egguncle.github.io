@@ -324,10 +324,7 @@
 
       
         
-          
-          art 反射 获取方法实例的流程java层java这层就简单一点说了,获取到class对象以后,使用getDeclaredMethod,然后调用getMethod,调用到getDeclaredMethodInternal.
-虚机getDeclaredMethodInternal是一个native方法,在java_lang_Class.cc中123456789101112131415161718static jobject Class_getDeclaredMethodInternal(JNIEnv* env, jobject javaThis,                                               jstring name, jobjectArray args) &#123;  ScopedFastNativeObjectAccess soa(env);  StackHandleScope&lt;1&gt; hs(soa.Self());  DCHECK_EQ(Runtime::Current()-&gt;GetClassLinker()-&gt;
-          ...
+          <h2 id="art-反射-获取方法实例的流程"><a href="#art-反射-获取方法实例的流程" class="headerlink" title="art 反射 获取方法实例的流程"></a>art 反射 获取方法实例的流程</h2><h4 id="java层"><a href="#java层" class="headerlink" title="java层"></a>java层</h4><p>java这层就简单一点说了,获取到class对象以后,使用getDeclaredMethod,然后调用getMethod,调用到getDeclaredMethodInternal.</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/08/22/art中反射查找方法的流程/#more" rel="contents">
@@ -443,12 +440,12 @@
 
       
         
-          
-          Android中的序列化反序列化不匹配导致的漏洞解析
-本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.
-
-0x00 前言上一次提到了launchAnyWhere这个漏洞,其中提到了修补方案,就是去验证intent指向的app和appB是不是有相同签名的,这里有这样一段:12345678910111213141516171819if (result != null+                    &amp;&amp; (intent = result.getParcelable(AccountManager.KEY_INTENT)) != null) &#123;+                /*+                 * The Authenticator API allows third party authenticators to+                 * supply arbitrary intents to other apps that they can run,+                 * this 
-          ...
+          <h2 id="Android中的序列化反序列化不匹配导致的漏洞解析"><a href="#Android中的序列化反序列化不匹配导致的漏洞解析" class="headerlink" title="Android中的序列化反序列化不匹配导致的漏洞解析"></a>Android中的序列化反序列化不匹配导致的漏洞解析</h2><blockquote>
+<p>本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.</p>
+</blockquote>
+<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>上一次提到了<a href="https://github.com/EggUncle/LaunchAnyWhere" target="_blank" rel="noopener">launchAnyWhere</a>这个漏洞,其中提到了修补方案,就是去验证intent指向的app和appB是不是有相同签名的,这里有这样一段:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">if (result != null</div><div class="line">+                    &amp;&amp; (intent = result.getParcelable(AccountManager.KEY_INTENT)) != null) &#123;</div><div class="line">+                /*</div><div class="line">+                 * The Authenticator API allows third party authenticators to</div><div class="line">+                 * supply arbitrary intents to other apps that they can run,</div><div class="line">+                 * this can be very bad when those apps are in the system like</div><div class="line">+                 * the System Settings.</div><div class="line">+                 */</div><div class="line">+                PackageManager pm = mContext.getPackageManager();</div><div class="line">+                ResolveInfo resolveInfo = pm.resolveActivity(intent, 0);</div><div class="line">+                int targetUid = resolveInfo.activityInfo.applicationInfo.uid;</div><div class="line">+                int authenticatorUid = Binder.getCallingUid();</div><div class="line">+                if (PackageManager.SIGNATURE_MATCH !=</div><div class="line">+                        pm.checkSignatures(authenticatorUid, targetUid)) &#123;</div><div class="line">+                    throw new SecurityException(</div><div class="line">+                            &quot;Activity to be started with KEY_INTENT must &quot; +</div><div class="line">+                            &quot;share Authenticator&apos;s signatures&quot;);</div><div class="line">+                &#125;</div><div class="line">+            &#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到这里有检查result.getParcelable(AccountManager.KEY_INTENT)是否为空,如果不是,就对他进行检查.那有没有绕过的方法?</p>
+<p>有的</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/17/Android-序列化反序列化不匹配造成的一个安全问题/#more" rel="contents">
@@ -564,16 +561,12 @@
 
       
         
-          
-          LaunchAnyWhere4.3及以下的一个系统漏洞
-
-本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.
-
-0x00 前言最近看了一点儿系统安全相关的东西,想了解一下java序列化反序列化的东西,正好看到LaunchAnyWhere这个比较经典的漏洞,也尝试了一下,触发机制和原理都比较简单,但是危害也不小.所以这里也顺手记下来.
-再顺带提一下,这个漏洞在Android4.3之后就失效了~
-0x01 背景知识1.Android 账户系统Android2.0中加入了一个新的包android.accounts，该包主要包括了集中式的账户管理API，用以安全地存储和访问认证的令牌和密码，比如，我们的手机存在多个账户，每个账户下面都有不同的信息，甚至每个账户都可以与不同的服务器之间进行数据同步（例如，手机账户中的联系人可以是一个Gmail账户中的通讯录，可联网进行同步更新）
-2.Android中添加账户的基本流程比如现在有两个app,appA需要使用到appB中的账户信息,而appB本身也提供了这种功能,那么就可以进行添加账户的操作.普通应用（记为AppA）去请求添加
-          ...
+          <h1 id="LaunchAnyWhere"><a href="#LaunchAnyWhere" class="headerlink" title="LaunchAnyWhere"></a>LaunchAnyWhere</h1><p>4.3及以下的一个系统漏洞</p>
+<blockquote>
+<p>本文仅供安全技术交流,请勿用于不正当的用途,造成的一切后果与本文作者无关.</p>
+</blockquote>
+<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>最近看了一点儿系统安全相关的东西,想了解一下java序列化反序列化的东西,正好看到LaunchAnyWhere这个比较经典的漏洞,也尝试了一下,触发机制和原理都比较简单,但是危害也不小.所以这里也顺手记下来.</p>
+<p>再顺带提一下,这个漏洞在Android4.3之后就失效了~</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/17/Android-LaunchAnyWhere/#more" rel="contents">
@@ -689,10 +682,7 @@
 
       
         
-          
-          0x00 前言以前就想试下进程注入这个东西,但是相关知识懂得太少了,进度就一直很慢,后来还是想了下感觉还是得头铁的尝试一下看看,这里把整个过程和踩到的坑记下来,也算是个简单的教程吧,我会的不多,但是一路下来还是了解到了不少东西,这里就把一路上用到的也都记下来
-0x01 目的首先先明确目标,首先新建一个app项目,里面的jni部分代码是这样的:12345678910111213141516171819202122#include &lt;jni.h&gt;#include &lt;string&gt;#include &lt;string.h&gt;#include &lt;sys/mman.h&gt;extern &quot;C&quot;char *getkey() &#123;    static char key[32];    strcpy(key, &quot;justakeyfromjni&quot;);    return key;&#125;extern &quot;C&quot;JNIEXPORT jstringJNICALLJava_com_example_eggu
-          ...
+          <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>以前就想试下进程注入这个东西,但是相关知识懂得太少了,进度就一直很慢,后来还是想了下感觉还是得头铁的尝试一下看看,这里把整个过程和踩到的坑记下来,也算是个简单的教程吧,我会的不多,但是一路下来还是了解到了不少东西,这里就把一路上用到的也都记下来</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/17/Android-进程注入/#more" rel="contents">
@@ -808,11 +798,7 @@
 
       
         
-          
-          0x00 前言emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。
-0x01 Android卸载监控的思路记得刚刚来数字的时候，土豆师傅就和我说过卸载监控怎么实现的，今天也随手看了点儿，没有很麻烦。实现卸载监控最关键的地方在于，卸载时app本身的进程会被杀死，所以正常情况下，写广播接收器之类的接收卸载广播这些思路，肯定是不行的，但是在linux中，如果fork出一个进程，那么当父进程被杀死之后，子进程并不会被杀死，而是变为init进程的子进程，而另一方面，当应用被卸载后，/data/data/packagename目录也会被删除，所以实现思路就很清晰了：先fork出一个子进程，然后再循环获取上面提到的目录是不是还存在，就实现了卸载监控。
-0x02 实现思路已经很清楚了，接下来就能着手实现一个简单的版本，直接从jni的Jni_OnLoad入手代码在公司的电脑里面，这里写点伪码示意一下123
-          ...
+          <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>emmm,好像很久很久都没写点东西了，这一段时间看得倒是不少但是都没怎么记住，一是缺少上手二是理解不是很深入的样子，今天刚好看了一点简单的东西，就稍微记一下，还是先说一下，我的环境是一台7.1.2的机器和一个4.4.4的虚拟机，高版本现在还是不行，很尬。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/31/Android-卸载监控/#more" rel="contents">

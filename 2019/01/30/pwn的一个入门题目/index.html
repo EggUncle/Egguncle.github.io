@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的 首先checksec12RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Forti">
+<meta name="description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pwn的一个入门题目">
 <meta property="og:url" content="http://yoursite.com/2019/01/30/pwn的一个入门题目/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的 首先checksec12RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Forti">
+<meta property="og:description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-18T14:28:57.576Z">
+<meta property="og:updated_time" content="2020-07-28T14:10:40.750Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pwn的一个入门题目">
-<meta name="twitter:description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的 首先checksec12RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Forti">
+<meta name="twitter:description" content="前一阵看了一点点pwn的基础教程https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的">
 
 
 
@@ -321,6 +321,7 @@
 
       
         <p>前一阵看了一点点pwn的基础教程<a href="https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的" target="_blank" rel="noopener">https://www.anquanke.com/post/id/168468，里面正好留了一个作业，就顺手做了一下，还是比较简单的</a></p>
+<a id="more"></a>
 <p>首先checksec<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH	Symbols		FORTIFY	Fortified	Fortifiable  FILE</div><div class="line">Partial RELRO   No canary found   NX enabled    No PIE          No RPATH   No RUNPATH   83 Symbols     No	0		4	pwn7</div></pre></td></tr></table></figure></p>
 <p>ida看到漏洞函数为gets</p>
 <p>然后使用<br>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC</p>

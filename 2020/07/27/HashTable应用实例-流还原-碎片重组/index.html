@@ -102,7 +102,7 @@
 <meta property="og:description" content="0x00 前言在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%888.36.13.png?raw=true">
-<meta property="og:updated_time" content="2020-07-27T13:03:44.021Z">
+<meta property="og:updated_time" content="2020-07-28T14:09:26.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HashTable应用实例-流还原&amp;碎片重组">
 <meta name="twitter:description" content="0x00 前言在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据">
@@ -325,6 +325,7 @@
       
         <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>在网络数据传输中，可能由于MTU等因素造成数据流本身被分成多个包，变得碎片化，很多协议都有类似的情况，例如ip的碎片，tcp的流还原，以及coap的block传输等等。<br>碎片重组和流还原本质上都是将一段一段的数据，合并或者说还原成期望的样子，而在这个还原操作中，常见的数据结构就是HashTable，这里不讨论具体语言实现中的一些HashTable的情况，例如线程是否安全等等，仅仅从数据结构本身的性质，记录一下关于它的实际应用-CAPWAP碎片还原。整个hashtable代码本身仅仅是从一个IDS里头看到的，自身实现的，比较简单的hashtable，解析capwap顺手用到了。</p>
 <p>HashTable本身的数据结构啥样这里就不提了，我觉得碎片重组和流还原本身比较相似，所以下文中仅仅介绍碎片重组。</p>
+<a id="more"></a>
 <h3 id="0x01-碎片重组基本思路"><a href="#0x01-碎片重组基本思路" class="headerlink" title="0x01 碎片重组基本思路"></a>0x01 碎片重组基本思路</h3><p>首先忽略CAPWAP协议本身的特征和各种标志位以及操作码等等，概括的描述一下，一个碎片包，如果需要重组，需要拥有什么信息，以及如何重组<br>需要拥有的信息：</p>
 <ol>
 <li>五元祖，源目的ip/端口/传输层协议</li>

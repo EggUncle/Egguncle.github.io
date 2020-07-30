@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。 SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences有一些新的变更https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn  &amp;">
+<meta name="description" content="昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XpNavbar模块在7.0适配时发现的一些问题的总结">
 <meta property="og:url" content="http://yoursite.com/2017/08/13/XpNavbar模块在7-0适配时发现的一些问题的总结/index.html">
 <meta property="og:site_name" content="Ekkkkkkko">
-<meta property="og:description" content="昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。 SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences有一些新的变更https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn  &amp;">
+<meta property="og:description" content="昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-13T07:05:13.287Z">
+<meta property="og:updated_time" content="2020-07-28T14:10:53.692Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XpNavbar模块在7.0适配时发现的一些问题的总结">
-<meta name="twitter:description" content="昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。 SharedPreferences 和 MODE_WORLD_READABLE在Nougat上，关于SharedPreferences有一些新的变更https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn  &amp;">
+<meta name="twitter:description" content="昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。">
 
 
 
@@ -322,6 +322,7 @@
 
       
         <p>昨天晚上刚刚完成XpNavbar模块在7.0上的适配工作，发现了一些问题。</p>
+<a id="more"></a>
 <h3 id="SharedPreferences-和-MODE-WORLD-READABLE"><a href="#SharedPreferences-和-MODE-WORLD-READABLE" class="headerlink" title="SharedPreferences 和 MODE_WORLD_READABLE"></a>SharedPreferences 和 MODE_WORLD_READABLE</h3><p>在Nougat上，关于SharedPreferences有一些新的变更<br><a href="https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn" target="_blank" rel="noopener">https://developer.android.com/about/versions/nougat/android-7.0-changes.html?hl=zh-cn</a></p>
 <blockquote>
 <p>&gt;<br>私有文件的文件权限不应再由所有者放宽，为使用 MODE_WORLD_READABLE 和/或 MODE_WORLD_WRITEABLE 而进行的此类尝试将触发 SecurityException。<br>注：迄今为止，这种限制尚不能完全执行。应用仍可能使用原生 API 或 File API 来修改它们的私有目录权限。但是，我们强烈反对放宽私有目录的权限。</p>

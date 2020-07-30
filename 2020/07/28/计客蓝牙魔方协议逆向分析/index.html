@@ -103,7 +103,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%889.36.32.png?raw=true">
 <meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/%E6%88%AA%E5%B1%8F2020-07-27%20%E4%B8%8B%E5%8D%889.38.56.png?raw=true">
-<meta property="og:updated_time" content="2020-07-28T13:56:14.825Z">
+<meta property="og:updated_time" content="2020-07-28T14:05:38.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计客蓝牙魔方协议逆向分析">
 <meta name="twitter:description" content="本文首发自安全客平台 https://www.anquanke.com/post/id/211979  0x00 前言本文大致记录了一个，对于蓝牙魔方中的协议逆向分析的步骤。 去年年初的时候，对蓝牙有一点儿兴趣，搞了搞ubertooth one（好像是叫这个名字？ 进不清楚了），用来嗅探蓝牙数据的，然后顺手又买了一个计客的魔方，带蓝牙功能的，简单来说就是基于蓝牙和手机的数据传输，将魔方的状态输出">
@@ -330,6 +330,7 @@
 <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>本文大致记录了一个，对于蓝牙魔方中的协议逆向分析的步骤。</p>
 <p>去年年初的时候，对蓝牙有一点儿兴趣，搞了搞ubertooth one（好像是叫这个名字？ 进不清楚了），用来嗅探蓝牙数据的，然后顺手又买了一个计客的魔方，带蓝牙功能的，简单来说就是基于蓝牙和手机的数据传输，将魔方的状态输出到手机上，以此来实现一些好玩的小功能的（诶再说下去感觉像是在打广告了）</p>
 <p>总的来说，仅仅是记录一个，处理问题接近问题的思路，具体关于拧动魔方的方向，这里也不提了，回头带一个魔方入门教程在结尾的参考中吧。</p>
+<a id="more"></a>
 <h3 id="0x01-基础逻辑推理分析"><a href="#0x01-基础逻辑推理分析" class="headerlink" title="0x01 基础逻辑推理分析"></a>0x01 基础逻辑推理分析</h3><p>在着手分析之前，其实需要搞明白一个问题，这个玩具，它是怎么通过和手机建立蓝牙连接后，将自己的状态同步到手机上的。</p>
 <p>首先，它内部一定是存在感应器来获取魔方转动的情况的，这里的问题是，它给到手机的数据，是什么样子的，理论上只有两种方式</p>
 <ol>
