@@ -1,0 +1,745 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="windows," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="0x00 前言 四月分析《机甲战魔》的那个金币无消耗的那个笔记里头，说要整一个大活，后来其实发完就开始弄了，但是最后并没有整出来，主要是没找到最后结局全盛时期苇名一心的的ai代码，然后解包的程序本身对我这个折腾的方向来说，并不完美，而我也没有精力去处理解包的程序了，所以其实就咕咕咕了，最近整理笔记的时候发现这篇了，还是发一下吧，如果后续也有人对这个部分感兴趣的话，也许看到这个能稍微节省一些时间。这">
+<meta name="keywords" content="windows">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sekiro(只狼）分析笔记">
+<meta property="og:url" content="http://yoursite.com/2020/08/06/Sekiro-只狼）分析笔记/index.html">
+<meta property="og:site_name" content="Ekkkkkkko">
+<meta property="og:description" content="0x00 前言 四月分析《机甲战魔》的那个金币无消耗的那个笔记里头，说要整一个大活，后来其实发完就开始弄了，但是最后并没有整出来，主要是没找到最后结局全盛时期苇名一心的的ai代码，然后解包的程序本身对我这个折腾的方向来说，并不完美，而我也没有精力去处理解包的程序了，所以其实就咕咕咕了，最近整理笔记的时候发现这篇了，还是发一下吧，如果后续也有人对这个部分感兴趣的话，也许看到这个能稍微节省一些时间。这">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/1b3af8198618367a94985ef52f738bd4b31ce574.png?raw=true">
+<meta property="og:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/5e470e7a02087bf47733303cfcd3572c13dfcf5f.jpg?raw=true">
+<meta property="og:updated_time" content="2020-08-06T02:48:35.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sekiro(只狼）分析笔记">
+<meta name="twitter:description" content="0x00 前言 四月分析《机甲战魔》的那个金币无消耗的那个笔记里头，说要整一个大活，后来其实发完就开始弄了，但是最后并没有整出来，主要是没找到最后结局全盛时期苇名一心的的ai代码，然后解包的程序本身对我这个折腾的方向来说，并不完美，而我也没有精力去处理解包的程序了，所以其实就咕咕咕了，最近整理笔记的时候发现这篇了，还是发一下吧，如果后续也有人对这个部分感兴趣的话，也许看到这个能稍微节省一些时间。这">
+<meta name="twitter:image" content="https://github.com/EggUncle/Demo/blob/master/markdownimg/1b3af8198618367a94985ef52f738bd4b31ce574.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/06/Sekiro-只狼）分析笔记/"/>
+
+
+
+
+
+  <title>Sekiro(只狼）分析笔记 | Ekkkkkkko</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ekkkkkkko</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/06/Sekiro-只狼）分析笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一只大茶蛋">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ekkkkkkko">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Sekiro(只狼）分析笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-06T09:53:47+08:00">
+                2020-08-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><blockquote>
+<p>四月分析《机甲战魔》的那个金币无消耗的那个笔记里头，说要整一个大活，后来其实发完就开始弄了，但是最后并没有整出来，主要是没找到最后结局全盛时期苇名一心的的ai代码，然后解包的程序本身对我这个折腾的方向来说，并不完美，而我也没有精力去处理解包的程序了，所以其实就咕咕咕了，最近整理笔记的时候发现这篇了，还是发一下吧，如果后续也有人对这个部分感兴趣的话，也许看到这个能稍微节省一些时间。这是我最后的波纹了！JOJO！</p>
+</blockquote>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/1b3af8198618367a94985ef52f738bd4b31ce574.png?raw=true" alt=""></p>
+<p>总的来说，就是想做一个有趣一些的修改工具，希望能直接针对游戏里面对手的技能或者招式，让玩家使用的角色自动做出配置好的动作。</p>
+<a id="more"></a>
+<h3 id="0x01-为什么要从mod开始而不是使用ida或者cheat-engine"><a href="#0x01-为什么要从mod开始而不是使用ida或者cheat-engine" class="headerlink" title="0x01 为什么要从mod开始而不是使用ida或者cheat engine"></a>0x01 为什么要从mod开始而不是使用ida或者cheat engine</h3><p>最早其实是想用的ida，然后找找汇编之类的，尝试使用inline hook之类的方式，修改游戏流程，就像先前使用cheat engine那种去改《机甲战魔》无金币消耗一样。后来发现，我还是想得太简单了，游戏的启动exe，本身大小还是比较小的，更像是一个加载资源的程序，自行研究资源找到ai逻辑代码，目前来说不太可行，而且不同游戏引擎开发出来的游戏，区别也许很大，这里可能在检索信息上难度也会比较大。</p>
+<p>当时想到“游戏资源文件”，这个事情的时候，其实就想到mod了，因为之前在只狼看到过一些修改人物模型的mod，还有修改游戏逻辑（boss关卡由固定boss修改为随机boss）的mod，因此后来的思路由用ida硬刚，转换成了，尝试制作mod。</p>
+<h3 id="0x02-一些mod，以及制作mod的工具"><a href="#0x02-一些mod，以及制作mod的工具" class="headerlink" title="0x02 一些mod，以及制作mod的工具"></a>0x02 一些mod，以及制作mod的工具</h3><ol>
+<li><p>图像纹理提升mod</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">https://down.gamersky.com/pc/202004/1280996.shtml</div><div class="line">只狼：影逝二度的Mod，在LodParam与GrassLodRangeParam中进行了数值加倍，这会增加物体与纹理细节，并减少游戏中纹理突显的问题。</div></pre></td></tr></table></figure>
+</li>
+<li><p>随机分配boss mod</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">https://down.gamersky.com/pc/202003/1271025.shtml</div><div class="line">只狼：影逝二度 随机分配器MOD，使用之后可以随机化敌人（包括BOSS和BOSS）和物品（包括关键物品和技能），让玩家有全新的体验，非常的有趣，喜欢的玩家不要错过下载。</div></pre></td></tr></table></figure>
+</li>
+<li><p>mod 加载器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">https://down.gamersky.com/pc/201903/1166870.shtml</div><div class="line">使用mod加载器就可以加载各种mod，但是开发似乎需要使用额外的工具</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="0x03-解包-amp-mod使用"><a href="#0x03-解包-amp-mod使用" class="headerlink" title="0x03 解包&amp;mod使用"></a>0x03 解包&amp;mod使用</h3><p>这里找到了解包的工具，名字叫UXM，<a href="https://www.nexusmods.com/sekiro/mods/26" target="_blank" rel="noopener">https://www.nexusmods.com/sekiro/mods/26</a> ，因为只狼是宫崎英高那个工作室的作品，因此之前各种魂系的单机包括现在的只狼，都是使用同一个游戏引擎开发的，网上有巨佬做过相关分析，整出来了这么一个解包工具，我觉着在他们工作室的魂系游戏里头，这个东西，很可能是比较通用的。</p>
+<p>关于解包，我还在贴吧找到了这样一片帖子，这里把他解出来的目录情况的分析的截图转载一下，图片好像，有点儿大，出处 <a href="https://tieba.baidu.com/p/6213139531?red_tag=2718561838" target="_blank" rel="noopener">https://tieba.baidu.com/p/6213139531?red_tag=2718561838</a></p>
+<p><img src="https://github.com/EggUncle/Demo/blob/master/markdownimg/5e470e7a02087bf47733303cfcd3572c13dfcf5f.jpg?raw=true" alt=""></p>
+<p>这里可以看到根目录有个script文件夹，按照这个帖子所说的，script这里，似乎就是存着游戏ai的脚本，lua写的，需要解密才能看，放回去应该也是要反过来加密的，而在我实际打开后，发现确实存在似乎是ai逻辑相关的脚本，因为我不会lua，只能看个大概。</p>
+<p>这里顺手下了一个修改模型的mod，看了一下，如果有mod的话需要如何使用，简单来说，就是自己在游戏根目录建立一个mods目录，然后把修改的mod根据相关层级放到这个新建目录里头去就行了，例如修改模型的mod，由于模型文件在parts目录下，因此mod文件就放置在，mods/parts 目录下即可。</p>
+<h3 id="0x04-ai脚本资源相关分析"><a href="#0x04-ai脚本资源相关分析" class="headerlink" title="0x04 ai脚本资源相关分析"></a>0x04 ai脚本资源相关分析</h3><p>script这个目录对应ai目录，那么现在初步的的逻辑其实就有了：<br>通过分析lua脚本，来看看其中的npc的逻辑是什么样子的，目前大致猜想一下，假设突刺攻击动作为lua脚本中的一个函数attack，那么我们可以尝试对函数进行hook之类的操作，在检测到突刺攻击动作触发的时候，自动使用垫步动作，这样就能相对完美的来进行突刺攻击的应对。</p>
+<p>尝试解包后，似乎在解开之后再解开一次，能看到一些关于lua的配置文件字段，有的是英文，有的似乎是日文拼音一样的东西，当时并不知道翻译软件可以直接根据这种拼音一样的东西翻译出来，直接找了一个在日本上学的朋友聊了聊这个，他刚好也比较喜欢玩这个。由于只狼是一个日本战国时代背景的游戏，还带有一些日本文化相关的内容，这里发现直接翻译也没那么直接的获取到相关单词的含义，还是直接问问比比较方便。</p>
+<p>根据逻辑和一些代码，获取到了这部分信息：</p>
+<p>D:\Program Files (x86)\Steam\steamapps\common\Sekiro\script\m10_00_00_00-luabnd-dcx\script\ai<br>PatrolLeader20000_Logic 这个似乎是巡逻队长的逻辑</p>
+<p>下面这两个好像涉及到一些日文拼音一样的东西。。不太清楚<br>D:\Program Files (x86)\Steam\steamapps\common\Sekiro\script\m11_00_00_00-luabnd-dcx\script\ai<br>Nanimosinai11000_Logic 问了问会日语的朋友 什么都不要做？</p>
+<p>D:\Program Files (x86)\Steam\steamapps\common\Sekiro\script\m15_00_00_00-luabnd-dcx\script\ai<br>HakaisouPhantom500005_Act01  破坏幻影？ 好像是破坏雾影，也许是幻影破解僧吧</p>
+<p>D:\Program Files (x86)\Steam\steamapps\common\Sekiro\script\m25_00_00_00-luabnd-dcx\script\ai<br>Waraningyou_504000_Logic   这个朋友再问了个日本人。。意思是 藁人形，朋友再查了一下，是那个送只狼去源之宫的东西，麻绳做出的巨人一样的玩意</p>
+<p>主要解的luainfo文件，有的目录是没有这个文件的</p>
+<p>这里先尝试找到不死半兵卫的ai代码，把游戏语言改为英文，发现他的英文名字是 hanbei the undying</p>
+<p>目前在逐个看lua代码，有点儿头疼，主要是名字都是日文拼音一类的东西<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">7menmusya  七面武士</div><div class="line">Yamori 壁虎</div><div class="line">JijoOba 二女儿阿姨。。。没明白啥意思？医女吗？</div><div class="line">Mihariban 哨兵</div><div class="line">NanbanArmor 南板甲。。没明白，难道是那个桥上面被踢下去的板甲武士吗</div><div class="line">Do beihei 美国兵。。啥啊就美国兵。。</div><div class="line">NewInu 新犬 是不是就是那个狗</div><div class="line">Sokushinbutsu 即时佛，应该是仙峰寺的什么玩意把</div><div class="line">Terakisozako 有一些以这个为开头的名字，似乎都是仙峰寺的，这个单词的疑似像是寺庙一类的</div><div class="line">Yashazaru Kenzoku 靖国康</div><div class="line">Kubinashi 无首把，我看还有个水下无首的逻辑</div><div class="line">FireBull 火牛 绝了，看到英文了，欸</div><div class="line">Kenkaku_weak 剑客，虚弱？老年一心吗</div><div class="line">MurabitoZombie 僵尸村民。。没明白是啥，水生村村民吗</div><div class="line">Tokugawazamurai 德川武士</div><div class="line">kaenhoushaki 喷火器</div><div class="line">Hakaisou 破戒僧</div><div class="line">Orochi 大蛇</div><div class="line">Orochi_nest 赤鬼之后没多久蛇巢穴的逻辑吗</div><div class="line">RedOgre 赤鬼把</div><div class="line">Nishikigoi 锦鲤</div><div class="line">NingyoRyu 好像是源之宫的东西吧，美人鱼龙？</div><div class="line">OnnaSousha 演奏乐器的女人？水生村的凛？</div><div class="line">NPC Busshi 游戏里面的小贩吗</div></pre></td></tr></table></figure></p>
+<p>还是有一些没解出来</p>
+<p>goal_list.lua 这个文件里面似乎有各种命名，再看看把，还有一个logic_list.lua 里面也是，他们类似于一个列表，将游戏的ai编号之类的的，都列了一遍，问题是，解包似乎并不完全，导致并不是所有ai逻辑都被解出来了。</p>
+<p>LOGIC_ID_TestZatoichi_985000 有这样一个id，我感觉有戏啊，得在仔细看看，test，座头市的那个传统武士造型，和不死半兵卫很像。</p>
+<p>目前发现一个新问题，解包失败了一半多，导致有些东西可能没找着。。再试试把，也不是都这样，是文件名字有重复所以覆盖了</p>
+<p>MoujaSoldier 亡者士兵？这个是不死半兵卫吗？</p>
+<p>目前我还是觉得，解包没有解全，有些脚本文件是没有的，应该是没有，在那个id文件里面应该是一个npc对应一个battle文件，以id命名的，但是我没有都找到，而且打包的文件数字不是连续的</p>
+<p>这里可能不是解包工具的问题，看了下uxm源码，发现里面对每个目录都是有硬编码的，解包似乎不完全这个问题，我也发邮件问过UXM的作者了，他的回答是确实存在这种情况，都放在_unknown目录了，任何没识别出来的文件都在这边，但是没有脚本家了，action里头也存在部分ai逻辑，但是需要使用hks解密，但是这个解密工具，本身也不太好使。</p>
+<p>到这里，因为仍然找不到半兵卫的逻辑，也找不到全盛苇名一心的ai逻辑，所以就弃坑了，其实可以搞搞火牛或者赤鬼的逻辑的，不过确实已经没什么兴趣了，哎，windows上打游戏还成，搞点儿花活就让我觉着不太方便。</p>
+<h3 id="0x05-调试模式"><a href="#0x05-调试模式" class="headerlink" title="0x05 调试模式"></a>0x05 调试模式</h3><p>虽然已经弃坑了，但是这里还有另外一个有趣的发现，可以使用mod将游戏的调试模式打开<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">https://www.nexusmods.com/sekiro/mods/544</div><div class="line">[使用]</div><div class="line">Select=显示/隐藏菜单</div><div class="line">RT +右摇杆=调整大小菜单</div><div class="line">RT +左摇杆=移动菜单</div><div class="line">L3 + X =冻结/取消冻结摄像机</div><div class="line">﻿L3 + A =旋转摄像机</div><div class="line"></div><div class="line">[安装]</div><div class="line">将“ d3d11.dll”拖放到您的Sekiro目录里，打开游戏即可使用。</div><div class="line"></div><div class="line">[卸载]</div><div class="line">从Sekiro目录中删掉文件“d3d11.dll”即可。</div><div class="line"></div><div class="line">[mod问题]</div><div class="line">Q) I can&apos;t see text on the GUI windows（在GUI窗口上看不到文本的问题）</div><div class="line">A) That&apos;s still broken, I&apos;ll fix it later（未来作者会有后续修复）</div><div class="line"></div><div class="line">Q) The text is flickering（文本闪烁，视频里也出现这个问题了）</div><div class="line">A) We had to balance between refreshing the menu fast enough to keep it updated, and the flickering. It&apos;s still fairly bad but should be manageable for now.（意思是目前无解……）</div><div class="line"></div><div class="line">[CREDITS]</div><div class="line"></div><div class="line">Special thanks for Enlisted for helping me figure out the draw function.</div><div class="line">Special thanks for Pav for restoring some of the menu drop-downs.</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/windows/" rel="tag"># windows</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/28/计客蓝牙魔方协议逆向分析/" rel="next" title="计客蓝牙魔方协议逆向分析">
+                <i class="fa fa-chevron-left"></i> 计客蓝牙魔方协议逆向分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/15843222?v=3&s=460"
+               alt="一只大茶蛋" />
+          <p class="site-author-name" itemprop="name">一只大茶蛋</p>
+           
+              <p class="site-description motion-element" itemprop="description">我会想念大家的</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://daemonth.github.io/" title="等风来" target="_blank">等风来</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://gorgias.me/" title="植物系魔法师" target="_blank">植物系魔法师</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://lijialalala.github.io/" title="Psychola" target="_blank">Psychola</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-为什么要从mod开始而不是使用ida或者cheat-engine"><span class="nav-number">2.</span> <span class="nav-text">0x01 为什么要从mod开始而不是使用ida或者cheat engine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-一些mod，以及制作mod的工具"><span class="nav-number">3.</span> <span class="nav-text">0x02 一些mod，以及制作mod的工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-解包-amp-mod使用"><span class="nav-number">4.</span> <span class="nav-text">0x03 解包&amp;mod使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-ai脚本资源相关分析"><span class="nav-number">5.</span> <span class="nav-text">0x04 ai脚本资源相关分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-调试模式"><span class="nav-number">6.</span> <span class="nav-text">0x05 调试模式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只大茶蛋</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
